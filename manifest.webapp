@@ -1,0 +1,21 @@
+{
+    "version": "0.1",
+    "name": "Los POJOs Survey App",
+    "description": "Survey app with skip logic",
+    "launch_path": "/index.html",
+    "icons": {
+        "16": "/img/icons/icon-16.png",
+        "48": "/img/icons/icon-48.png",
+        "128": "/img/icons/icon-128.png"
+    },
+    "developer": {
+        "name": "Los POJOs",
+        "url": "https://github.com/tork/los-pojos-survey"
+    },
+    "default_locale": "en",
+    "activities": {
+        "dhis": {
+            "href": "*"
+        }
+    }
+}

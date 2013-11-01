@@ -1,3 +1,3 @@
 (function() {
-     window.Survey = window.Survey || {};
+     window.survey = window.survey || {};
 })() ;

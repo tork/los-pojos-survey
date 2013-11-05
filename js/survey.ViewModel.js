@@ -8,7 +8,6 @@
         self.selectedProgram = ko.observable();
         self.programStages = ko.observableArray(); //populate with get
         self.selectedProgramStage = ko.observable();
-        self.id = ko.observable();
         self.dataElements = ko.observableArray();
     }
 

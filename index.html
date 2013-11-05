@@ -37,7 +37,7 @@
 			</div>
 			<!-- Keep all page content within the page-content inset div! -->
 			<div class="page-content inset">
-				<div class="row">
+				<div class="row">     <!--Fjerne eller? -->
 					<div class="col-md-12">
 						<p class="lead">Welcome to our survey web app.</p>
 					</div>
@@ -51,7 +51,7 @@
                         <p class="well">HOW TO USE THE WEB APP</p>
                     </div>
 				</div>
-                <div class="row" id="Kristian" data-bind="with: viewModel">
+                <div class="row Kristian" data-bind="with: viewModel">
                     <div class="col-md-6">
                         <select class="fullWidth" id="programsSelect"
                                 data-bind="options: programs,
@@ -65,6 +65,14 @@
                                  optionsText: 'name',
                                  optionsCaption: 'Select program stage',
                                  value: selectedProgramStage"></select>
+                    </div>
+                </div>
+                <div class="row Kristian" data-bind="with: viewModel">
+                    <div class="col-md-12" data-bind="visible: selectedProgramStage()">
+                        <h3 data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
+                        <div class="row" data-bind="foreach: dataElements">
+                             <!--Marianne sin template her!-->
+                        </div>
                     </div>
                 </div>
 			</div>

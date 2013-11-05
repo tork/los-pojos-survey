@@ -15,9 +15,9 @@
     /*
     * Litt forklaring: selectedProgram vil inneholde det man har valgt,
     * eller undefined hvis det står "Select program" i selecten.
-    * Det er en observable, så den hentes ut ved å kalle viewModels.viewModel.selectedProgram()
+    * Det er en observable, så den hentes ut ved å kalle viewModel.selectedProgram()
     * Foreslår at dette brukes til å gjøre get til api.
     * */
 
     root.viewModel = new viewModel();
-})(survey.viewModels = survey.viewModels || {});
+})(survey);

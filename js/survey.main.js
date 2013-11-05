@@ -1,10 +1,10 @@
-(function(viewModels){
+(function(viewModel){
     $(document).ready(function() {
 	    $("#menu-toggle").click(function(e) {
             e.preventDefault();
             $("#wrapper").toggleClass("active");
         });
 
-        ko.applyBindings({viewModel: viewModels.viewModel})
+        ko.applyBindings({viewModel: viewModel})
     });
-})(survey.viewModels);
+})(survey.viewModel);

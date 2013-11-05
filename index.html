@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Los POJOs Survey App</title>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los POJOs Survey App</title>
 
-	    <!-- Bootstrap core CSS -->
-	    <link href="css/bootstrap.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.css" rel="stylesheet">
 
-	    <!-- Add custom CSS here -->
-	    <link href="css/stylesheet.css" rel="stylesheet">
-	    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/customComponents.css" rel="stylesheet">
-	</head>
+<!-- Add custom CSS here -->
+<link href="css/stylesheet.css" rel="stylesheet">
+<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="css/customComponents.css" rel="stylesheet">
+</head>
 
-	<body>
+<body>
 
 	<div id="wrapper">
 
@@ -26,65 +26,83 @@
 				<li><a href="#">Surveys</a></li>
 			</ul>
 		</div>
-          
+
 		<!-- Page content -->
 		<div id="page-content-wrapper">
 			<div class="content-header">
-			<h1>
-				<a id="menu-toggle" href="#" class="btn btn-default"><i class="icon-reorder"></i></a>
-				Survey App
+				<h1>
+					<a id="menu-toggle" href="#" class="btn btn-default"><i
+						class="icon-reorder"></i></a> Survey App
 				</h1>
 			</div>
 			<!-- Keep all page content within the page-content inset div! -->
 			<div class="page-content inset">
-				<div class="row">     <!--Fjerne eller? -->
+				<div class="row">
+					<!--Fjerne eller? -->
 					<div class="col-md-12">
 						<p class="lead">Welcome to our survey web app.</p>
 					</div>
-                    <div class="col-md-6">
-                        <div class="well">
-                            <input type="text" class="form-control" placeholder="Enter ID">
-                            <button type="submit" class="btn btn-default">GET JSON</button>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="well">HOW TO USE THE WEB APP</p>
-                    </div>
+					<div class="col-md-6">
+						<div class="well">
+							<input type="text" class="form-control" placeholder="Enter ID">
+							<button type="submit" class="btn btn-default">GET JSON</button>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<p class="well">HOW TO USE THE WEB APP</p>
+					</div>
 				</div>
-                <div class="row Kristian" data-bind="with: viewModel">
-                    <div class="col-md-6">
-                        <select class="fullWidth" id="programsSelect"
-                                data-bind="options: programs,
+				<div class="row Kristian" data-bind="with: viewModel">
+					<div class="col-md-6">
+						<select class="fullWidth" id="programsSelect"
+							data-bind="options: programs,
                                 optionsText: 'name',
                                 optionsCaption: 'Select program',
                                 value: selectedProgram"></select>
-                    </div>
-                    <div class="col-md-6">
-                        <select class="fullWidth" id="programStagesSelect"
-                                data-bind="options: programStages,
+					</div>
+					<div class="col-md-6">
+						<select class="fullWidth" id="programStagesSelect"
+							data-bind="options: programStages,
                                  optionsText: 'name',
                                  optionsCaption: 'Select program stage',
                                  value: selectedProgramStage"></select>
-                    </div>
-                </div>
-                <div class="row Kristian" data-bind="with: viewModel">
-                    <div class="col-md-12" data-bind="visible: selectedProgramStage()">
-                        <h3 data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
-                        <div class="row" data-bind="foreach: dataElements">
-                             <!--Marianne sin template her!-->
-                        </div>
-                    </div>
-                </div>
-			</div>
-		</div>      
-	</div>
-    <script src="js/libs/jquery.js"></script>
-    <script src="js/libs/bootstrap.js"></script>
-    <script src="js/libs/knockout-3.0.0.min.js"></script>
+					</div>
+				</div>
+				<div class="row Kristian" data-bind="with: viewModel">
+					<div class="col-md-12" data-bind="visible: selectedProgramStage()">
+						<h3
+							data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
+						<div class="row" data-bind="foreach: dataElements">
 
-    <script src="js/namespace.js"></script>
-    <script src="js/survey.utils.js"></script>
-    <script src="js/survey.ViewModel.js"></script>
-    <script src="js/survey.main.js"></script>
-	</body>
+
+							<div class="col-md-12">
+								<div class="well">
+									<p>
+										<strong data-bind="text: formName"></strong> - <strong
+											style="font-weight: lighter;" data-bind="text: description"></strong>
+									</p>
+									<p>
+										<input data-bind="value: value"></input>
+										(<strong style="font-weight: lighter;" data-bind="text: type"></strong>)
+									</p>
+
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/libs/jquery.js"></script>
+	<script src="js/libs/bootstrap.js"></script>
+	<script src="js/libs/knockout-3.0.0.min.js"></script>
+
+	<script src="js/namespace.js"></script>
+	<script src="js/survey.utils.js"></script>
+	<script src="js/survey.ViewModel.js"></script>
+	<script src="js/survey.main.js"></script>
+</body>
 </html>

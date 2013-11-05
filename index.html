@@ -50,7 +50,14 @@
                         <p class="well">HOW TO USE THE WEB APP</p>
                     </div>
 				</div>
-
+                <div class="row" id="Kristian" data-bind="with: viewModel">
+                    <div class="col-md-6">
+                        <select id="programsSelect" data-bind="options: programs"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <select id="programStagesSelect" data-bind="options: programStages"></select>
+                    </div>
+                </div>
 			</div>
 		</div>      
 	</div>
@@ -60,7 +67,7 @@
 
     <script src="js/namespace.js"></script>
     <script src="js/survey.utils.js"></script>
-    <script src="js/survey.main.js"></script>
     <script src="js/survey.ViewModel.js"></script>
+    <script src="js/survey.main.js"></script>
 	</body>
 </html>

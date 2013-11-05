@@ -1,5 +1,5 @@
 (function(root){
-// Kan nok rename denne etter hvert som vi vet hvilke viewModels vi trenger
+// Kan nok rename denne etter hvert som vi vet hvilke viewModels vi trenger - iallfall hvis vi trenger flere!
     var viewModel = function() {
         var self = this;
         self.programs = ko.observableArray(); //populate with get
@@ -8,9 +8,5 @@
         self.dataElements = ko.observableArray();
     }
 
-    $(function() {
-//        root.testModel = new testModel();
-//        ko.applyBindings({testModel: root.testModel});
-        //Ha én global ready funksjon etter hvert også..
-    });
+    root.viewModel = new viewModel();
 })(survey.viewModels = survey.viewModels || {});

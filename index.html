@@ -11,6 +11,7 @@
 	    <!-- Add custom CSS here -->
 	    <link href="css/stylesheet.css" rel="stylesheet">
 	    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/customComponents.css" rel="stylesheet">
 	</head>
 
 	<body>
@@ -52,10 +53,18 @@
 				</div>
                 <div class="row" id="Kristian" data-bind="with: viewModel">
                     <div class="col-md-6">
-                        <select id="programsSelect" data-bind="options: programs"></select>
+                        <select class="fullWidth" id="programsSelect"
+                                data-bind="options: programs,
+                                optionsText: 'name',
+                                optionsCaption: 'Select program',
+                                value: selectedProgram"></select>
                     </div>
                     <div class="col-md-6">
-                        <select id="programStagesSelect" data-bind="options: programStages"></select>
+                        <select class="fullWidth" id="programStagesSelect"
+                                data-bind="options: programStages,
+                                 optionsText: 'name',
+                                 optionsCaption: 'Select program stage',
+                                 value: selectedProgramStage"></select>
                     </div>
                 </div>
 			</div>

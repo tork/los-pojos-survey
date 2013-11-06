@@ -75,7 +75,7 @@
 						<div class="row" data-bind="foreach: dataElements">
 							<!-- Template Marianne -->
 
-							<div class="col-md-12">
+							<div class="col-md-12" data-bind="visible: dependenciesHolds()">
 								<div class="well">
 									<p>
 										<strong data-bind="text: formName"></strong> <strong
@@ -113,6 +113,7 @@
 
 	<script src="js/namespace.js"></script>
 	<script src="js/survey.utils.js"></script>
+	<script src="js/survey.DataElementModel.js"></script>
 	<script src="js/survey.ViewModel.js"></script>
 	<script src="js/survey.main.js"></script>
 </body>

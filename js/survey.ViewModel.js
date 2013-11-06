@@ -9,6 +9,10 @@
 		self.programStages = ko.observableArray();
 		self.selectedProgramStage = ko.observable();
 		self.dataElements = ko.observableArray();
+        self.selectedProgram.subscribe(function() {
+            self.programStages().length = 0;
+            survey.data.getProgramStagesFromSelectedProgram();
+        });
 
 
 		/* testdata */
@@ -27,3 +31,4 @@
 
 	root.viewModel = new viewModel();
 })(survey);
+

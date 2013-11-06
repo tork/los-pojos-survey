@@ -5,6 +5,8 @@
             $("#wrapper").toggleClass("active");
         });
 
-        ko.applyBindings({viewModel: viewModel})
+        ko.applyBindings({viewModel: viewModel});
+        survey.data.getPrograms();
     });
-})(survey.viewModel);
+})(survey.viewModel, survey.data);
+

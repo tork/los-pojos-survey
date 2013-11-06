@@ -75,7 +75,7 @@
 						<div class="row" data-bind="foreach: dataElements">
 							<!-- Template Marianne -->
 
-							<div class="col-md-12" data-bind="visible: dependenciesHolds()">
+							<div class="col-md-12" data-bind="visible: $parent.dependenciesHold($data)">
 								<div class="well">
 									<p>
 										<strong data-bind="text: formName"></strong> <strong

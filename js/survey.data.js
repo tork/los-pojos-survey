@@ -64,7 +64,7 @@
                 console.log("Could not fetch program stages from server.");
             });
             
-        }
+        };
         
     };
     

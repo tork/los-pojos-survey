@@ -22,6 +22,12 @@
 		//skip logic
 		self.isInSkipLogic = ko.observable(false);
 		self.addingSkipLogic = ko.observable(false);
+
+        self.addSkipLogic = function(dataelement) {
+            console.log("ADD SKIP LOGIC");
+            if(dataelement != undefined)
+                dataelement.isInSkipLogic(true);
+        };
 	}
 
 //	Kan nok rename denne etter hvert som vi vet hvilke viewModels vi trenger - iallfall hvis vi trenger flere!
@@ -57,11 +63,12 @@
 			return true;
 		};
 		
-		self.addSkipLogic = function(dataelement) {
-			console.log("ADD SKIP LOGIC");
-			if(dataelement != undefined)
-				dataelement.isInSkipLogic(true);
-		};
+//		self.addSkipLogic = function(dataelement) {
+//			console.log("ADD SKIP LOGIC");
+//            console.log(root.viewModel);
+//			if(dataelement != undefined)
+//				dataelement.isInSkipLogic(true);
+//		};
 
 	}
 	/*

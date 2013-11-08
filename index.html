@@ -94,7 +94,7 @@
 									</div>
 
 									<button
-										data-bind="visible: !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
+										data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
 										skip logic</button>
 									<button data-bind="visible: addingSkipLogic()">Save
 										skip logic</button>

@@ -77,7 +77,7 @@
 								<div class="well col-md-12">
 									<p>
 										<strong data-bind="text: formName"></strong> <strong
-											style="font-weight: lighter;" data-bind="text: description"></strong>
+											data-bind="text: description"></strong>
 									</p>
 
 									<div class="col-md-6" data-bind="switch: type">
@@ -86,8 +86,8 @@
 										</div>
 										<div data-bind="case: $default">
 											<p>
-												<input data-bind="value: value"></input> (<strong
-													style="font-weight: lighter;" data-bind="text: type"></strong>)
+												<input data-bind="value: value" /> (<strong
+													data-bind="text: type"></strong>)
 											</p>
 
 										</div>
@@ -96,8 +96,8 @@
 									<button
 										data-bind="visible: !isInSkipLogic() , click: $parent.addSkipLogic($data)">Add
 										skip logic</button>
-									<button
-										data-bind="visible: addingSkipLogic()">Save skip logic</button>
+									<button data-bind="visible: addingSkipLogic()">Save
+										skip logic</button>
 
 									<input type="checkbox" data-bind="visible: isInSkipLogic()" />
 								</div>

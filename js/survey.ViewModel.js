@@ -18,6 +18,8 @@
 			self.value = ko.observable(false);
 		else
 			self.value = ko.observable("");	
+		
+		self.isDependent = ko.observable(false);
 
 		//skip logic
 		self.isInSkipLogic = ko.observable(false);
@@ -32,6 +34,21 @@
 				}
 			});
 		};
+		
+		self.saveSkipLogic = function(dataelement) {
+			$.each(root.viewModel.dataElements(), function( index, element ) {
+				if(element != self) {
+					if(element.isDependent()) {
+						element.isDependent(false);
+						console.log("legger til avhengighet", element);
+					}
+						
+					element.isInSkipLogic(false);
+				}
+			});
+			dataelement.addingSkipLogic(false);
+		};
+		
 	}
 
 //	Kan nok rename denne etter hvert som vi vet hvilke viewModels vi trenger - iallfall hvis vi trenger flere!

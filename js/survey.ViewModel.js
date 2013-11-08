@@ -71,15 +71,22 @@
 		self.dataElements.push(new DataElement({"name":"Gender","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Gender","description":"Gender of patient.","formName":"Gender","active":true,"domainType":"patient","type":"string","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"Age"}));	
 		self.dataElements.push(new DataElement({"name":"Alive","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Alive","description":"","formName":"Are you still alive?","active":true,"domainType":"patient","type":"checkbox","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"checkBoxElementID"}));	
 
+
 		self.getDataElementByID = function(id) {
-			return undefined;
-		}
+            var dataEl;
+            $.each(root.viewModel.dataElements(), function(index, dataElement) {
+                if(dataElement.id === id) {
+                   dataEl = dataElement;
+                }
+            });
+            return dataEl;
+		};
 
 		self.dependenciesHold = function (dataelement) {
 			console.log("dependenciesHold", dataelement)
 			$.each(dataelement.dependencies, function( index, dep ) {
 				var dataElement = self.getDataElementByID(dep.id); //undefined
-				if(!dataElement == undefined && !$.inArray(dep.values, dataElement.value())) return false;
+				if(dataElement != undefined && !$.inArray(dep.values, dataElement.value())) return false;
 			});
 			return true;
 		};

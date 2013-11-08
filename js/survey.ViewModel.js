@@ -49,7 +49,7 @@
 		}
 
 		self.dependenciesHold = function (dataelement) {
-//			console.log("dependenciesHold", dataelement)
+			console.log("dependenciesHold", dataelement)
 			$.each(dataelement.dependencies, function( index, dep ) {
 				var dataElement = self.getDataElementByID(dep.id); //undefined
 				if(!dataElement == undefined && !$.inArray(dep.values, dataElement.value())) return false;
@@ -58,7 +58,8 @@
 		};
 		
 		self.addSkipLogic = function(dataelement) {
-			if(!dataelement === undefined)
+			console.log("ADD SKIP LOGIC");
+			if(dataelement != undefined)
 				dataelement.isInSkipLogic(true);
 		};
 

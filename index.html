@@ -43,8 +43,7 @@
 						<p class="lead">Welcome to our survey web app.</p>
 					</div>
 					<div class="col-md-6">
-						<div class="well">
-						</div>
+						<div class="well"></div>
 					</div>
 					<div class="col-md-6">
 						<p class="well">HOW TO USE THE WEB APP</p>
@@ -73,14 +72,15 @@
 						<div class="row" data-bind="foreach: dataElements">
 							<!-- Template Marianne -->
 
-							<div class="col-md-12" data-bind="visible: $parent.dependenciesHold($data)">
-								<div class="well">
+							<div class="col-md-12"
+								data-bind="visible: $parent.dependenciesHold($data)">
+								<div class="well col-md-12">
 									<p>
 										<strong data-bind="text: formName"></strong> <strong
 											style="font-weight: lighter;" data-bind="text: description"></strong>
 									</p>
 
-									<div data-bind="switch: type">
+									<div class="col-md-6" data-bind="switch: type">
 										<div data-bind="case: 'checkbox'">
 											<input type="checkbox" data-bind="checked: value" />
 										</div>
@@ -93,6 +93,13 @@
 										</div>
 									</div>
 
+									<button
+										data-bind="visible: !isInSkipLogic() , click: $parent.addSkipLogic($data)">Add
+										skip logic</button>
+									<button
+										data-bind="visible: addingSkipLogic()">Save skip logic</button>
+
+									<input type="checkbox" data-bind="visible: isInSkipLogic()" />
 								</div>
 
 							</div>
@@ -111,8 +118,7 @@
 
 	<script src="js/namespace.js"></script>
 	<script src="js/survey.utils.js"></script>
-    <script src="js/survey.data.js"></script>
-	<script src="js/survey.DataElementModel.js"></script>
+	<script src="js/survey.data.js"></script>
 	<script src="js/survey.ViewModel.js"></script>
 	<script src="js/survey.main.js"></script>
 </body>

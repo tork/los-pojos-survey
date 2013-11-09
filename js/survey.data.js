@@ -62,10 +62,8 @@
             })
             .fail(function() {
                 console.log("Could not fetch program stages from server.");
-            });
-            
-        }
-        
+            });            
+        }        
     };
     
     root.data = new data();

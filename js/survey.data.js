@@ -62,6 +62,7 @@
             });
         };
 
+        //TODO: untested (cross-domain trouble)
         self.get_dependencies = function(surveyId, elements, success, error) {
             var url = survey.utils.surveySettingsUrl(surveyId, 'deps');
 
@@ -70,15 +71,12 @@
                 url: url,
                 contentType: 'text/plain'
             }).done(function(data) {
-                elements.forEach(function(elem) {
-                    elem.dependencies =
-                        Object.getOwnPropertyDescriptor(
-                            data, elem.element_id);
-                });
+                data = JSON.parse(data);
                 success(data);
             }).fail(error);
         };
 
+        //TODO: untested (cross-domain trouble)
         self.post_dependencies = function(surveyId, elements) {
             function elements2dependencies(elements, success, error) {
                 var deps = {};
@@ -107,7 +105,7 @@
             $.ajax({
                 type: 'POST',
                 url: url,
-                data: data,
+                data: JSON.stringify(data),
                 contentType: 'text/plain'
             }).done(success).fail(error);
         };

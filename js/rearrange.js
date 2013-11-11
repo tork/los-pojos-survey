@@ -15,8 +15,50 @@ var create_workspace = create_workspace_array;
 var get_element = get_element_array;
 var extract_arrangement = extract_arrangement_array;
 
-(function testbed() {
-	var test_set = [
+function testbed() {
+	survey.data = {};
+	survey.data.get_dependencies = function(surveyId, elements, succ, err) {
+		var deps =
+		{
+			10:
+			[{
+				dep_id: 12,
+				triggers: [""]
+			},{
+				dep_id: 13,
+				triggers: [""]
+			}],
+
+			11:
+			[{
+				dep_id: 10,
+				triggers: [""]
+			},{
+				dep_id: -10,
+				triggers: [""]
+			}],
+
+			12:
+			[{
+				dep_id: 13,
+				triggers: [""]
+			}],
+			'-10': // apparently negative numbers are no-no
+			[{
+				dep_id: 11,
+				triggers: [""]
+			}]
+		};
+
+		// Simulate system settings
+		deps = JSON.stringify(deps);
+		deps = JSON.parse(deps);
+
+		succ(deps);
+	}
+
+	/*
+	var test_set_with_deps = [
 	{
 		element_id: 10,
 		dependencies:
@@ -59,50 +101,87 @@ var extract_arrangement = extract_arrangement_array;
 		element_id: 19
 	}
 	];
+	*/
+
+	var test_set = [
+	{
+		element_id: 10
+	},{
+		element_id: 11
+	},{
+		element_id: 12
+	},{
+		element_id: 13
+	},{
+		// Circular dependencies (excluded)
+		element_id: -10
+	},{
+		// Isolated node
+		element_id: 19
+	}
+	];
 
 	debug(test_set);
-})();
+}
 
 // Rearrange test_set and print debugging information
 function debug(test_set) {
-	var arr = rearrange(test_set);
-	
-	print("OLD\tNEW");
-	for (var idx in test_set) {
-		var elem = arr[idx];
-		print(test_set[idx].element_id+
-			(elem? '\t'+arr[idx].element_id:""));
+	function succ(arr) {
+		console.log("OLD\tNEW");
+		for (var idx in test_set) {
+			var elem = arr[idx];
+			console.log(test_set[idx].element_id+
+				(elem? '\t'+arr[idx].element_id:""));
+		}
+
+		/*
+		console.log("\nKEPT ELEMENTS");
+		for (var idx in arr) {
+			var keys = Object.keys(arr[idx]);
+			keys.forEach(function(key) {
+				console.log(key+"\t"+arr[idx][key]);
+			});
+			console.log();
+		}
+		*/
 	}
 
-	print("\nKEPT ELEMENTS");
-	for (var idx in arr) {
-		var keys = Object.keys(arr[idx]);
-		keys.forEach(function(key) {
-			print(key+"\t"+arr[idx][key]);
-		});
-		print();
+	function err() {
+		console.log('Something went wrong. :-(');
 	}
+
+	rearrange(test_set, 0, succ, err);
 }
 
-function rearrange(elements, surveyId) {
-	function succ(msg) {
-		console.log(msg);
+function rearrange(elements, surveyId, success, error) {
+	function succ(deps) {
+		var workspace = create_workspace(elements);
+		elements.forEach(function(elem) {
+			var wrapper = Object.getOwnPropertyDescriptor(
+				deps, elem.element_id);
+			elem.dependencies = wrapper? wrapper.value:[];
+			register_dependencies(elem, workspace);
+		});
+
+//		elements.forEach(function(elem) {
+//			register_dependencies(elem, workspace);
+//		});
+
+//		elements.forEach(function(elem) {
+//			var deps = fetch_dependencies(elem);
+//			register_dependencies(elem, deps, workspace);
+//		});
+		
+		success(extract_arrangement(workspace));
 	}
 
 	function err(req, status, err) {
-		console.log(status+':');
+		console.log('Rearranging failed (status=' + status+'):');
 		console.log(err);
+		error();
 	}
 
 	survey.data.get_dependencies(surveyId, elements, succ, err);
-	var workspace = create_workspace(elements);
-	
-	elements.forEach(function(elem) {
-		var deps = fetch_dependencies(elem);
-		register_dependencies(elem, deps, workspace);
-	});
-	
-	return extract_arrangement(workspace);
 }
 
 /*
@@ -149,11 +228,14 @@ function fetch_dependencies(elem) {
 }
 */
 
-function register_dependencies(elem, deps, workspace) {
-	elem.dependencies = deps;
+function register_dependencies(elem, workspace) {
+	var deps = elem.dependencies;
 	elem.dep_count = deps.length;
+	//console.log(deps);
+	//elem.dep_count = (deps && deps.length)? deps.length:0;
 	
 	if (elem.dep_count == 0) {
+		console.log("free: "+elem.element_id);
 		workspace.free_queue = enqueue(elem, workspace.free_queue);
 	} else {
 		deps.forEach(function(descriptor) {

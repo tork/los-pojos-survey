@@ -50,7 +50,7 @@
 					</div>
 				</div>
 				<div id="programWrapper" data-bind="with: viewModel">
-					<div class="row Kristian">
+					<div class="row">
 						<div class="col-md-6">
 							<select class="fullWidth" id="programsSelect"
 								data-bind="options: programs,
@@ -66,13 +66,11 @@
                                  value: selectedProgramStage"></select>
 						</div>
 					</div>
-					<div class="row Kristian">
+					<div class="row">
 						<div class="col-md-12" data-bind="visible: selectedProgramStage()">
 							<h3
 								data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
 							<div class="row" data-bind="foreach: dataElements">
-								<!-- Template Marianne -->
-
 								<div class="col-md-12"
 									data-bind="visible: $parent.dependenciesHold($data)">
 									<div class="well col-md-12">
@@ -85,6 +83,9 @@
 											<div data-bind="case: 'trueOnly'">
 												<input type="checkbox" data-bind="checked: value" />
 											</div>
+                                            <div data-bind="case: 'bool'">
+
+                                            </div>
 											<div data-bind="case: $default">
 												<p>
 													<input data-bind="value: value" /> (<strong
@@ -94,13 +95,13 @@
 											</div>
 										</div>
 
-                                        <div class="col-md-6 skipLogicPanel">
+                                        <div class="skipLogicPanel">
                                             <!--Add skip-logic ui here-->
                                             <button
-                                                data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
+                                                data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: $parent.addSkipLogic.bind($data)">Add
                                                 skip logic</button>
                                             <button
-                                                data-bind="visible: addingSkipLogic(), click: saveSkipLogic.bind($data)">Save
+                                                data-bind="visible: addingSkipLogic(), click: $parent.saveSkipLogic.bind($data)">Save
                                                 skip logic</button>
 
                                             <input type="checkbox"

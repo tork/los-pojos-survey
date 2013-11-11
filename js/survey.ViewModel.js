@@ -24,35 +24,7 @@
 		//skip logic
 		self.isInSkipLogic = ko.observable(false);
 		self.addingSkipLogic = ko.observable(false);
-
-		self.addSkipLogic = function(dataelement) {
-			dataelement.addingSkipLogic(true);
-			
-			$.each(root.viewModel.dataElements(), function( index, element ) {
-				if(element != self) {
-					element.isInSkipLogic(true);
-				}
-			});
-		};
-		
-		self.saveSkipLogic = function(dataelement) {
-			$.each(root.viewModel.dataElements(), function( index, element ) {
-				if(element != self) {
-					if(element.isDependent()) {
-						element.isDependent(false);
-                        //Må vite hva slags type avhengighet: dataelement.type
-                        //Hente ut avhengighetsdata somehow..
-                        //Kalle på handler
-						console.log("legger til avhengighet", element);
-					}
-						
-					element.isInSkipLogic(false);
-				}
-			});
-			dataelement.addingSkipLogic(false);
-		};
-		
-	}
+	};
 
 //	Kan nok rename denne etter hvert som vi vet hvilke viewModels vi trenger - iallfall hvis vi trenger flere!
 	var viewModel = function() {
@@ -94,7 +66,34 @@
 			return true;
 		};
 
-	}
+        self.addSkipLogic = function(dataelement) {
+            dataelement.addingSkipLogic(true);
+
+            $.each(root.viewModel.dataElements(), function( index, element ) {
+                if(element != dataelement) {
+                    element.isInSkipLogic(true);
+                }
+            });
+        };
+
+        self.saveSkipLogic = function(dataelement) {
+            $.each(root.viewModel.dataElements(), function( index, element ) {
+                if(element != self) {
+                    if(element.isDependent()) {
+                        element.isDependent(false);
+                        //Må vite hva slags type avhengighet: dataelement.type
+                        //Hente ut avhengighetsdata somehow..
+                        //Kalle på handler
+                        console.log("legger til avhengighet", element);
+                    }
+
+                    element.isInSkipLogic(false);
+                }
+            });
+            dataelement.addingSkipLogic(false);
+        };
+
+	};
 	/*
 	 * Litt forklaring: selectedProgram vil inneholde det man har valgt,
 	 * eller undefined hvis det står "Select program" i selecten.

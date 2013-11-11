@@ -118,6 +118,20 @@
                                                                     data-bind="options: $parent.activeElement().dropDownOpts,
                                                                     value: triggerOption"></select>
                                                         </div>
+                                                        <div data-bind="case: 'int'">
+                                                            <label>Interval?</label>
+                                                            <input type="checkbox" data-bind="checked: interval"/>
+                                                            <div data-bind="visible: !interval()">
+                                                                <label>Values (separate with ",")</label>
+                                                                <input type="text" data-bind="value: commaList" />
+                                                            </div>
+                                                            <div data-bind="visible: interval()">
+                                                                <label>Lower limit</label>
+                                                                <input type="number" data-bind="value: lowerLimit"/>
+                                                                <label>Upper limit</label>
+                                                                <input type="number" data-bind="value: upperLimit"/>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

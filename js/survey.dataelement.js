@@ -18,15 +18,19 @@
         self.dropDownOpts.push("Yes"); //Do this when dataElement is inserted in viewModel
         self.dropDownOpts.push("No");   //instead of this hard coded edition :P
 
-        self.triggerValue = ko.observable();
-        self.triggerOption = ko.observable();
-        self.triggerOption.subscribe(function(value) {
-            self.triggerValue({value: value});
-        });
+        //skip logic
+        self.triggerOption = ko.observable(); //If adding dep to bool dataElement
+
+        self.interval = ko.observable();
+        self.commaList = ko.observable(); //If adding dep to int dataElement with specific values
+
+        self.lowerLimit = ko.observable(); //If adding dep to int dataElement with interval
+        self.upperLimit = ko.observable();  //If adding dep to int dataElement with interval
+
 
         self.isDependent = ko.observable(false);
 
-        //skip logic
+
         self.isInSkipLogic = ko.observable(false);
         self.addingSkipLogic = ko.observable(false);
     };

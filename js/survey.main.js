@@ -6,7 +6,8 @@
         });
 
         ko.applyBindings({viewModel: viewModel});
-        survey.data.getPrograms();
+        //survey.data.getPrograms();
+        survey.data.getProgramIdsAndPopulateDropdown();
     });
 })(survey.viewModel, survey.data);
 

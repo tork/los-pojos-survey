@@ -43,62 +43,71 @@
 						<p class="lead">Welcome to our survey web app.</p>
 					</div>
 					<div class="col-md-6">
-						<div class="well">
-						</div>
+						<div class="well"></div>
 					</div>
 					<div class="col-md-6">
 						<p class="well">HOW TO USE THE WEB APP</p>
 					</div>
 				</div>
-				<div class="row Kristian" data-bind="with: viewModel">
-					<div class="col-md-6">
-						<select class="fullWidth" id="programsSelect"
-							data-bind="options: programs,
+				<div id="programWrapper" data-bind="with: viewModel">
+					<div class="row Kristian">
+						<div class="col-md-6">
+							<select class="fullWidth" id="programsSelect"
+								data-bind="options: programs,
                                 optionsText: 'name',
                                 optionsCaption: 'Select program',
                                 value: selectedProgram"></select>
-					</div>
-					<div class="col-md-6">
-						<select class="fullWidth" id="programStagesSelect"
-							data-bind="options: programStages,
+						</div>
+						<div class="col-md-6">
+							<select class="fullWidth" id="programStagesSelect"
+								data-bind="options: programStages,
                                  optionsText: 'name',
                                  optionsCaption: 'Select program stage',
                                  value: selectedProgramStage"></select>
+						</div>
 					</div>
-				</div>
-				<div class="row Kristian" data-bind="with: viewModel">
-					<div class="col-md-12" data-bind="visible: selectedProgramStage()">
-						<h3
-							data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
-						<div class="row" data-bind="foreach: dataElements">
-							<!-- Template Marianne -->
+					<div class="row Kristian">
+						<div class="col-md-12" data-bind="visible: selectedProgramStage()">
+							<h3
+								data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
+							<div class="row" data-bind="foreach: dataElements">
+								<!-- Template Marianne -->
 
-							<div class="col-md-12" data-bind="visible: $parent.dependenciesHold($data)">
-								<div class="well">
-									<p>
-										<strong data-bind="text: formName"></strong> <strong
-											style="font-weight: lighter;" data-bind="text: description"></strong>
-									</p>
+								<div class="col-md-12"
+									data-bind="visible: $parent.dependenciesHold($data)">
+									<div class="well col-md-12">
+										<p>
+											<strong data-bind="text: formName"></strong> <strong
+												data-bind="text: description"></strong>
+										</p>
 
-									<div data-bind="switch: type">
-										<div data-bind="case: 'checkbox'">
-											<input type="checkbox" data-bind="checked: value" />
+										<div class="col-md-6" data-bind="switch: type">
+											<div data-bind="case: 'checkbox'">
+												<input type="checkbox" data-bind="checked: value" />
+											</div>
+											<div data-bind="case: $default">
+												<p>
+													<input data-bind="value: value" /> (<strong
+														data-bind="text: type"></strong>)
+												</p>
+
+											</div>
 										</div>
-										<div data-bind="case: $default">
-											<p>
-												<input data-bind="value: value"></input> (<strong
-													style="font-weight: lighter;" data-bind="text: type"></strong>)
-											</p>
 
-										</div>
+										<button
+											data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
+											skip logic</button>
+										<button
+											data-bind="visible: addingSkipLogic(), click: saveSkipLogic.bind($data)">Save
+											skip logic</button>
+
+										<input type="checkbox"
+											data-bind="visible: isInSkipLogic(), checked: isDependent" />
 									</div>
 
 								</div>
-
 							</div>
 						</div>
-
-
 					</div>
 				</div>
 			</div>
@@ -111,8 +120,7 @@
 
 	<script src="js/namespace.js"></script>
 	<script src="js/survey.utils.js"></script>
-    <script src="js/survey.data.js"></script>
-	<script src="js/survey.DataElementModel.js"></script>
+	<script src="js/survey.data.js"></script>
 	<script src="js/survey.ViewModel.js"></script>
 	<script src="js/survey.main.js"></script>
 </body>

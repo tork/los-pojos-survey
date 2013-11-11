@@ -66,7 +66,7 @@
 		self.dataElements = ko.observableArray();
 		self.selectedProgram.subscribe(function() {
 			self.programStages().length = 0;
-			survey.data.getProgramStagesFromSelectedProgram();
+			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
 
 		/* testdata */

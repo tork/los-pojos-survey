@@ -110,6 +110,7 @@
                 data: data,
                 contentType: 'text/plain'
             }).done(success).fail(error);
+        };
         
         self.getAndInsertDataElementsForSelectedProgramStage = function() {
             for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {

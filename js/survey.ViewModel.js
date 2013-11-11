@@ -8,7 +8,8 @@
 		self.programStages = ko.observableArray();
 		self.selectedProgramStage = ko.observable();
 		self.dataElements = ko.observableArray();
-		self.selectedProgram.subscribe(function() {
+		self.activeElement = ko.observable({type: "None"});
+        self.selectedProgram.subscribe(function() {
 			self.programStages().length = 0;
 			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
@@ -41,6 +42,7 @@
 
         self.addSkipLogic = function(dataelement) {
             dataelement.addingSkipLogic(true);
+            self.activeElement(dataelement);
 
             $.each(root.viewModel.dataElements(), function( index, element ) {
                 if(element != dataelement) {

@@ -73,7 +73,7 @@
 							<div class="row" data-bind="foreach: dataElements">
 								<div class="col-md-12"
 									data-bind="visible: $parent.dependenciesHold($data)">
-									<div class="well col-md-12">
+									<div class="well row col-md-12">
 										<p>
 											<strong data-bind="text: formName"></strong> <strong
 												data-bind="text: description"></strong>
@@ -105,8 +105,23 @@
                                                 data-bind="visible: addingSkipLogic(), click: $parent.saveSkipLogic.bind($data)">Save
                                                 skip logic</button>
 
-                                            <input type="checkbox"
-                                                data-bind="visible: isInSkipLogic(), checked: isDependent" />
+                                            <div class="skipLogicUI col-md-6">
+                                                <div class="col-md-1">
+                                                    <input type="checkbox" data-bind="visible: isInSkipLogic(), checked: isDependent" />
+                                                </div>
+                                                <div class="skipLogicPicker col-md-11"
+                                                     data-bind="visible: isDependent()">
+                                                    <div data-bind="switch: $parent.activeElement().type">
+                                                        <div data-bind="case: 'bool'">
+                                                            <label>Show this element when parent is: </label>
+                                                            <select
+                                                                    data-bind="options: $parent.activeElement().dropDownOpts,
+                                                                    value: triggerOption"></select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
 									</div>
 

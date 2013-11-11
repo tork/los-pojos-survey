@@ -18,6 +18,12 @@
         self.dropDownOpts.push("Yes"); //Do this when dataElement is inserted in viewModel
         self.dropDownOpts.push("No");   //instead of this hard coded edition :P
 
+        self.triggerValue = ko.observable();
+        self.triggerOption = ko.observable();
+        self.triggerOption.subscribe(function(value) {
+            self.triggerValue({value: value});
+        });
+
         self.isDependent = ko.observable(false);
 
         //skip logic

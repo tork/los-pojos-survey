@@ -61,7 +61,33 @@
                 console.log("Could not fetch program stages from server");
             });
         };
+        
+        self.getAndInsertDataElementsForSelectedProgramStage = function() {
+            for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
+                var dataElementId = survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id;
+                self.getAndInsertDataElementById(dataElementId);
+            }
+        };
+        
+        self.getAndInsertDataElementById = function(id) {
+            var url = "http://" + survey.utils.getBaseUrl() + "/api/dataElements/" + id + ".jsonp";
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: 'application/json',
+                dataType: 'jsonp'
+            })
+            .done(function(data) {
+                console.log("Data element fetched");
+                console.log(data);
+                root.viewModel.dataElements.push(data);
+            })
+            .fail(function() {
+                console.log("Could not fetch data element from server");
+            });
+        };
     };
+    
     
     root.data = new data();
 })(survey);

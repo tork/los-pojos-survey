@@ -19,24 +19,44 @@ var extract_arrangement = extract_arrangement_array;
 	var test_set = [
 	{
 		element_id: 10,
-		unreadable_id: 20
+		dependencies:
+		[{
+			dep_id: 12,
+			triggers: [""]
+		},{
+			dep_id: 13,
+			triggers: [""]
+		}]
 	},{
 		element_id: 11,
-		unreadable_id: 21
+		dependencies:
+		[{
+			dep_id: 10,
+			triggers: [""]
+		},{
+			dep_id: -10,
+			triggers: [""]
+		}]
 	},{
-		element_id: 12,
-		unreadable_id: 22
+		element_id: 12
+		dependencies:
+		[{
+			dep_id: 13,
+			triggers: [""]
+		}]
 	},{
-		element_id: 13,
-		unreadable_id: 23
+		element_id: 13
 	},{
 		// Circular dependencies (excluded)
 		element_id: -10,
-		unreadable_id:-20
+		dependencies:
+		[{
+			dep_id: 11,
+			triggers: [""]
+		}]
 	},{
 		// Isolated node
-		element_id: 19,
-		unreadable_id: 29
+		element_id: 19
 	}
 	];
 
@@ -64,7 +84,17 @@ function debug(test_set) {
 	}
 }
 
-function rearrange(elements) {
+function rearrange(elements, surveyId) {
+	function succ(msg) {
+		console.log(msg);
+	}
+
+	function err(req, status, err) {
+		console.log(status+':');
+		console.log(err);
+	}
+
+	survey.data.get_dependencies(surveyId, elements, succ, err);
 	var workspace = create_workspace(elements);
 	
 	elements.forEach(function(elem) {
@@ -75,9 +105,8 @@ function rearrange(elements) {
 	return extract_arrangement(workspace);
 }
 
+/*
 function fetch_dependencies(elem) {
-	// TODO: Actually execute a fetch
-	
 	var deps = [];
 	switch (elem.element_id) {
 	case 10:
@@ -118,6 +147,7 @@ function fetch_dependencies(elem) {
 	
 	return deps;
 }
+*/
 
 function register_dependencies(elem, deps, workspace) {
 	elem.dependencies = deps;

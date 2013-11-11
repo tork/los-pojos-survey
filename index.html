@@ -22,8 +22,8 @@
 		<div id="sidebar-wrapper">
 			<ul class="sidebar-nav">
 				<li class="sidebar-brand"><a href="#">Menu</a></li>
-				<li><a href="#">Admin</a></li>
-				<li><a href="#">Surveys</a></li>
+				<li><a href="">Admin</a></li> <!-- add clickhandler to change between views-->
+				<li><a href="">Surveys</a></li>
 			</ul>
 		</div>
 
@@ -82,7 +82,7 @@
 										</p>
 
 										<div class="col-md-6" data-bind="switch: type">
-											<div data-bind="case: 'checkbox'">
+											<div data-bind="case: 'trueOnly'">
 												<input type="checkbox" data-bind="checked: value" />
 											</div>
 											<div data-bind="case: $default">
@@ -94,15 +94,18 @@
 											</div>
 										</div>
 
-										<button
-											data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
-											skip logic</button>
-										<button
-											data-bind="visible: addingSkipLogic(), click: saveSkipLogic.bind($data)">Save
-											skip logic</button>
+                                        <div class="col-md-6 skipLogicPanel">
+                                            <!--Add skip-logic ui here-->
+                                            <button
+                                                data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
+                                                skip logic</button>
+                                            <button
+                                                data-bind="visible: addingSkipLogic(), click: saveSkipLogic.bind($data)">Save
+                                                skip logic</button>
 
-										<input type="checkbox"
-											data-bind="visible: isInSkipLogic(), checked: isDependent" />
+                                            <input type="checkbox"
+                                                data-bind="visible: isInSkipLogic(), checked: isDependent" />
+                                        </div>
 									</div>
 
 								</div>

@@ -13,10 +13,10 @@
             {"id" : "checkBoxElementID", "values" : ["true"]}
         ];
 
-        if(self.type === 'checkbox')
-            self.value = ko.observable(false);
-        else
-            self.value = ko.observable("");
+        self.value = ko.observable();
+        self.dropDownOpts = ko.observableArray();
+        self.dropDownOpts.push("Yes"); //Do this when dataElement is inserted in viewModel
+        self.dropDownOpts.push("No");   //instead of this hard coded edition :P
 
         self.isDependent = ko.observable(false);
 

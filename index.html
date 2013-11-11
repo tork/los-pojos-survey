@@ -84,7 +84,8 @@
 												<input type="checkbox" data-bind="checked: value" />
 											</div>
                                             <div data-bind="case: 'bool'">
-
+                                                <select data-bind="options: dropDownOpts,
+                                                value: value"></select>
                                             </div>
 											<div data-bind="case: $default">
 												<p>

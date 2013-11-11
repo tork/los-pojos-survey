@@ -22,8 +22,8 @@
 		<div id="sidebar-wrapper">
 			<ul class="sidebar-nav">
 				<li class="sidebar-brand"><a href="#">Menu</a></li>
-				<li><a href="#">Admin</a></li>
-				<li><a href="#">Surveys</a></li>
+				<li><a href="">Admin</a></li> <!-- add clickhandler to change between views-->
+				<li><a href="">Surveys</a></li>
 			</ul>
 		</div>
 
@@ -50,7 +50,7 @@
 					</div>
 				</div>
 				<div id="programWrapper" data-bind="with: viewModel">
-					<div class="row Kristian">
+					<div class="row">
 						<div class="col-md-6">
 							<select class="fullWidth" id="programsSelect"
 								data-bind="options: programs,
@@ -66,13 +66,11 @@
                                  value: selectedProgramStage"></select>
 						</div>
 					</div>
-					<div class="row Kristian">
+					<div class="row">
 						<div class="col-md-12" data-bind="visible: selectedProgramStage()">
 							<h3
 								data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
 							<div class="row" data-bind="foreach: dataElements">
-								<!-- Template Marianne -->
-
 								<div class="col-md-12"
 									data-bind="visible: $parent.dependenciesHold($data)">
 									<div class="well col-md-12">
@@ -82,9 +80,12 @@
 										</p>
 
 										<div class="col-md-6" data-bind="switch: type">
-											<div data-bind="case: 'checkbox'">
+											<div data-bind="case: 'trueOnly'">
 												<input type="checkbox" data-bind="checked: value" />
 											</div>
+                                            <div data-bind="case: 'bool'">
+
+                                            </div>
 											<div data-bind="case: $default">
 												<p>
 													<input data-bind="value: value" /> (<strong
@@ -94,15 +95,18 @@
 											</div>
 										</div>
 
-										<button
-											data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
-											skip logic</button>
-										<button
-											data-bind="visible: addingSkipLogic(), click: saveSkipLogic.bind($data)">Save
-											skip logic</button>
+                                        <div class="skipLogicPanel">
+                                            <!--Add skip-logic ui here-->
+                                            <button
+                                                data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: $parent.addSkipLogic.bind($data)">Add
+                                                skip logic</button>
+                                            <button
+                                                data-bind="visible: addingSkipLogic(), click: $parent.saveSkipLogic.bind($data)">Save
+                                                skip logic</button>
 
-										<input type="checkbox"
-											data-bind="visible: isInSkipLogic(), checked: isDependent" />
+                                            <input type="checkbox"
+                                                data-bind="visible: isInSkipLogic(), checked: isDependent" />
+                                        </div>
 									</div>
 
 								</div>
@@ -120,9 +124,10 @@
 
 	<script src="js/namespace.js"></script>
 	<script src="js/survey.utils.js"></script>
-	<script src="js/survey.data.js"></script>
-	<script src="js/rearrange.js"></script>
+    <script src="js/survey.dataelement.js"></script>
 	<script src="js/survey.ViewModel.js"></script>
+    <script src="js/survey.data.js"></script>
 	<script src="js/survey.main.js"></script>
+	<script src="js/survey.rearrange.js"></script>
 </body>
 </html>

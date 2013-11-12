@@ -128,6 +128,10 @@
             .done(function(data) {
                 console.log("Data element fetched");
                 console.log(data);
+                if (data.optionSet) {
+                    var optionSetId = data.optionSet.id;
+                    self.getOptionSet(optionSetId);
+                }                
                 root.viewModel.dataElements.push(new root.viewModel.dataElementCreator(data));
             })
             .fail(function() {
@@ -136,7 +140,23 @@
             
         };
         
-        
+        self.getOptionSet = function(id) {
+            var url = "http://" + survey.utils.getBaseUrl() + "/api/optionSets/" + id + ".jsonp";
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: 'application/json',
+                dataType: 'jsonp'
+            })
+            .done(function(data) {
+                console.log("Option set fetched");
+                console.log(data);
+                root.viewModel.selectedProgramStagesOptionSets().push(data);
+            })
+            .fail(function() {
+                console.log("Could not fetch option set from server");
+            });
+        };
     };
     
     

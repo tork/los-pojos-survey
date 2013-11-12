@@ -15,10 +15,10 @@
 			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
         self.selectedProgramStage.subscribe(function() {
-            console.log("test");
-            survey.data.getAndInsertDataElementsForSelectedProgramStage();
+            self.selectedProgramStagesOptionSets().length = 0;
+            survey.data.getAndInsertDataElementsForSelectedProgramStage();            
         });
-        self.selectedProgramStagesOptionSets = ko.observable;
+        self.selectedProgramStagesOptionSets = ko.observableArray();
 
 		/* testdata */
 		self.dataElements.push(new models.DataElement({"name":"Age","created":"2012-11-14T13:41:39.639+0000","lastUpdated":"2013-03-15T16:32:26.280+0000","shortName":"Age","description":"Age of patient.","formName":"Age (Years)","active":true,"domainType":"patient","type":"int","numberType":"int","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":null,"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/qrur9Dvnyt5","id":"qrur9Dvnyt5"}));

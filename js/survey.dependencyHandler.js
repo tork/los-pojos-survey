@@ -37,9 +37,21 @@
             deferred.reject("No such type");
         }
 
-        element.dependencies.push(dependency);
+        addOrUpdateDependency(element, dependency);
         deferred.resolve();
         return deferred.promise();
     };
+
+    function addOrUpdateDependency(element, dependency) {
+        var deps = element.dependencies;
+        for(var i = 0; i < deps.length; i++) {
+            if(deps[i].id === dependency.id) {
+                deps[i].triggers = dependency.triggers;
+                return;
+            }
+        }
+
+        element.dependencies.push(dependency);
+    }
 
 })(survey.dependencyHandler = survey.dependencyHandler || {});

@@ -4,7 +4,7 @@
         var self = this;
         self.id = dataelement.id;
         self.name = dataelement.name;
-        self.formName = dataelement.formName;
+        self.formName = dataelement.formName ? dataelement.formName : dataelement.name;
         self.description = dataelement.description;
         self.type =  dataelement.type;
 

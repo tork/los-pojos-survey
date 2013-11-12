@@ -132,6 +132,10 @@
                                                                 <input type="number" data-bind="value: upperLimit"/>
                                                             </div>
                                                         </div>
+                                                        <div data-bind="case: 'string'">
+                                                            <label>Values (separate with ",")</label>
+                                                            <input type="text" data-bind="value: commaList" />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

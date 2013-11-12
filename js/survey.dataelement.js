@@ -29,8 +29,6 @@
 
 
         self.isDependent = ko.observable(false);
-
-
         self.isInSkipLogic = ko.observable(false);
         self.addingSkipLogic = ko.observable(false);
     };

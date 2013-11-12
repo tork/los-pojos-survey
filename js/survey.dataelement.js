@@ -39,6 +39,7 @@
             self.lowerLimit("");
             self.upperLimit("");
             self.isDependent(false);
+            self.isInSkipLogic(false);
         }
     };
 })(survey.viewModel, survey.models = survey.models || {});

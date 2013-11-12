@@ -54,16 +54,12 @@
 
         self.saveSkipLogic = function(dataelement) {
             $.each(root.viewModel.dataElements(), function( index, element ) {
-                if(element != dataelement) {
-                    if(element.isDependent()) {
-
-                        //Må vite hva slags type avhengighet: dataelement.type
-                        //Hente ut avhengighetsdata somehow..
-                        //Kalle på handler
-                        element.resetSkipLogicUI();
-                        console.log("legger til avhengighet", element);
-                    }
-
+                if(element != dataelement && element.isDependent()) {
+                    //Må vite hva slags type avhengighet: dataelement.type
+                    //Hente ut avhengighetsdata somehow..
+                    //Kalle på handler
+                    element.resetSkipLogicUI();
+                    console.log("legger til avhengighet", element);
                     element.isInSkipLogic(false);
                 }
             });

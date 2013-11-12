@@ -61,6 +61,54 @@
                 console.log("Could not fetch program stages from server");
             });
         };
+
+        //TODO: untested (cross-domain trouble)
+        self.get_dependencies = function(surveyId, elements, success, error) {
+            var url = survey.utils.surveySettingsUrl(surveyId, 'deps');
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: 'text/plain'
+            }).done(function(data) {
+                data = JSON.parse(data);
+                success(data);
+            }).fail(error);
+        };
+
+        //TODO: untested (cross-domain trouble)
+        self.post_dependencies = function(surveyId, elements) {
+            function elements2dependencies(elements, success, error) {
+                var deps = {};
+                elements.forEach(function(elem) {
+                    var dep = elem.dependencies;
+                    if (dep) {
+                        Object.defineProperty(deps, elem.element_id, dep);
+                    }
+                });
+
+        // deluxe array edition (slow)
+        //      var deps = [];
+        //      elements.forEach(function(elem) {
+        //          var dep = elem.dependencies;
+        //          if (dep) {
+        //              deps.push(dep);
+        //          }
+        //      });
+
+                return deps;
+            }
+
+            var url = survey.utils.surveySettingsUrl(surveyId, 'deps');
+            var data = elements2dependencies(elements);
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                contentType: 'text/plain'
+            }).done(success).fail(error);
+        };
         
         self.getAndInsertDataElementsForSelectedProgramStage = function() {
             for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
@@ -80,7 +128,7 @@
             .done(function(data) {
                 console.log("Data element fetched");
                 console.log(data);
-                root.viewModel.dataElements.push(new root.viewModel.dataElementCreator(data)); // CONTINUE HERE
+                root.viewModel.dataElements.push(new root.viewModel.dataElementCreator(data));
             })
             .fail(function() {
                 console.log("Could not fetch data element from server");

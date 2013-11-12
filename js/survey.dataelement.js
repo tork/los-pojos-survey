@@ -8,10 +8,7 @@
         self.description = dataelement.description;
         self.type =  dataelement.type;
 
-        self.dependencies = [
-            {"id" : "Age", "values" : [0, 20]},
-            {"id" : "checkBoxElementID", "values" : ["true"]}
-        ];
+        self.dependencies = [];
 
         self.value = ko.observable();
         self.dropDownOpts = ko.observableArray();

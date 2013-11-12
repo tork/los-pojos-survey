@@ -1,4 +1,4 @@
-(function(root, models){
+(function(root, models, depHandler){
 	var viewModel = function() {
 		var self = this;
 		//må pushe objecter med minimum en prop kalt name i programs og programStages
@@ -55,12 +55,15 @@
         self.saveSkipLogic = function(dataelement) {
             $.each(root.viewModel.dataElements(), function( index, element ) {
                 if(element != dataelement && element.isDependent()) {
-                    //Må vite hva slags type avhengighet: dataelement.type
-                    //Hente ut avhengighetsdata somehow..
-                    //Kalle på handler
+                    depHandler.addDependency(dataelement, element).done(function() {
+                        element.resetSkipLogicUI();
+                        console.log("legger til avhengighet", element);
+                    }).fail(function(status) {
+                        element.resetSkipLogicUI();
+                        console.log(status);
+                    });
+                } else {
                     element.resetSkipLogicUI();
-                    console.log("legger til avhengighet", element);
-                    element.isInSkipLogic(false);
                 }
             });
             dataelement.addingSkipLogic(false);
@@ -75,5 +78,5 @@
 	 * */
 
 	root.viewModel = new viewModel();
-})(survey, survey.models);
+})(survey, survey.models, survey.dependencyHandler);
 

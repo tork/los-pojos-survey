@@ -56,14 +56,19 @@
 
         self.saveSkipLogic = function(dataelement) {
             $.each(root.viewModel.dataElements(), function( index, element ) {
-                if(element != dataelement && element.isDependent()) {
-                    depHandler.addDependency(dataelement, element).done(function() {
+                if(element != dataelement) {
+                    if(element.isDependent()) {
+                        depHandler.addDependency(dataelement, element).done(function() {
+                            element.resetSkipLogicUI();
+                            console.log("legger til avhengighet", element);
+                        }).fail(function(status) {
+                            element.resetSkipLogicUI();
+                            console.log(status);
+                        });
+                    } else {
+                        depHandler.removeDependency(dataelement, element);
                         element.resetSkipLogicUI();
-                        console.log("legger til avhengighet", element);
-                    }).fail(function(status) {
-                        element.resetSkipLogicUI();
-                        console.log(status);
-                    });
+                    }
                 } else {
                     element.resetSkipLogicUI();
                 }

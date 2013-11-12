@@ -4,7 +4,7 @@
     element: The dataElement to create a dependency on
     dependentOnElement: The element it should depend on
      */
-    root.addDependency = function(parentElement, element /*need something more*/) {
+    root.addDependency = function(parentElement, element) {
         var deferred = new $.Deferred();
         var dependency = {
             id: parentElement.id,
@@ -40,6 +40,15 @@
         addOrUpdateDependency(element, dependency);
         deferred.resolve();
         return deferred.promise();
+    };
+
+    root.removeDependency = function(parentElement, element) {
+        var deps = element.dependencies;
+        for(var i = 0; i < deps.length; i++) {
+            if(deps[i].id == parentElement.id) {
+                deps.splice(i, 1);
+            }
+        }
     };
 
     root.hasDependency = function(element, potentialParent) {

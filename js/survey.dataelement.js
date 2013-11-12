@@ -31,5 +31,14 @@
         self.isDependent = ko.observable(false);
         self.isInSkipLogic = ko.observable(false);
         self.addingSkipLogic = ko.observable(false);
+
+        self.resetSkipLogicUI = function() {
+            self.triggerOption("");
+            self.interval(false);
+            self.commaList("");
+            self.lowerLimit("");
+            self.upperLimit("");
+            self.isDependent(false);
+        }
     };
 })(survey.viewModel, survey.models = survey.models || {});

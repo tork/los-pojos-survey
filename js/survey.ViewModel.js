@@ -56,11 +56,11 @@
             $.each(root.viewModel.dataElements(), function( index, element ) {
                 if(element != dataelement) {
                     if(element.isDependent()) {
-                        element.isDependent(false);
-                        element.interval(false); //Lage hjelpefunksjon for å nulle ut i dataElement
+
                         //Må vite hva slags type avhengighet: dataelement.type
                         //Hente ut avhengighetsdata somehow..
                         //Kalle på handler
+                        element.resetSkipLogicUI();
                         console.log("legger til avhengighet", element);
                     }
 

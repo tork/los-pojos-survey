@@ -22,7 +22,7 @@
         self.triggerOption = ko.observable(); //If adding dep to bool dataElement
 
         self.interval = ko.observable();
-        self.commaList = ko.observable(); //If adding dep to int dataElement with specific values
+        self.commaList = ko.observable(); //If adding dep to int, string or date(only one) dataElement with specific values
 
         self.lowerLimit = ko.observable(); //If adding dep to int dataElement with interval
         self.upperLimit = ko.observable();  //If adding dep to int dataElement with interval

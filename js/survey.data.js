@@ -1,117 +1,143 @@
 (function(root){
-	var data = function() {
-		var self = this;
+    var data = function() {
+        var self = this;
+        
+        self.getProgramIdsAndPopulateDropdown = function() {
+            var url = "http://" + survey.utils.getBaseUrl() + "/api/programs.jsonp";
+            console.log("URL: " + url);            
+            $.ajax({
+               type: 'GET',
+                url: url,
+                contentType: 'application/json',
+                dataType: 'jsonp'
+            })
+            .done(function(data) {
+                for (var i = 0; i < data.programs.length; i++) {
+                    root.viewModel.programs.push(data.programs[i]);
+                }
+            })
+            .fail(function(){
+                console.log("Could not fetch program IDs from server");
+            });
+        };
+        
+        self.getProgramStageIdsFromSelectedProgram = function() {
+            var chosenProgramId = survey.viewModel.selectedProgram().id;
+            var url = "http://" + survey.utils.getBaseUrl() + "/api/programs/" + chosenProgramId + ".jsonp";
+            console.log(url);
+                        
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: 'application/json',
+                dataType: 'jsonp'
+            })
+            .done(function(data) {
+                console.log("Program fetched");
+                console.log(data);
+                for (var i = 0; i < data.programStages.length; i++) {
+                    self.getProgramStagesAndPopulateDropdown(data.programStages[i].id);
+                }
+            })
+            .fail(function() {
+                console.log("Could not fetch program stage IDs from server");
+            });
+        };
+        
+        self.getProgramStagesAndPopulateDropdown = function(id) {
+            var progStageUrl = "http://" + survey.utils.getBaseUrl() + "/api/programStages/" + id + ".jsonp";
+            $.ajax({
+                type: 'GET',
+                url: progStageUrl,
+                contentType: 'application/json',
+                dataType: 'jsonp'
+            })
+            .done(function(data) {
+                console.log("Program stages fetched");
+                console.log(data);
+                root.viewModel.programStages.push(data);
+            })
+            .fail(function() {
+                console.log("Could not fetch program stages from server");
+            });
+        };
 
-		self.getPrograms = function() {
-			var url = "http://" + survey.utils.getBaseUrl() + "/api/programs.jsonp";
-			console.log("URL: " + url);            
-			$.ajax({
-				type: 'GET',
-				url: url,
-				contentType: "application/json",
-				dataType: 'jsonp'
-			})
-			.done(function(data) {
-				for (var i = 0; i < data.programs.length; i++) {
-					self.getExtendedProgramsAndPopulateDropdown(data.programs[i].id);
-				}
-			})
-			.fail(function(){
-				console.log("Could not fetch programs from server");
-			});
-		};
+        //TODO: untested (cross-domain trouble)
+        self.get_dependencies = function(surveyId, elements, success, error) {
+            var url = survey.utils.surveySettingsUrl(surveyId, 'deps');
 
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: 'text/plain'
+            }).done(function(data) {
+                data = JSON.parse(data);
+                success(data);
+            }).fail(error);
+        };
 
-		self.getExtendedProgramsAndPopulateDropdown = function(id) {
-			var url = "http://" + survey.utils.getBaseUrl() + "/api/programs/" + id + ".jsonp";
-			console.log(url);
-			$.ajax({
-				type: 'GET',
-				url: url,
-				contentType: "application/json",
-				dataType: 'jsonp'
-			})
-			.done(function(data) {
-				console.log("Program: " + data.name + " received!");
-				root.viewModel.programs.push(data);
-			})
-			.fail(function() {
-				console.log("Could not fetch extended program info from server");
-			});
-		};
+        //TODO: untested (cross-domain trouble)
+        self.post_dependencies = function(surveyId, elements) {
+            function elements2dependencies(elements, success, error) {
+                var deps = {};
+                elements.forEach(function(elem) {
+                    var dep = elem.dependencies;
+                    if (dep) {
+                        Object.defineProperty(deps, elem.element_id, dep);
+                    }
+                });
 
-		self.getProgramStagesFromSelectedProgram = function() {            
-			for (var i = 0; i < root.viewModel.selectedProgram().programStages.length; i++) {
-				self.getProgramStageAndPopulateDropdown(root.viewModel.selectedProgram().programStages[i].id);
-			}
-		};
+        // deluxe array edition (slow)
+        //      var deps = [];
+        //      elements.forEach(function(elem) {
+        //          var dep = elem.dependencies;
+        //          if (dep) {
+        //              deps.push(dep);
+        //          }
+        //      });
 
-		self.getProgramStageAndPopulateDropdown = function(id) {
-			var url = "http://" + survey.utils.getBaseUrl() + "/api/programStages/" + id + ".jsonp";
-			console.log(url);
-			$.ajax({
-				type: 'GET',
-				url: url,
-				contentType: "application/json",
-				dataType: 'jsonp'
-			})
-			.done(function(data) {
-				console.log("ProgramStage: " + data.name + " received!");
-				root.viewModel.programStages.push(data);
-				// TODO: Add ProgramStageDataElements to view model
-			})
-			.fail(function() {
-				console.log("Could not fetch program stages from server.");
-			});
+                return deps;
+            }
 
-		};
+            var url = survey.utils.surveySettingsUrl(surveyId, 'deps');
+            var data = elements2dependencies(elements);
 
-		self.authenticate = function(username, password) {
-			var url = "http://" + survey.utils.getBaseUrl() + "/dhis-web-commons-security/login.action?authOnly=true";
-
-			console.log(url);
-			$.ajax({
-				type: 'POST',
-				url: url,
-				contentType: "application/json",
-				data: {"j_username" : username, "j_password" : password}
-			})
-			.done(function(data) {
-				console.log("Log in status:", data);
-				// TODO: Add ProgramStageDataElements to view model
-			})
-			.fail(function(err) {
-				console.log("Could not log in.", err.status);
-			});
-
-
-		}
-
-		self.getDHISStartPage = function() {
-			var result = "result";
-			var url = "http://" + survey.utils.getBaseUrl() + "/api/programs.jsonp";
-			console.log("URL: " + url); 
-
-
-			$.ajax({
-				type: 'GET',
-				url: url,
-			})
-			.done(function(data) {
-				result = data;
-			})
-			.fail(function(err){
-				console.log("Not logged in");
-				result = "invalid";
-			});
-
-			return result;
-
-		};
-	};
-
-
-	root.data = new data();
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                contentType: 'text/plain'
+            }).done(success).fail(error);
+        };
+        
+        self.getAndInsertDataElementsForSelectedProgramStage = function() {
+            for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
+                var dataElementId = survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id;
+                self.getAndInsertDataElementById(dataElementId);
+            }
+        };
+        
+        self.getAndInsertDataElementById = function(id) {
+            var url = "http://" + survey.utils.getBaseUrl() + "/api/dataElements/" + id + ".jsonp";
+            $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: 'application/json',
+                dataType: 'jsonp'
+            })
+            .done(function(data) {
+                console.log("Data element fetched");
+                console.log(data);
+                root.viewModel.dataElements.push(data);
+            })
+            .fail(function() {
+                console.log("Could not fetch data element from server");
+            });
+        };
+    };
+    
+    
+    root.data = new data();
 })(survey);
 
 

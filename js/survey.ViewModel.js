@@ -1,56 +1,5 @@
-(function(root){
-	/* Inneholder all data om et dataelement. Planen er å etterhvert utvide dette til å også inneholde skip logic*/
-	function DataElement(dataelement) {
-		var self = this;
-		self.id = dataelement.id;
-		self.name = dataelement.name;
-		self.formName = dataelement.formName;
-		self.description = dataelement.description;
-		self.type =  dataelement.type;
 
-		self.dependencies = [
-		                     {"id" : "Age", "values" : [0, 20]},
-		                     {"id" : "checkBoxElementID", "values" : ["true"]}
-		                     ];
-
-		if(self.type === 'checkbox')
-			self.value = ko.observable(false);
-		else
-			self.value = ko.observable("");	
-
-		self.isDependent = ko.observable(false);
-
-		//skip logic
-		self.isInSkipLogic = ko.observable(false);
-		self.addingSkipLogic = ko.observable(false);
-
-		self.addSkipLogic = function(dataelement) {
-			dataelement.addingSkipLogic(true);
-
-			$.each(root.viewModel.dataElements(), function( index, element ) {
-				if(element != self) {
-					element.isInSkipLogic(true);
-				}
-			});
-		};
-
-		self.saveSkipLogic = function(dataelement) {
-			$.each(root.viewModel.dataElements(), function( index, element ) {
-				if(element != self) {
-					if(element.isDependent()) {
-						element.isDependent(false);
-						console.log("legger til avhengighet", element);
-					}
-
-					element.isInSkipLogic(false);
-				}
-			});
-			dataelement.addingSkipLogic(false);
-		};
-
-	}
-
-//	Kan nok rename denne etter hvert som vi vet hvilke viewModels vi trenger - iallfall hvis vi trenger flere!
+(function(root, models){
 	var viewModel = function() {
 		var self = this;
 
@@ -61,15 +10,18 @@
 		self.programStages = ko.observableArray();
 		self.selectedProgramStage = ko.observable();
 		self.dataElements = ko.observableArray();
+		self.activeElement = ko.observable({type: "None"});
 		self.selectedProgram.subscribe(function() {
 			self.programStages().length = 0;
-			survey.data.getProgramStagesFromSelectedProgram();
+			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
 
 		/* testdata */
-		self.dataElements.push(new DataElement({"name":"Age","created":"2012-11-14T13:41:39.639+0000","lastUpdated":"2013-03-15T16:32:26.280+0000","shortName":"Age","description":"Age of patient.","formName":"Age (Years)","active":true,"domainType":"patient","type":"int","numberType":"int","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":null,"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/qrur9Dvnyt5","id":"qrur9Dvnyt5"}));
-		self.dataElements.push(new DataElement({"name":"Gender","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Gender","description":"Gender of patient.","formName":"Gender","active":true,"domainType":"patient","type":"string","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"Age"}));	
-		self.dataElements.push(new DataElement({"name":"Alive","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Alive","description":"","formName":"Are you still alive?","active":true,"domainType":"patient","type":"checkbox","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"checkBoxElementID"}));	
+		self.dataElements.push(new models.DataElement({"name":"Age","created":"2012-11-14T13:41:39.639+0000","lastUpdated":"2013-03-15T16:32:26.280+0000","shortName":"Age","description":"Age of patient.","formName":"Age (Years)","active":true,"domainType":"patient","type":"int","numberType":"int","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":null,"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/qrur9Dvnyt5","id":"qrur9Dvnyt5"}));
+		self.dataElements.push(new models.DataElement({"name":"Gender","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Gender","description":"Gender of patient.","formName":"Gender","active":true,"domainType":"patient","type":"string","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"Age"}));
+		self.dataElements.push(new models.DataElement({"name":"Alive","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Alive","description":"","formName":"Are you still alive?","active":true,"domainType":"patient","type":"trueOnly","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"checkBoxElementID"}));
+		self.dataElements.push(new models.DataElement({"name":"Ok?","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Alive","description":"","formName":"Feeling Ok?","active":true,"domainType":"patient","type":"bool","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"yesNOElementID"}));
+		self.dataElements.push(new models.DataElement({"name":"Ok?","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Alive","description":"","formName":"Feeling Ok?","active":true,"domainType":"patient","type":"date","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"DateElementID"}));
 
 
 		self.getDataElementByID = function(id) {
@@ -90,27 +42,47 @@
 			});
 			return true;
 		};
-		
+
+		self.addSkipLogic = function(dataelement) {
+			dataelement.addingSkipLogic(true);
+			self.activeElement(dataelement);
+
+			$.each(root.viewModel.dataElements(), function( index, element ) {
+				if(element != dataelement) {
+					element.isInSkipLogic(true);
+				}
+			});
+		};
+
+		self.saveSkipLogic = function(dataelement) {
+			$.each(root.viewModel.dataElements(), function( index, element ) {
+				if(element != dataelement) {
+					if(element.isDependent()) {
+						element.isDependent(false);
+						element.interval(false); //Lage hjelpefunksjon for å nulle ut i dataElement
+						//Må vite hva slags type avhengighet: dataelement.type
+						//Hente ut avhengighetsdata somehow..
+						//Kalle på handler
+						console.log("legger til avhengighet", element);
+					}
+
+					element.isInSkipLogic(false);
+				}
+			});
+			dataelement.addingSkipLogic(false);
+		};
+
 		//LOG IN
 		self.loginVisible = ko.observable(false);
-		
+
 		self.username = ko.observable();
 		self.password = ko.observable();
 		self.logIn = function() {
 			console.log("Log in with values: " + self.username() + " " + self.password());
 			survey.data.authenticate(self.username(), self.password());rue
 		}
-		
-		self.startUp = function() {
-			var data = survey.data.getDHISStartPage();
-			try {
-				JSON.parse(data);
-				self.loginVisible(false);
-			} catch (err) {
-				self.loginVisible(true);
-			}
-		}
-	}
+
+	};
 
 	/*
 	 * Litt forklaring: selectedProgram vil inneholde det man har valgt,
@@ -120,5 +92,5 @@
 	 * */
 
 	root.viewModel = new viewModel();
-})(survey);
+})(survey, survey.models);
 

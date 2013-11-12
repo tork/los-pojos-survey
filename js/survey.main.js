@@ -6,14 +6,8 @@
 		});
 
 		ko.applyBindings({viewModel: viewModel});
-		
-//		if(survey.viewModel.isLoggedIn())
-//			survey.data.getPrograms();
-//		else
-//			console.log("LOG IN!");
-		survey.viewModel.startUp();
-		
-
+		//survey.data.getPrograms();
+		survey.data.getProgramIdsAndPopulateDropdown();
 	});
 })(survey.viewModel, survey.data);
 

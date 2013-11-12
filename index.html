@@ -24,6 +24,7 @@
 				<li class="sidebar-brand"><a href="#">Menu</a></li>
 				<li><a href="#">Admin</a></li>
 				<li><a href="#">Surveys</a></li>
+				<li><a href="#">Log out</a>
 			</ul>
 		</div>
 
@@ -49,79 +50,87 @@
 						<p class="well">HOW TO USE THE WEB APP</p>
 					</div>
 				</div>
-				<div id="programWrapper" data-bind="with: viewModel">
-					<div class="row Kristian">
-						<div class="col-md-6">
-							<select class="fullWidth" id="programsSelect"
-								data-bind="options: programs,
+				<div>
+					<div id=programWrapper data-bind="with: viewModel">
+						<div data-bind="visible: loginVisible">
+							Username: <input type="text" data-bind="value: username"><br>
+							Password: <input type="password" data-bind="value: password">
+							<button data-bind="click: logIn">Log in</button>
+						</div>
+						<div data-bind="visible: !loginVisible">
+							<div class="row Kristian">
+								<div class="col-md-6">
+									<select class="fullWidth" id="programsSelect"
+										data-bind="options: programs,
                                 optionsText: 'name',
                                 optionsCaption: 'Select program',
                                 value: selectedProgram"></select>
-						</div>
-						<div class="col-md-6">
-							<select class="fullWidth" id="programStagesSelect"
-								data-bind="options: programStages,
+								</div>
+								<div class="col-md-6">
+									<select class="fullWidth" id="programStagesSelect"
+										data-bind="options: programStages,
                                  optionsText: 'name',
                                  optionsCaption: 'Select program stage',
                                  value: selectedProgramStage"></select>
-						</div>
-					</div>
-					<div class="row Kristian">
-						<div class="col-md-12" data-bind="visible: selectedProgramStage()">
-							<h3
-								data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
-							<div class="row" data-bind="foreach: dataElements">
-								<!-- Template Marianne -->
-
+								</div>
+							</div>
+							<div class="row Kristian">
 								<div class="col-md-12"
-									data-bind="visible: $parent.dependenciesHold($data)">
-									<div class="well col-md-12">
-										<p>
-											<strong data-bind="text: formName"></strong> <strong
-												data-bind="text: description"></strong>
-										</p>
+									data-bind="visible: selectedProgramStage()">
+									<h3
+										data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
+									<div class="row" data-bind="foreach: dataElements">
+										<!-- Template Marianne -->
 
-										<div class="col-md-6" data-bind="switch: type">
-											<div data-bind="case: 'checkbox'">
-												<input type="checkbox" data-bind="checked: value" />
-											</div>
-											<div data-bind="case: $default">
+										<div class="col-md-12"
+											data-bind="visible: $parent.dependenciesHold($data)">
+											<div class="well col-md-12">
 												<p>
-													<input data-bind="value: value" /> (<strong
-														data-bind="text: type"></strong>)
+													<strong data-bind="text: formName"></strong> <strong
+														data-bind="text: description"></strong>
 												</p>
 
+												<div class="col-md-6" data-bind="switch: type">
+													<div data-bind="case: 'checkbox'">
+														<input type="checkbox" data-bind="checked: value" />
+													</div>
+													<div data-bind="case: $default">
+														<p>
+															<input data-bind="value: value" /> (<strong
+																data-bind="text: type"></strong>)
+														</p>
+
+													</div>
+												</div>
+
+												<button
+													data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
+													skip logic</button>
+												<button
+													data-bind="visible: addingSkipLogic(), click: saveSkipLogic.bind($data)">Save
+													skip logic</button>
+
+												<input type="checkbox"
+													data-bind="visible: isInSkipLogic(), checked: isDependent" />
 											</div>
+
 										</div>
-
-										<button
-											data-bind="visible: !addingSkipLogic() && !isInSkipLogic() , click: addSkipLogic.bind($data)">Add
-											skip logic</button>
-										<button
-											data-bind="visible: addingSkipLogic(), click: saveSkipLogic.bind($data)">Save
-											skip logic</button>
-
-										<input type="checkbox"
-											data-bind="visible: isInSkipLogic(), checked: isDependent" />
 									</div>
-
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	<script src="js/libs/jquery.js"></script>
-	<script src="js/libs/bootstrap.js"></script>
-	<script src="js/libs/knockout-3.0.0.min.js"></script>
-	<script src="js/libs/knockout-switch-case.min.js"></script>
+			<script src="js/libs/jquery.js"></script>
+			<script src="js/libs/bootstrap.js"></script>
+			<script src="js/libs/knockout-3.0.0.min.js"></script>
+			<script src="js/libs/knockout-switch-case.min.js"></script>
 
-	<script src="js/namespace.js"></script>
-	<script src="js/survey.utils.js"></script>
-	<script src="js/survey.data.js"></script>
-	<script src="js/survey.ViewModel.js"></script>
-	<script src="js/survey.main.js"></script>
+			<script src="js/namespace.js"></script>
+			<script src="js/survey.utils.js"></script>
+			<script src="js/survey.data.js"></script>
+			<script src="js/survey.ViewModel.js"></script>
+			<script src="js/survey.main.js"></script>
 </body>
 </html>

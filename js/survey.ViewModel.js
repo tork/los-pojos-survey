@@ -1,5 +1,4 @@
 (function(root){
-
 	/* Inneholder all data om et dataelement. Planen er å etterhvert utvide dette til å også inneholde skip logic*/
 	function DataElement(dataelement) {
 		var self = this;
@@ -18,7 +17,7 @@
 			self.value = ko.observable(false);
 		else
 			self.value = ko.observable("");	
-		
+
 		self.isDependent = ko.observable(false);
 
 		//skip logic
@@ -27,14 +26,14 @@
 
 		self.addSkipLogic = function(dataelement) {
 			dataelement.addingSkipLogic(true);
-			
+
 			$.each(root.viewModel.dataElements(), function( index, element ) {
 				if(element != self) {
 					element.isInSkipLogic(true);
 				}
 			});
 		};
-		
+
 		self.saveSkipLogic = function(dataelement) {
 			$.each(root.viewModel.dataElements(), function( index, element ) {
 				if(element != self) {
@@ -42,18 +41,19 @@
 						element.isDependent(false);
 						console.log("legger til avhengighet", element);
 					}
-						
+
 					element.isInSkipLogic(false);
 				}
 			});
 			dataelement.addingSkipLogic(false);
 		};
-		
+
 	}
 
 //	Kan nok rename denne etter hvert som vi vet hvilke viewModels vi trenger - iallfall hvis vi trenger flere!
 	var viewModel = function() {
 		var self = this;
+
 		//må pushe objecter med minimum en prop kalt name i programs og programStages
 		//Kan være lurt å ha en model som ser slik ut kanskje: {name: "Navnet", id: "idsomething"}s
 		self.programs = ko.observableArray();
@@ -73,13 +73,13 @@
 
 
 		self.getDataElementByID = function(id) {
-            var dataEl;
-            $.each(root.viewModel.dataElements(), function(index, dataElement) {
-                if(dataElement.id === id) {
-                   dataEl = dataElement;
-                }
-            });
-            return dataEl;
+			var dataEl;
+			$.each(root.viewModel.dataElements(), function(index, dataElement) {
+				if(dataElement.id === id) {
+					dataEl = dataElement;
+				}
+			});
+			return dataEl;
 		};
 
 		self.dependenciesHold = function (dataelement) {
@@ -90,8 +90,28 @@
 			});
 			return true;
 		};
-
+		
+		//LOG IN
+		self.loginVisible = ko.observable(false);
+		
+		self.username = ko.observable();
+		self.password = ko.observable();
+		self.logIn = function() {
+			console.log("Log in with values: " + self.username() + " " + self.password());
+			survey.data.authenticate(self.username(), self.password());rue
+		}
+		
+		self.startUp = function() {
+			var data = survey.data.getDHISStartPage();
+			try {
+				JSON.parse(data);
+				self.loginVisible(false);
+			} catch (err) {
+				self.loginVisible(true);
+			}
+		}
 	}
+
 	/*
 	 * Litt forklaring: selectedProgram vil inneholde det man har valgt,
 	 * eller undefined hvis det står "Select program" i selecten.

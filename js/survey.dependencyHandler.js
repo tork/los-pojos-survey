@@ -13,31 +13,32 @@
         if(parentElement.type === "trueOnly") {
             dependency.triggers.push([true]);
         } else if(parentElement.type === "bool") {
-            dependency.triggers.push([element.triggerOption()]); //TODO: "Yes"/"No" eller true/false?
+            dependency.triggers.push([element.triggerOption() === "Yes"]); //TODO: "Yes"/"No" eller true/false?
         } else if(parentElement.type === "int") {
             if(element.interval()) {
-
+                //TODO: hva skulle vi ha av validering her igjen?
+                dependency.triggers.push({from: parseInt(element.lowerLimit()), to: parseInt(element.upperLimit())});
             } else {
-                var numbers = $.map(element.commaList().split(","), function(num) {
-                    return parseInt(num);
-                });
-                $.each(numbers, function(index, num) {
+                dependency.triggers = $.map(element.commaList().split(","), function(num) {
                     if(!isNaN(num)) {
-                        dependency.triggers.push(num);
+                        return parseInt(num);
                     }
-                })
+                });
             }
         } else if(parentElement.type === "string") {
-
-        } else if(parentElement.type === "date") {
-
+            dependency.triggers = element.commaList().split(",");
+        } else if(parentElement.type === "date") { //TODO: finne ut hvordan dhis takler date + validering?
+            if(element.interval()) {
+                dependency.triggers.push({from: new Date(element.lowerLimit()), to: new Date(element.upperLimit())});
+            } else {
+                dependency.triggers.push(new Date(element.commaList()));
+            }
         } else {
             deferred.reject("No such type");
         }
 
         element.dependencies.push(dependency);
         deferred.resolve();
-        //Set element.dependencies to something..
         return deferred.promise();
     };
 

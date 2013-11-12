@@ -1,4 +1,4 @@
-(function(viewModel, root) {
+(function(viewModel, root, utils) {
     /* Inneholder all data om et dataelement. Planen er å etterhvert utvide dette til å også inneholde skip logic*/
     root.DataElement = function(dataelement) {
         var self = this;
@@ -37,6 +37,35 @@
             self.upperLimit("");
             self.isDependent(false);
             self.isInSkipLogic(false);
+        };
+
+        self.setSkipLogicUIElements = function(dataElement) {
+            $.each(self.dependencies, function(i, dep) {
+                if(dep.id === dataElement.id) {
+                    if(dep.triggers[0].from !== undefined) {
+                        self.interval(true)
+                        if(dataElement.type === "int") {
+                            self.lowerLimit(dep.triggers[0].from);
+                            self.upperLimit(dep.triggers[0].to);
+                        } else {
+                            var date = dep.triggers[0].from;
+                            self.lowerLimit(utils.getDateFormattedForInput(date));
+                            date = dep.triggers[0].to;
+                            self.upperLimit(utils.getDateFormattedForInput(date));
+                        }
+                    } else {
+                        if(dataElement.type === "bool") {
+                            var value = dep.triggers[0] == true ? "Yes" : "No";
+                            self.triggerOption(value);
+                        } else if(dataElement.type === "date") {
+                            self.commaList(utils.getDateFormattedForInput(dep.triggers[0]));
+                        } else {
+                            self.commaList(dep.triggers.join(","));
+                        }
+                    }
+
+                }
+            });
         }
     };
-})(survey.viewModel, survey.models = survey.models || {});
+})(survey.viewModel, survey.models = survey.models || {}, survey.utils);

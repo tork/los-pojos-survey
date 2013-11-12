@@ -45,9 +45,11 @@
             dataelement.addingSkipLogic(true);
             self.activeElement(dataelement);
 
-            $.each(root.viewModel.dataElements(), function( index, element ) {
+            $.each(self.dataElements(), function( index, element ) {
                 if(element != dataelement) {
                     element.isInSkipLogic(true);
+                    element.isDependent(depHandler.hasDependency(element, dataelement));
+                    element.setSkipLogicUIElements(dataelement);
                 }
             });
         };

@@ -11,9 +11,9 @@
             triggers: []
         };
         if(parentElement.type === "trueOnly") {
-            dependency.triggers.push([true]);
+            dependency.triggers.push(true);
         } else if(parentElement.type === "bool") {
-            dependency.triggers.push([element.triggerOption() === "Yes"]); //TODO: "Yes"/"No" eller true/false?
+            dependency.triggers.push(element.triggerOption() === "Yes"); //TODO: "Yes"/"No" eller true/false?
         } else if(parentElement.type === "int") {
             if(element.interval()) {
                 //TODO: hva skulle vi ha av validering her igjen?
@@ -40,6 +40,17 @@
         addOrUpdateDependency(element, dependency);
         deferred.resolve();
         return deferred.promise();
+    };
+
+    root.hasDependency = function(element, potentialParent) {
+        var deps = element.dependencies;
+        for(var i = 0; i < deps.length; i++) {
+            if(deps[i].id == potentialParent.id) {
+                return true;
+            }
+        }
+
+        return false;
     };
 
     function addOrUpdateDependency(element, dependency) {

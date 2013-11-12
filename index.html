@@ -67,7 +67,8 @@
 						</div>
 					</div>
 					<div class="row Kristian">
-						<div class="col-md-12" data-bind="visible: selectedProgramStage()">
+						<!--div class="col-md-12" data-bind="visible: selectedProgramStage()"-->
+                        <div class="col-md-12" data-bind="visible: dataElements().length > 0 && selectedProgramStage()">
 							<h3
 								data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
 							<div class="row" data-bind="foreach: dataElements">

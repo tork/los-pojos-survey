@@ -1,4 +1,5 @@
 (function(root){
+    
 
 	/* Inneholder all data om et dataelement. Planen er å etterhvert utvide dette til å også inneholde skip logic*/
 	function DataElement(dataelement) {
@@ -65,11 +66,20 @@
 			self.programStages().length = 0;
 			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
+        self.selectedProgramStage.subscribe(function() {
+            console.log("test");
+            survey.data.getAndInsertDataElementsForSelectedProgramStage();
+        });
+        self.selectedProgramStagesOptionSets = ko.observable;
 
 		/* testdata */
 		self.dataElements.push(new DataElement({"name":"Age","created":"2012-11-14T13:41:39.639+0000","lastUpdated":"2013-03-15T16:32:26.280+0000","shortName":"Age","description":"Age of patient.","formName":"Age (Years)","active":true,"domainType":"patient","type":"int","numberType":"int","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":null,"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/qrur9Dvnyt5","id":"qrur9Dvnyt5"}));
 		self.dataElements.push(new DataElement({"name":"Gender","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Gender","description":"Gender of patient.","formName":"Gender","active":true,"domainType":"patient","type":"string","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"Age"}));	
-		self.dataElements.push(new DataElement({"name":"Alive","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Alive","description":"","formName":"Are you still alive?","active":true,"domainType":"patient","type":"checkbox","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"checkBoxElementID"}));	
+		self.dataElements.push(new DataElement({"name":"Alive","created":"2012-11-14T12:11:55.105+0000","lastUpdated":"2013-03-15T16:32:26.287+0000","shortName":"Alive","description":"","formName":"Are you still alive?","active":true,"domainType":"patient","type":"checkbox","textType":"text","aggregationOperator":"sum","categoryCombo":{"name":"default","created":"2011-12-24T11:24:25.203+0000","lastUpdated":"2011-12-24T11:24:25.203+0000","href":"http://apps.dhis2.org/demo/api/categoryCombos/p0KPaWEg3cf","id":"p0KPaWEg3cf"},"url":"","zeroIsSignificant":false,"optionSet":{"name":"Gender","created":"2012-11-13T08:08:51.450+0000","lastUpdated":"2012-11-13T08:08:51.450+0000","href":"http://apps.dhis2.org/demo/api/optionSets/fEDqAkq2X4o","id":"fEDqAkq2X4o"},"legendSet":null,"access":{"manage":true,"externalize":false,"write":true,"read":true,"update":true,"delete":true},"href":"http://apps.dhis2.org/demo/api/dataElements/oZg33kd9taw","id":"checkBoxElementID"}));
+        
+        self.dataElementCreator = function(dataElement) {
+            return new DataElement(dataElement);
+        };
 
 
 		self.getDataElementByID = function(id) {

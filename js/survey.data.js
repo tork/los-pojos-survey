@@ -80,12 +80,15 @@
             .done(function(data) {
                 console.log("Data element fetched");
                 console.log(data);
-                root.viewModel.dataElements.push(data);
+                root.viewModel.dataElements.push(new root.viewModel.dataElementCreator(data)); // CONTINUE HERE
             })
             .fail(function() {
                 console.log("Could not fetch data element from server");
             });
+            
         };
+        
+        
     };
     
     

@@ -25,10 +25,12 @@ to unlock) are excluded from the rearrangement.
 	// rearrange.testbed()
 	root.rearrange.testbed = testbed;
 
+	/** /
 	var create_workspace = create_workspace_array;
-	var get_element = get_element_array;
-	//var create_workspace = create_workspace_object;
-	//var get_element = get_element_object;
+	var get_element = get_element_array;//*/
+	/**/
+	var create_workspace = create_workspace_object;
+	var get_element = get_element_object;//*/
 
 	function testbed() {
 		root.data = {};
@@ -171,6 +173,19 @@ to unlock) are excluded from the rearrangement.
 		return queue;
 	}
 
+	function extract_arrangement(workspace) {
+		var arrangement = [];
+		
+		var root = workspace.free_queue;
+		while (root) {
+			var tmp = root.next;
+			extract_element(root, arrangement);
+			root = tmp;
+		}
+		
+		return arrangement;
+	}
+
 	function extract_element(elem, arrangement) {
 		arrangement.push(elem);
 		
@@ -190,26 +205,13 @@ to unlock) are excluded from the rearrangement.
 		return arrangement;
 	}
 
-	// Removes an elements temporary members
+	// Removes an element's temporary members
 	// used by rearrange.js privately.
 	function clean_element(elem) {
 		delete elem.dependents;
 		delete elem.dep_count;
 		delete elem.prev;
 		delete elem.next;
-	}
-
-	function extract_arrangement(workspace) {
-		var arrangement = [];
-		
-		var root = workspace.free_queue;
-		while (root) {
-			var tmp = root.next;
-			extract_element(root, arrangement);
-			root = tmp;
-		}
-		
-		return arrangement;
 	}
 
 
@@ -236,13 +238,14 @@ to unlock) are excluded from the rearrangement.
 	}
 
 
-	/** TODO: OBJECT AS WORKSPACE **/
+	/** OBJECT AS WORKSPACE **/
 	function create_workspace_object(elements) {
 		var workspace = {};
 		var o = {};
 
 		elements.forEach(function(elem) {
-			Object.defineProperty(o, elem.element_id, elem);
+			//Object.defineProperty(o, elem.element_id, elem);
+			o[elem.element_id] = elem;
 		});
 
 		workspace.elements = o;
@@ -251,7 +254,8 @@ to unlock) are excluded from the rearrangement.
 	}
 
 	function get_element_object(id, workspace) {
-		return Object.getOwnPropertyDescriptor(workspace.elements, id);
+		//return Object.getOwnPropertyDescriptor(workspace.elements, id);
+		return workspace.elements[id];
 	}
 
 })(survey);

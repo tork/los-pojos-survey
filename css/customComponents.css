@@ -1,3 +1,20 @@
 .fullWidth {
     width: 100%;
 }
+
+.sidebar-nav li .sidebar-item {
+  color: #999999;
+  display: block;
+  text-decoration: none;
+}
+
+.sidebar-nav li .sidebar-item:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+  text-decoration: none;
+}
+
+.sidebar-nav li .sidebar-item:active,
+.sidebar-nav li .sidebar-item:focus {
+  text-decoration: none;
+}

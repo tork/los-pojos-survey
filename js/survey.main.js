@@ -1,4 +1,4 @@
-(function(viewModel){
+(function(viewModel, data){
 	$(document).ready(function() {
 		$("#menu-toggle").click(function(e) {
 			e.preventDefault();
@@ -7,7 +7,8 @@
 
 		ko.applyBindings({viewModel: viewModel});
 		//survey.data.getPrograms();
-		survey.data.getProgramIdsAndPopulateDropdown();
+		viewModel.loginStatus();
+		data.getProgramIdsAndPopulateDropdown();
 	});
 })(survey.viewModel, survey.data);
 

@@ -86,7 +86,29 @@
 		self.logIn = function() {
 			console.log("Log in with values: " + self.username() + " " + self.password());
 			survey.data.authenticate(self.username(), self.password());
+			self.loginVisible(false);
 		}
+		
+		self.isAdmin = ko.observable(true);
+		
+		self.loginStatus = function() {
+			var response = survey.data.getWebAPI();
+			try {
+				JSON.parse(response);
+				self.loginVisible(false);
+			} catch (err) {
+				console.log("User not authenticated.")
+				self.loginVisible(true);
+			}
+		}
+		
+		self.adminClick = function() {
+			root.viewModel.isAdmin(true);
+		};
+		
+		self.userClick = function() {
+			root.viewModel.isAdmin(false);
+		};
 	};
 
 	/*
@@ -97,5 +119,6 @@
 	 * */
 
 	root.viewModel = new viewModel();
+	
 })(survey, survey.models, survey.dependencyHandler);
 

@@ -27,7 +27,8 @@ to unlock) are excluded from the rearrangement.
 
 	var create_workspace = create_workspace_array;
 	var get_element = get_element_array;
-	var extract_arrangement = extract_arrangement_array;
+	//var create_workspace = create_workspace_object;
+	//var get_element = get_element_object;
 
 	function testbed() {
 		root.data = {};
@@ -198,6 +199,19 @@ to unlock) are excluded from the rearrangement.
 		delete elem.next;
 	}
 
+	function extract_arrangement(workspace) {
+		var arrangement = [];
+		
+		var root = workspace.free_queue;
+		while (root) {
+			var tmp = root.next;
+			extract_element(root, arrangement);
+			root = tmp;
+		}
+		
+		return arrangement;
+	}
+
 
 	/** ARRAY AS WORKSPACE **/
 	function create_workspace_array(elements) {
@@ -221,20 +235,23 @@ to unlock) are excluded from the rearrangement.
 		return found;
 	}
 
-	function extract_arrangement_array(workspace) {
-		var arrangement = [];
-		
-		var root = workspace.free_queue;
-		while (root) {
-			var tmp = root.next;
-			extract_element(root, arrangement);
-			root = tmp;
-		}
-		
-		return arrangement;
+
+	/** TODO: OBJECT AS WORKSPACE **/
+	function create_workspace_object(elements) {
+		var workspace = {};
+		var o = {};
+
+		elements.forEach(function(elem) {
+			Object.defineProperty(o, elem.element_id, elem);
+		});
+
+		workspace.elements = o;
+		workspace.free_queue = null;
+		return workspace;
 	}
 
-
-	/** TODO: HASH TABLE (?) AS WORKSPACE **/
+	function get_element_object(id, workspace) {
+		return Object.getOwnPropertyDescriptor(workspace.elements, id);
+	}
 
 })(survey);

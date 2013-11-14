@@ -159,6 +159,17 @@
         };
     };
     
+    self.genericAjaxFunction = function(url, doneFunction, failFunction) {
+        $.ajax({
+                type: 'GET',
+                url: url,
+                contentType: 'application/json',
+                dataType: 'jsonp'
+            })
+            .done(donefunction)
+            .fail(failFunction);
+    };
+    
     
     root.data = new data();
 })(survey);

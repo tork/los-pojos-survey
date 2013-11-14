@@ -53,12 +53,12 @@
 				</div>
 
 				<div id=programWrapper data-bind="with: viewModel">
-					<div data-bind="visible: loginVisible">
+					<div data-bind="visible: true">
 						Username: <input type="text" data-bind="value: username"><br>
 						Password: <input type="password" data-bind="value: password">
 						<button data-bind="click: logIn">Log in</button>
 					</div>
-					<div data-bind="visible: !loginVisible">
+					<div data-bind="visible: false">
 						<div class="row Kristian">
 							<div class="col-md-6">
 								<select class="fullWidth" id="programsSelect"

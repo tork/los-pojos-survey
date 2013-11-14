@@ -87,8 +87,6 @@
 			console.log("Log in with values: " + self.username() + " " + self.password());
 			survey.data.authenticate(self.username(), self.password());
 			self.loginVisible(false);
-			survey.data.getProgramIdsAndPopulateDropdown();
-
 		}
 		
 		self.isAdmin = ko.observable(true);
@@ -98,7 +96,6 @@
 			try {
 				JSON.parse(response);
 				self.loginVisible(false);
-				survey.data.getProgramIdsAndPopulateDropdown();
 			} catch (err) {
 				console.log("User not authenticated.")
 				self.loginVisible(true);

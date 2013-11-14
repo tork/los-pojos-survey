@@ -7,7 +7,6 @@
 
 		ko.applyBindings({viewModel: viewModel});
 		//survey.data.getPrograms();
-		viewModel.loginStatus();
 		data.getProgramIdsAndPopulateDropdown();
 	});
 })(survey.viewModel, survey.data);

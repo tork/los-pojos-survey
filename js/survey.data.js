@@ -83,7 +83,8 @@
                 elements.forEach(function(elem) {
                     var dep = elem.dependencies;
                     if (dep) {
-                        Object.defineProperty(deps, elem.element_id, dep);
+                        //Object.defineProperty(deps, elem.element_id, dep);
+                        deps[elem.element_id] = dep;
                     }
                 });
 

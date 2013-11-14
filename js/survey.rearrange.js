@@ -33,10 +33,8 @@ to unlock) are excluded from the rearrangement.
 	var get_element = get_element_object;//*/
 
 	function testbed() {
-		root.data = {};
 		var scratch = root.data.get_dependencies;
 		root.data.get_dependencies = function(surveyId, elements, succ, err) {
-			root.data.get_dependencies = scratch;
 			var deps =
 			{
 				10:
@@ -69,32 +67,72 @@ to unlock) are excluded from the rearrangement.
 				}]
 			};
 
-			// Simulate system settings
-			deps = JSON.stringify(deps);
-			deps = JSON.parse(deps);
-
 			succ(deps);
 		}
 
-		var test_set = [
-		{
-			element_id: 10
-		},{
-			element_id: 11
-		},{
-			element_id: 12
-		},{
-			element_id: 13
-		},{
-			// Circular dependencies (excluded)
-			element_id: -10
-		},{
-			// Isolated node
-			element_id: 19
+		function test_set() {
+			var test_set = [
+			{
+				element_id: 10
+			},{
+				element_id: 11
+			},{
+				element_id: 12
+			},{
+				element_id: 13
+			},{
+				// Circular dependencies (excluded)
+				element_id: -10
+			},{
+				// Isolated node
+				element_id: 19
+			}
+			];
+			return test_set;
 		}
-		];
 
-		debug(test_set, 0);
+		debug(test_set(), 0);
+
+		/*
+		This benchmark is theoretical, as it only measures
+		the performance of create_workspace + get_element.
+
+		How much the different implementations affects
+		actual performance, will depend on a survey's size
+		and dependency relations.
+		*/
+		function benchmark(create, get, name, num_tests) {
+			scratch_create = create_workspace;
+			scratch_get = get_element;
+
+			create_workspace = create;
+			get_element = get;
+
+			var elements = [];
+			for (var i = 0; i < num_tests; i++) {
+				elements[i] = {element_id: i};
+			}
+
+			var t0 = new Date().getMilliseconds();
+			var workspace = create_workspace(elements);
+			for (var i = 0; i < num_tests; i++) {
+				get_element(i, workspace);
+			}
+			var t1 = new Date().getMilliseconds();
+
+			var delta = t1 - t0;
+			console.log(name+'\t'+delta+'ms');
+
+			create_workspace = scratch_create;
+			get_element = scratch_get;
+		}
+
+		var num_tests = 1000;
+		console.log('\nBENCHMARK ('+num_tests+' OPERATIONS)');
+		benchmark(create_workspace_object, get_element_object, 'object', num_tests);
+		benchmark(create_workspace_array, get_element_array, 'array', num_tests);
+
+		root.data.get_dependencies = scratch;
 	}
 
 	// Rearrange elements and print debugging information
@@ -124,9 +162,13 @@ to unlock) are excluded from the rearrangement.
 		function succ(deps) {
 			var workspace = create_workspace(elements);
 			elements.forEach(function(elem) {
-				var wrapper = Object.getOwnPropertyDescriptor(
+				/*var wrapper = Object.getOwnPropertyDescriptor(
 					deps, elem.element_id);
-				elem.dependencies = wrapper? wrapper.value:[];
+				elem.dependencies = wrapper? wrapper.value:[];*/
+
+				var dep = deps[elem.element_id];
+				elem.dependencies = dep? dep:[];
+
 				register_dependencies(elem, workspace);
 			});
 			
@@ -218,7 +260,13 @@ to unlock) are excluded from the rearrangement.
 	/** ARRAY AS WORKSPACE **/
 	function create_workspace_array(elements) {
 		var workspace = {};
-		workspace.elements = elements;
+		var a = elements;
+
+//		elements.forEach(function(elem) {
+//			a.push(elem);
+//		});
+
+		workspace.elements = a;
 		workspace.free_queue = null;
 		return workspace;
 	}
@@ -238,13 +286,12 @@ to unlock) are excluded from the rearrangement.
 	}
 
 
-	/** OBJECT AS WORKSPACE **/
+	/** OBJECT (HASH TABLE) AS WORKSPACE **/
 	function create_workspace_object(elements) {
 		var workspace = {};
 		var o = {};
 
 		elements.forEach(function(elem) {
-			//Object.defineProperty(o, elem.element_id, elem);
 			o[elem.element_id] = elem;
 		});
 
@@ -254,7 +301,6 @@ to unlock) are excluded from the rearrangement.
 	}
 
 	function get_element_object(id, workspace) {
-		//return Object.getOwnPropertyDescriptor(workspace.elements, id);
 		return workspace.elements[id];
 	}
 

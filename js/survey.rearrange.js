@@ -13,159 +13,42 @@ Elements with circular dependencies (i.e impossible
 to unlock) are excluded from the rearrangement.
 */
 (function(root) {
-	// Rearrange data elements
-	// rearrange(elements, surveyId, success, error)
-	root.rearrange = rearrange;
+	var self = rearrange;
+	root.rearrange = self;
 
-	// Debug data elements
-	// rearrange.debug(elements, surveyId)
-	root.rearrange.debug = debug;
-
-	// Run debug with offline, predefined test data
-	// rearrange.testbed()
-	root.rearrange.testbed = testbed;
-
-	/** /
-	var create_workspace = create_workspace_array;
-	var get_element = get_element_array;//*/
-	/**/
 	var create_workspace = create_workspace_object;
-	var get_element = get_element_object;//*/
+	var get_element = get_element_object;
 
-	function testbed() {
-		var scratch = root.data.get_dependencies;
-		root.data.get_dependencies = function(surveyId, elements, succ, err) {
-			var deps =
-			{
-				10:
-				[{
-					dep_id: 12,
-					triggers: [""]
-				},{
-					dep_id: 13,
-					triggers: [""]
-				}],
+	// Dev access (should run from web server)
+	if (survey.utils.debug) {
+		self.dev = {
+			create_workspace_array:		create_workspace_array,
+			get_element_array:			get_element_array,
+			create_workspace_object:	create_workspace_object,
+			get_element_object:			get_element_object,
 
-				11:
-				[{
-					dep_id: 10,
-					triggers: [""]
-				},{
-					dep_id: -10,
-					triggers: [""]
-				}],
-
-				12:
-				[{
-					dep_id: 13,
-					triggers: [""]
-				}],
-				'-10': // apparently negative numbers are no-no
-				[{
-					dep_id: 11,
-					triggers: [""]
-				}]
-			};
-
-			succ(deps);
-		}
-
-		function test_set() {
-			var test_set = [
-			{
-				element_id: 10
-			},{
-				element_id: 11
-			},{
-				element_id: 12
-			},{
-				element_id: 13
-			},{
-				// Circular dependencies (excluded)
-				element_id: -10
-			},{
-				// Isolated node
-				element_id: 19
+			set_create_workspace: function(func) {
+				create_workspace = func;
+			},
+			set_get_element: function(func) {
+				get_element = func;
+			},
+			get_create_workspace: function() {
+				return create_workspace;
+			},
+			get_get_element: function() {
+				return get_element;
 			}
-			];
-			return test_set;
-		}
+		};
 
-		debug(test_set(), 0);
-
-		/*
-		This benchmark is theoretical, as it only measures
-		the performance of create_workspace + get_element.
-
-		How much the different implementations affects
-		actual performance, will depend on a survey's size
-		and dependency relations.
-		*/
-		function benchmark(create, get, name, num_tests) {
-			scratch_create = create_workspace;
-			scratch_get = get_element;
-
-			create_workspace = create;
-			get_element = get;
-
-			var elements = [];
-			for (var i = 0; i < num_tests; i++) {
-				elements[i] = {element_id: i};
-			}
-
-			var t0 = new Date().getMilliseconds();
-			var workspace = create_workspace(elements);
-			for (var i = 0; i < num_tests; i++) {
-				get_element(i, workspace);
-			}
-			var t1 = new Date().getMilliseconds();
-
-			var delta = t1 - t0;
-			console.log(name+'\t'+delta+'ms');
-
-			create_workspace = scratch_create;
-			get_element = scratch_get;
-		}
-
-		var num_tests = 1000;
-		console.log('\nBENCHMARK ('+num_tests+' OPERATIONS)');
-		benchmark(create_workspace_object, get_element_object, 'object', num_tests);
-		benchmark(create_workspace_array, get_element_array, 'array', num_tests);
-
-		root.data.get_dependencies = scratch;
+		$('body').append('<script src="js/survey.rearrange.dev.js"></script>');
 	}
 
-	// Rearrange elements and print debugging information
-	function debug(elements, surveyId) {
-		function succ(arr) {
-			console.log("OLD\tNEW");
-			for (var idx in elements) {
-				var elem = arr[idx];
-				console.log(elements[idx].element_id +
-					(elem? '\t'+arr[idx].element_id:""));
-			}
-
-			console.log("\nKEPT ELEMENTS");
-			arr.forEach(function(elem) {
-				console.log(JSON.stringify(elem));
-			});
-		}
-
-		function err() {
-			console.log('Something went wrong. :-(');
-		}
-
-		rearrange(elements, surveyId, succ, err);
-	}
 
 	function rearrange(elements, surveyId, success, error) {
 		function succ(deps) {
 			var workspace = create_workspace(elements);
 			elements.forEach(function(elem) {
-				/*var wrapper = Object.getOwnPropertyDescriptor(
-					deps, elem.element_id);
-				elem.dependencies = wrapper? wrapper.value:[];*/
-
 				var dep = deps[elem.element_id];
 				elem.dependencies = dep? dep:[];
 
@@ -260,13 +143,7 @@ to unlock) are excluded from the rearrangement.
 	/** ARRAY AS WORKSPACE **/
 	function create_workspace_array(elements) {
 		var workspace = {};
-		var a = elements;
-
-//		elements.forEach(function(elem) {
-//			a.push(elem);
-//		});
-
-		workspace.elements = a;
+		workspace.elements = elements;
 		workspace.free_queue = null;
 		return workspace;
 	}

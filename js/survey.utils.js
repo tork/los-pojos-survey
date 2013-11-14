@@ -21,4 +21,6 @@
 
         return year + "-" + month + "-" + day;
     };
+
+    root.debug = false;
 })(survey.utils = survey.utils || {})

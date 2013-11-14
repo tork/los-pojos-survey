@@ -13,118 +13,45 @@ Elements with circular dependencies (i.e impossible
 to unlock) are excluded from the rearrangement.
 */
 (function(root) {
-	// Rearrange data elements
-	// rearrange(elements, surveyId, success, error)
-	root.rearrange = rearrange;
+	var self = rearrange;
+	root.rearrange = self;
 
-	// Debug data elements
-	// rearrange.debug(elements, surveyId)
-	root.rearrange.debug = debug;
+	var create_workspace = create_workspace_object;
+	var get_element = get_element_object;
 
-	// Run debug with offline, predefined test data
-	// rearrange.testbed()
-	root.rearrange.testbed = testbed;
+	// Dev access (should run from web server)
+	if (survey.utils.debug) {
+		self.dev = {
+			create_workspace_array:		create_workspace_array,
+			get_element_array:			get_element_array,
+			create_workspace_object:	create_workspace_object,
+			get_element_object:			get_element_object,
 
-	var create_workspace = create_workspace_array;
-	var get_element = get_element_array;
-	//var create_workspace = create_workspace_object;
-	//var get_element = get_element_object;
-
-	function testbed() {
-		root.data = {};
-		var scratch = root.data.get_dependencies;
-		root.data.get_dependencies = function(surveyId, elements, succ, err) {
-			root.data.get_dependencies = scratch;
-			var deps =
-			{
-				10:
-				[{
-					dep_id: 12,
-					triggers: [""]
-				},{
-					dep_id: 13,
-					triggers: [""]
-				}],
-
-				11:
-				[{
-					dep_id: 10,
-					triggers: [""]
-				},{
-					dep_id: -10,
-					triggers: [""]
-				}],
-
-				12:
-				[{
-					dep_id: 13,
-					triggers: [""]
-				}],
-				'-10': // apparently negative numbers are no-no
-				[{
-					dep_id: 11,
-					triggers: [""]
-				}]
-			};
-
-			// Simulate system settings
-			deps = JSON.stringify(deps);
-			deps = JSON.parse(deps);
-
-			succ(deps);
-		}
-
-		var test_set = [
-		{
-			element_id: 10
-		},{
-			element_id: 11
-		},{
-			element_id: 12
-		},{
-			element_id: 13
-		},{
-			// Circular dependencies (excluded)
-			element_id: -10
-		},{
-			// Isolated node
-			element_id: 19
-		}
-		];
-
-		debug(test_set, 0);
-	}
-
-	// Rearrange elements and print debugging information
-	function debug(elements, surveyId) {
-		function succ(arr) {
-			console.log("OLD\tNEW");
-			for (var idx in elements) {
-				var elem = arr[idx];
-				console.log(elements[idx].element_id +
-					(elem? '\t'+arr[idx].element_id:""));
+			set_create_workspace: function(func) {
+				create_workspace = func;
+			},
+			set_get_element: function(func) {
+				get_element = func;
+			},
+			get_create_workspace: function() {
+				return create_workspace;
+			},
+			get_get_element: function() {
+				return get_element;
 			}
+		};
 
-			console.log("\nKEPT ELEMENTS");
-			arr.forEach(function(elem) {
-				console.log(JSON.stringify(elem));
-			});
-		}
-
-		function err() {
-			console.log('Something went wrong. :-(');
-		}
-
-		rearrange(elements, surveyId, succ, err);
+		$('body').append('<script src="js/survey.rearrange.dev.js"></script>');
 	}
+
 
 	function rearrange(elements, surveyId, success, error) {
 		function succ(deps) {
 			var workspace = create_workspace(elements);
 			elements.forEach(function(elem) {
-				var wrapper = Object.getOwnPropertyDescriptor(
-					deps, elem.element_id);
-				elem.dependencies = wrapper? wrapper.value:[];
+				var dep = deps[elem.element_id];
+				elem.dependencies = dep? dep:[];
+
 				register_dependencies(elem, workspace);
 			});
 			
@@ -171,6 +98,19 @@ to unlock) are excluded from the rearrangement.
 		return queue;
 	}
 
+	function extract_arrangement(workspace) {
+		var arrangement = [];
+		
+		var root = workspace.free_queue;
+		while (root) {
+			var tmp = root.next;
+			extract_element(root, arrangement);
+			root = tmp;
+		}
+		
+		return arrangement;
+	}
+
 	function extract_element(elem, arrangement) {
 		arrangement.push(elem);
 		
@@ -190,26 +130,13 @@ to unlock) are excluded from the rearrangement.
 		return arrangement;
 	}
 
-	// Removes an elements temporary members
+	// Removes an element's temporary members
 	// used by rearrange.js privately.
 	function clean_element(elem) {
 		delete elem.dependents;
 		delete elem.dep_count;
 		delete elem.prev;
 		delete elem.next;
-	}
-
-	function extract_arrangement(workspace) {
-		var arrangement = [];
-		
-		var root = workspace.free_queue;
-		while (root) {
-			var tmp = root.next;
-			extract_element(root, arrangement);
-			root = tmp;
-		}
-		
-		return arrangement;
 	}
 
 
@@ -236,13 +163,13 @@ to unlock) are excluded from the rearrangement.
 	}
 
 
-	/** TODO: OBJECT AS WORKSPACE **/
+	/** OBJECT (HASH TABLE) AS WORKSPACE **/
 	function create_workspace_object(elements) {
 		var workspace = {};
 		var o = {};
 
 		elements.forEach(function(elem) {
-			Object.defineProperty(o, elem.element_id, elem);
+			o[elem.element_id] = elem;
 		});
 
 		workspace.elements = o;
@@ -251,7 +178,7 @@ to unlock) are excluded from the rearrangement.
 	}
 
 	function get_element_object(id, workspace) {
-		return Object.getOwnPropertyDescriptor(workspace.elements, id);
+		return workspace.elements[id];
 	}
 
 })(survey);

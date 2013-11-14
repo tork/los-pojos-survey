@@ -207,11 +207,8 @@
             })
             .done(donefunction)
             .fail(failFunction);
-    };
-
-
+        };
 	};
-
 
 	root.data = new data();
 })(survey);

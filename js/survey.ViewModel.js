@@ -109,6 +109,11 @@
 		self.userClick = function() {
 			root.viewModel.isAdmin(false);
 		};
+		
+		self.logoutClick = function() {
+			survey.data.logout();
+			self.loginVisible(true);
+		}
 	};
 
 	/*

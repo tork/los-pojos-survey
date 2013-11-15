@@ -161,7 +161,7 @@
 		self.getWebAPI = function() {
 			var result = "";
 			var url = "http://localhost:8082/api/programs.jsonp?callback=jQuery19108472421790938824_1384426691126&_=1384426691128";
-			
+
 			var x = $.ajax({
 				type: 'GET',
 				url: url,
@@ -174,40 +174,58 @@
 			.fail(function() {
 				console.log("GET failed");
 			});
-			
+
 			return "";
 		};
-		
+
 		self.authenticate = function(username, password) {
-			
+
 			$.ajax({
-		        url: 'http://apps.dhis2.org/demo/dhis-web-commons-security/login.action?authOnly=true',
-		        data: {
-		            j_username: username,
-		            j_password: password
-		        },
-		        type: 'POST',
-		        dataType: 'json',
-		        contentType: 'text/html'
-		    })
+				url: 'http://' + survey.utils.getBaseUrl() + '/dhis-web-commons-security/login.action?authOnly=true',
+				data: {
+					j_username: username,
+					j_password: password
+				},
+				type: 'POST',
+				dataType: 'json',
+				contentType: 'text/html'
+			})
 			.done(function(data) {
-			    console.log(data)
+				console.log(data)
 			})
 			.fail(function(x) {
-			    console.log("login request failed", x);
+				console.log("login request failed", x);
 			});	
 		}
-        
-        self.genericAjaxFunction = function(url, doneFunction, failFunction) {
-        $.ajax({
-                type: 'GET',
-                url: url,
-                contentType: 'application/json',
-                dataType: 'jsonp'
-            })
-            .done(donefunction)
-            .fail(failFunction);
-        };
+
+		self.logout = function() {
+			var url = "http://" + survey.utils.getBaseUrl() + "/dhis-web-commons-security/logout.action";
+
+			$.ajax({
+				type: 'GET',
+				url: url,
+				contentType: 'application/json',
+				dataType: 'jsonp'
+
+			})
+			.done(function() {
+				console.log("logout complete");
+			})
+			.fail(function() {
+				console.log("logout failed");
+			});
+
+		};
+
+		self.genericAjaxFunction = function(url, doneFunction, failFunction) {
+			$.ajax({
+				type: 'GET',
+				url: url,
+				dataType: 'jsonp'
+			})
+			.done(donefunction)
+			.fail(failFunction);
+		};
 	};
 
 	root.data = new data();

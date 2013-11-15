@@ -125,10 +125,15 @@
 			self.loginVisible(true);
 		}
 		
+		//SAVE DATA ENTRY
+		self.entryDate = "";
+		self.orgUnit = "";
+		
 		self.programIsChosen = ko.computed(function () {
 			return self.selectedProgramStage() != undefined;
 		})
-
+		
+		self.orgUnitOpts = [{orgName: "org1", id: "hakdhfa"},{orgName: "org2", id: "haskdhfa"},{orgName: "org3", id: "hakdhsfa"}];
 		self.saveDataEntry = function() {	
 			var getDataValues = function() {
 				dataelements = [];
@@ -140,11 +145,12 @@
 
 			var dataentry = {
 					program : self.selectedProgram().id,
-					orgUnit: "DiszpKrYNg8",
-					eventDate: "2013-05-17",
+					orgUnit: self.orgUnit,
+					eventDate: self.entryDate,
 					dataValues: getDataValues()
 			}
-			
+			console.log("saving data entry:", dataentry);
+
 			//post dataentry to dhis
 		}
 	};

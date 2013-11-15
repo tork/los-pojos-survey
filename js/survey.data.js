@@ -3,7 +3,7 @@
 		var self = this;
 
 		self.getProgramIdsAndPopulateDropdown = function() {
-			var url = "http://" + survey.utils.getBaseUrl() + "/api/programs.jsonp";
+			var url = "http://" + survey.utils.url + "/api/programs.jsonp";
 			
 			self.genericGETFunction(url, function(data) {
 				for (var i = 0; i < data.programs.length; i++) {
@@ -33,7 +33,7 @@
 
 		self.getProgramStageIdsFromSelectedProgram = function() {
 			var chosenProgramId = survey.viewModel.selectedProgram().id;
-			var url = "http://" + survey.utils.getBaseUrl() + "/api/programs/" + chosenProgramId + ".jsonp";
+			var url = "http://" + survey.utils.url + "/api/programs/" + chosenProgramId + ".jsonp";
 
 			self.genericGETFunction(url, function(data) {
 				console.log("Program fetched");
@@ -64,7 +64,7 @@
 		};
 
 		self.getProgramStagesAndPopulateDropdown = function(id) {
-			var progStageUrl = "http://" + survey.utils.getBaseUrl() + "/api/programStages/" + id + ".jsonp";
+			var progStageUrl = "http://" + survey.utils.url + "/api/programStages/" + id + ".jsonp";
 			
 			self.genericGETFunction(progStageUrl, function(data) {
 				console.log("Program stages fetched");
@@ -146,7 +146,7 @@
 		};
 
 		self.getAndInsertDataElementById = function(id) {
-			var url = "http://" + survey.utils.getBaseUrl() + "/api/dataElements/" + id + ".jsonp";
+			var url = "http://" + survey.utils.url + "/api/dataElements/" + id + ".jsonp";
 			
 			self.genericGETFunction(url, function(data) {
 				console.log("Data element fetched");
@@ -182,7 +182,7 @@
 		};
 
 		self.getOptionSet = function(id) {
-			var url = "http://" + survey.utils.getBaseUrl() + "/api/optionSets/" + id + ".jsonp";
+			var url = "http://" + survey.utils.url + "/api/optionSets/" + id + ".jsonp";
 			
 			self.genericGETFunction(url, function(data) {
 				console.log("Option set fetched");

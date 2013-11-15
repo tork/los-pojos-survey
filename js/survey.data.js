@@ -163,6 +163,8 @@
 			$.when.apply($, promises).then(function() {
 				console.log("ALLE DATAELEMENTS MED OPTIONSET HAR NÅ FÅTT OPTIONSETTET SITT");
 				// TODO: HENT ALLE DEPENDENCIES FØR ALLE DOWNLOADEDDATAELEMENTS
+				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id, successFunction, failFunction);
+				
 				// All dataelements are fetched and added into survey.viewModel.downloadedDataElements
 			});
 		};
@@ -179,7 +181,6 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				console.log("OPTION SET FETCHED MADDAFACKKA");
 				dataElement.optionSet = data;
 				console.log(dataElement.optionSet);
 				deferred.resolve();

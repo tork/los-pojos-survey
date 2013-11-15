@@ -124,13 +124,15 @@
 			survey.data.logout();
 			self.loginVisible(true);
 		}
+		
+		self.programIsChosen = ko.computed(function () {
+			return self.selectedProgramStage() != undefined;
+		})
 
 		self.saveDataEntry = function() {	
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
-					console.log("ID: ", element.id);
-					console.log("VALUE: ",element.value());
 					dataelements.push({dataElement: element.id, value: element.value()});
 				});
 				return dataelements;

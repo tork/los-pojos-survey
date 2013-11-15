@@ -175,7 +175,7 @@
 							</div>
 						</div>
 						<!-- 						Save button here  -->
-						<div data-bind="visible: !isAdmin()">
+						<div data-bind="visible: !isAdmin() && programIsChosen()">
 							<button data-bind="click: saveDataEntry">Save data</button>
 						</div>
 					</div>

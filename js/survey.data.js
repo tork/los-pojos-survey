@@ -3,14 +3,13 @@
 		var self = this;
 
 		self.getProgramIdsAndPopulateDropdown = function() {
-			var url = "http://" + survey.utils.url + "/api/programs.jsonp";
+			var url = survey.utils.url + "/api/programs.jsonp";
 			
 			self.genericGETFunction(url, function(data) {
 				for (var i = 0; i < data.programs.length; i++) {
 					root.viewModel.programs.push(data.programs[i]);
 				}
 			} ,"Could not fetch program IDs from server");
-			
 			
 			
 			/*
@@ -33,7 +32,7 @@
 
 		self.getProgramStageIdsFromSelectedProgram = function() {
 			var chosenProgramId = survey.viewModel.selectedProgram().id;
-			var url = "http://" + survey.utils.url + "/api/programs/" + chosenProgramId + ".jsonp";
+			var url = survey.utils.url + "/api/programs/" + chosenProgramId + ".jsonp";
 
 			self.genericGETFunction(url, function(data) {
 				console.log("Program fetched");
@@ -64,7 +63,7 @@
 		};
 
 		self.getProgramStagesAndPopulateDropdown = function(id) {
-			var progStageUrl = "http://" + survey.utils.url + "/api/programStages/" + id + ".jsonp";
+			var progStageUrl = survey.utils.url + "/api/programStages/" + id + ".jsonp";
 			
 			self.genericGETFunction(progStageUrl, function(data) {
 				console.log("Program stages fetched");
@@ -146,7 +145,7 @@
 		};
 
 		self.getAndInsertDataElementById = function(id) {
-			var url = "http://" + survey.utils.url + "/api/dataElements/" + id + ".jsonp";
+			var url = survey.utils.url + "/api/dataElements/" + id + ".jsonp";
 			
 			self.genericGETFunction(url, function(data) {
 				console.log("Data element fetched");
@@ -182,7 +181,7 @@
 		};
 
 		self.getOptionSet = function(id) {
-			var url = "http://" + survey.utils.url + "/api/optionSets/" + id + ".jsonp";
+			var url = survey.utils.url + "/api/optionSets/" + id + ".jsonp";
 			
 			self.genericGETFunction(url, function(data) {
 				console.log("Option set fetched");
@@ -210,7 +209,7 @@
 
 		self.getWebAPI = function() {
 			var result = "";
-			var url = "http://" + survey.utils.url + "/api/programs.jsonp?callback=jQuery19108472421790938824_1384426691126&_=1384426691128";
+			var url = survey.utils.url + "/api/programs.jsonp?callback=jQuery19108472421790938824_1384426691126&_=1384426691128";
 
 			var x = $.ajax({
 				type: 'GET',
@@ -231,7 +230,7 @@
 		self.authenticate = function(username, password) {
 
 			$.ajax({
-				url: 'http://' + survey.utils.url + '/dhis-web-commons-security/login.action?authOnly=true',
+				url:  survey.utils.url + '/dhis-web-commons-security/login.action?authOnly=true',
 				data: {
 					j_username: username,
 					j_password: password
@@ -249,7 +248,7 @@
 		}
 
 		self.logout = function() {
-			var url = "http://" + survey.utils.url + "/dhis-web-commons-security/logout.action";
+			var url = survey.utils.url + "/dhis-web-commons-security/logout.action";
 
 			$.ajax({
 				type: 'GET',

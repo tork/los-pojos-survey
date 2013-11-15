@@ -11,8 +11,6 @@
 				}
 			} ,"Could not fetch program IDs from server");
 			
-			
-			
 			/*
 			$.ajax({
 				type: 'GET',
@@ -139,24 +137,105 @@
 		};
 
 		self.getAndInsertDataElementsForSelectedProgramStage = function() {
+			var promises = [];
 			for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
 				var dataElementId = survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id;
-				self.getAndInsertDataElementById(dataElementId);
+				promises.push(self.getAndInsertDataElementById(dataElementId));
 			}
+			$.when.apply($, promises).then(function() {
+				console.log();				
+				// All dataelements are fetched and added into survey.viewModel.downloadedDataElements
+				self.getAllOptionSetsForSelectedProgramStage();
+			});
 		};
+		
+		self.getAllOptionSetsForSelectedProgramStage = function() {
+			var promises = [];
+			console.log(survey.viewModel.downloadedDataElements().length);
+			
+			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
+				console.log(survey.viewModel.downloadedDataElements()[i]);
+				if (survey.viewModel.downloadedDataElements()[i].optionSet) {
+					var optionSetId = survey.viewModel.downloadedDataElements()[i].optionSet.id;
+					promises.push(self.getOptionSetForDataElement(survey.viewModel.downloadedDataElements()[i], optionSetId));
+				}
+			}
+			$.when.apply($, promises).then(function() {
+				console.log("ALLE DATAELEMENTS MED OPTIONSET HAR NÅ FÅTT OPTIONSETTET SITT");
+				// TODO: HENT ALLE DEPENDENCIES FØR ALLE DOWNLOADEDDATAELEMENTS
+				// All dataelements are fetched and added into survey.viewModel.downloadedDataElements
+			});
+		};
+		
+		self.getOptionSetForDataElement = function(dataElement, optionSetId) {
+			var url = "http://" + survey.utils.url + "/api/optionSets/" + optionSetId + ".jsonp";
+			
+			var deferred = new $.Deferred();
+			
+			$.ajax({
+				type: 'GET',
+				url: url,
+				contentType: 'application/json',
+				dataType: 'jsonp'
+			})
+			.done(function(data) {
+				console.log("OPTION SET FETCHED MADDAFACKKA");
+				dataElement.optionSet = data;
+				console.log(dataElement.optionSet);
+				deferred.resolve();
+			})
+			.fail(function() {
+				console.log("Could not fetch option set from server");
+				deferred.reject();
+			});
+			
+			return deferred.promise();
+		};
+		
 
 		self.getAndInsertDataElementById = function(id) {
-			var url = "http://" + survey.utils.url + "/api/dataElements/" + id + ".jsonp";
+			var url = "http://" + survey.utils.url + "/api/dataElements/" + id + ".jsonp";			
 			
+			var deferred = new $.Deferred();
+						
+			$.ajax({
+				type: 'GET',
+				url: url,
+				contentType: 'application/json',
+				dataType: 'jsonp'
+			})
+			.done(function(data) {
+				console.log("Data element fetched");
+				console.log(data);
+				if (data.optionSet) {
+					var optionSetId = data.optionSet.id;
+					self.getOptionSet(optionSetId);
+				}
+				root.viewModel.downloadedDataElements.push(new root.viewModel.dataElementCreator(data));
+				
+				deferred.resolve(data);
+			})
+			.fail(function() {
+				deferred.reject();
+				console.log("Could not fetch data element from server");
+			});
+			
+			return deferred.promise();
+			
+			/*
 			self.genericGETFunction(url, function(data) {
 				console.log("Data element fetched");
 				console.log(data);
 				if (data.optionSet) {
 					var optionSetId = data.optionSet.id;
 					self.getOptionSet(optionSetId);
-				}                
+				}
+				//root.viewModel.downloadedDataElements.push(new root.viewModel.dataElementCreator(data));
 				root.viewModel.dataElements.push(new root.viewModel.dataElementCreator(data));
+				
 			}, "Could not fetch data element from server");
+			*/
+			
 			
 			/*
 			$.ajax({
@@ -245,7 +324,7 @@
 			})
 			.fail(function(x) {
 			    console.log("login request failed", x);
-			});	
+			});
 		}
         
         self.genericGETFunction = function(url, doneFunction, failMsg) {
@@ -260,7 +339,6 @@
 				console.log(failMsg);
 			});
         };
-		
 	};
 
 	root.data = new data();

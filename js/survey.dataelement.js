@@ -7,6 +7,7 @@
         self.formName = dataelement.formName ? dataelement.formName : dataelement.name;
         self.description = dataelement.description;
         self.type =  dataelement.type;
+		self.optionSet = dataelement.optionSet;
 
         self.dependencies = [];
 

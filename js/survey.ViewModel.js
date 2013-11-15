@@ -23,6 +23,8 @@
         self.dataElementCreator = function(dataElement) {
             return new models.DataElement(dataElement);
         };
+		
+		self.downloadedDataElements = ko.observableArray();
 
 		self.getDataElementByID = function(id) {
 			var dataEl;

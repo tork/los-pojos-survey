@@ -1,96 +1,106 @@
-(function(root, models, depHandler){
+(function(root, models, depHandler) {
 	var viewModel = function() {
 		var self = this;
 
-		//må pushe objecter med minimum en prop kalt name i programs og programStages
-		//Kan være lurt å ha en model som ser slik ut kanskje: {name: "Navnet", id: "idsomething"}s
+		// må pushe objecter med minimum en prop kalt name i programs og
+		// programStages
+		// Kan være lurt å ha en model som ser slik ut kanskje: {name: "Navnet",
+		// id: "idsomething"}s
 		self.programs = ko.observableArray();
 		self.selectedProgram = ko.observable();
 		self.programStages = ko.observableArray();
 		self.selectedProgramStage = ko.observable();
 		self.dataElements = ko.observableArray();
-		self.activeElement = ko.observable({type: "None"});
+		self.activeElement = ko.observable({
+			type : "None"
+		});
 		self.selectedProgram.subscribe(function() {
 			self.programStages().length = 0;
 			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
-        self.selectedProgramStage.subscribe(function() {
-            self.selectedProgramStagesOptionSets().length = 0;
-            survey.data.getAndInsertDataElementsForSelectedProgramStage();            
-        });
-        self.selectedProgramStagesOptionSets = ko.observableArray();
+		self.selectedProgramStage.subscribe(function() {
+			self.selectedProgramStagesOptionSets().length = 0;
+			survey.data.getAndInsertDataElementsForSelectedProgramStage();
+		});
+		self.selectedProgramStagesOptionSets = ko.observableArray();
 
-        self.dataElementCreator = function(dataElement) {
-            return new models.DataElement(dataElement);
-        };
+		self.dataElementCreator = function(dataElement) {
+			return new models.DataElement(dataElement);
+		};
 
 		self.getDataElementByID = function(id) {
 			var dataEl;
 			$.each(root.viewModel.dataElements(), function(index, dataElement) {
-				if(dataElement.id === id) {
+				if (dataElement.id === id) {
 					dataEl = dataElement;
 				}
 			});
 			return dataEl;
 		};
 
-		self.dependenciesHold = function (dataelement) {
+		self.dependenciesHold = function(dataelement) {
 			console.log("dependenciesHold", dataelement)
-			$.each(dataelement.dependencies, function( index, dep ) {
-				var dataElement = self.getDataElementByID(dep.id); //undefined
-				if(dataElement != undefined && !$.inArray(dep.values, dataElement.value())) return false;
+			$.each(dataelement.dependencies, function(index, dep) {
+				var dataElement = self.getDataElementByID(dep.id); // undefined
+				if (dataElement != undefined
+						&& !$.inArray(dep.values, dataElement.value()))
+					return false;
 			});
 			return true;
 		};
 
-        self.addSkipLogic = function(dataelement) {
-            dataelement.addingSkipLogic(true);
-            self.activeElement(dataelement);
+		self.addSkipLogic = function(dataelement) {
+			dataelement.addingSkipLogic(true);
+			self.activeElement(dataelement);
 
-            $.each(self.dataElements(), function( index, element ) {
-                if(element != dataelement) {
-                    element.isInSkipLogic(true);
-                    element.isDependent(depHandler.hasDependency(element, dataelement));
-                    element.setSkipLogicUIElements(dataelement);
-                }
-            });
-        };
+			$.each(self.dataElements(), function(index, element) {
+				if (element != dataelement) {
+					element.isInSkipLogic(true);
+					element.isDependent(depHandler.hasDependency(element,
+							dataelement));
+					element.setSkipLogicUIElements(dataelement);
+				}
+			});
+		};
 
-        self.saveSkipLogic = function(dataelement) {
-            $.each(root.viewModel.dataElements(), function( index, element ) {
-                if(element != dataelement) {
-                    if(element.isDependent()) {
-                        depHandler.addDependency(dataelement, element).done(function() {
-                            element.resetSkipLogicUI();
-                            console.log("legger til avhengighet", element);
-                        }).fail(function(status) {
-                            element.resetSkipLogicUI();
-                            console.log(status);
-                        });
-                    } else {
-                        depHandler.removeDependency(dataelement, element);
-                        element.resetSkipLogicUI();
-                    }
-                } else {
-                    element.resetSkipLogicUI();
-                }
-            });
-            dataelement.addingSkipLogic(false);
-        };
+		self.saveSkipLogic = function(dataelement) {
+			$.each(root.viewModel.dataElements(), function(index, element) {
+				if (element != dataelement) {
+					if (element.isDependent()) {
+						depHandler.addDependency(dataelement, element).done(
+								function() {
+									element.resetSkipLogicUI();
+									console.log("legger til avhengighet",
+											element);
+								}).fail(function(status) {
+									element.resetSkipLogicUI();
+									console.log(status);
+								});
+					} else {
+						depHandler.removeDependency(dataelement, element);
+						element.resetSkipLogicUI();
+					}
+				} else {
+					element.resetSkipLogicUI();
+				}
+			});
+			dataelement.addingSkipLogic(false);
+		};
 
-		//LOG IN
+		// LOG IN
 		self.loginVisible = ko.observable(false);
 
 		self.username = ko.observable();
 		self.password = ko.observable();
 		self.logIn = function() {
-			console.log("Log in with values: " + self.username() + " " + self.password());
+			console.log("Log in with values: " + self.username() + " "
+					+ self.password());
 			survey.data.authenticate(self.username(), self.password());
 			self.loginVisible(false);
 		}
-		
+
 		self.isAdmin = ko.observable(true);
-		
+
 		self.loginStatus = function() {
 			var response = survey.data.getWebAPI();
 			try {
@@ -101,29 +111,47 @@
 				self.loginVisible(true);
 			}
 		}
-		
+
 		self.adminClick = function() {
 			root.viewModel.isAdmin(true);
 		};
-		
+
 		self.userClick = function() {
 			root.viewModel.isAdmin(false);
 		};
-		
+
 		self.logoutClick = function() {
 			survey.data.logout();
 			self.loginVisible(true);
 		}
+
+		self.saveDataEntry = function() {
+
+			// loop through all data elements and add them to data entry
+
+
+
+			var dataentry = {
+					program : self.selectedProgram().id,
+					orgUnit: "DiszpKrYNg8",
+					eventDate: "2013-05-17",
+					dataValues: [
+					             { dataElement: "qrur9Dvnyt5", value: "22" },
+					             { dataElement: "oZg33kd9taw", value: "Male" },
+					             { dataElement: "msodh3rEMJa", value: "2013-05-18" }
+					             ]
+			}
+			console.log("saving test data entry", dataentry);
+		}
 	};
 
 	/*
-	 * Litt forklaring: selectedProgram vil inneholde det man har valgt,
-	 * eller undefined hvis det står "Select program" i selecten.
-	 * Det er en observable, så den hentes ut ved å kalle viewModel.selectedProgram()
-	 * Foreslår at dette brukes til å gjøre get til api.
-	 * */
+	 * Litt forklaring: selectedProgram vil inneholde det man har valgt, eller
+	 * undefined hvis det står "Select program" i selecten. Det er en observable, så
+	 * den hentes ut ved å kalle viewModel.selectedProgram() Foreslår at dette
+	 * brukes til å gjøre get til api.
+	 */
 
 	root.viewModel = new viewModel();
-	
-})(survey, survey.models, survey.dependencyHandler);
 
+})(survey, survey.models, survey.dependencyHandler);

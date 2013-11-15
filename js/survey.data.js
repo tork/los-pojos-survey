@@ -210,7 +210,7 @@
 
 		self.getWebAPI = function() {
 			var result = "";
-			var url = "http://localhost:8082/api/programs.jsonp?callback=jQuery19108472421790938824_1384426691126&_=1384426691128";
+			var url = "http://" + survey.utils.url + "/api/programs.jsonp?callback=jQuery19108472421790938824_1384426691126&_=1384426691128";
 
 			var x = $.ajax({
 				type: 'GET',
@@ -231,13 +231,13 @@
 		self.authenticate = function(username, password) {
 
 			$.ajax({
-				url: 'http://' + survey.utils.getBaseUrl() + '/dhis-web-commons-security/login.action?authOnly=true',
+				url: 'http://' + survey.utils.url + '/dhis-web-commons-security/login.action?authOnly=true',
 				data: {
 					j_username: username,
 					j_password: password
 				},
 				type: 'POST',
-				dataType: 'json',
+				dataType: 'jsonp',
 				contentType: 'text/html'
 			})
 			.done(function(data) {
@@ -249,7 +249,7 @@
 		}
 
 		self.logout = function() {
-			var url = "http://" + survey.utils.getBaseUrl() + "/dhis-web-commons-security/logout.action";
+			var url = "http://" + survey.utils.url + "/dhis-web-commons-security/logout.action";
 
 			$.ajax({
 				type: 'GET',
@@ -261,8 +261,8 @@
 			.done(function() {
 				console.log("logout complete");
 			})
-			.fail(function() {
-				console.log("logout failed");
+			.fail(function(err) {
+				console.log("logout failed", err);
 			});
 
 		};

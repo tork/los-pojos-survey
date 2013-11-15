@@ -1,7 +1,24 @@
 (function(root){
     root.getBaseUrl = function () {
-        return window.location.origin == "file://" ? "localhost:8082" : "apps.dhis2.org/demo";
+        return window.location.origin.indexOf("http://localhost") == 0  ? "localhost:8082" : "apps.dhis2.org/demo";
     };
+
+    root.resolveBaseUrl = function() {
+        var deferred = new $.Deferred();
+        if(root.getBaseUrl() === "localhost:8082") {
+            root.url = "localhost:8082";
+        } else {
+            $.get("./manifest.webapp").done(function(manifest){
+                var manifestObj = JSON.parse(manifest);
+                root.url = manifestObj.activities.dhis.href;
+                deferred.resolve();
+            }).fail(function() {
+               deferred.reject("Could not read manifest.webapp");
+            });
+        }
+
+        return deferred.promise();
+    }
 
     root.surveySettingsUrl = function(surveyId, loc) {
     	return

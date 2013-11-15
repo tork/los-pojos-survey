@@ -10,11 +10,11 @@
 
         utils.resolveBaseUrl().done(function() {
            console.log("Base url: " + utils.url);
+           data.getProgramIdsAndPopulateDropdown();
         }).fail(function(msg) {
            console.log(msg);
-           return;
         });
-		data.getProgramIdsAndPopulateDropdown();
+
 	});
 })(survey.viewModel, survey.data, survey.utils);
 

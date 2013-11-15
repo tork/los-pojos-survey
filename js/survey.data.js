@@ -4,7 +4,16 @@
 
 		self.getProgramIdsAndPopulateDropdown = function() {
 			var url = "http://" + survey.utils.getBaseUrl() + "/api/programs.jsonp";
-			console.log("URL: " + url);            
+			
+			self.genericGETFunction(url, function(data) {
+				for (var i = 0; i < data.programs.length; i++) {
+					root.viewModel.programs.push(data.programs[i]);
+				}
+			} ,"Could not fetch program IDs from server");
+			
+			
+			
+			/*
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -19,13 +28,22 @@
 			.fail(function(){
 				console.log("Could not fetch program IDs from server");
 			});
+			*/
 		};
 
 		self.getProgramStageIdsFromSelectedProgram = function() {
 			var chosenProgramId = survey.viewModel.selectedProgram().id;
 			var url = "http://" + survey.utils.getBaseUrl() + "/api/programs/" + chosenProgramId + ".jsonp";
-			console.log(url);
 
+			self.genericGETFunction(url, function(data) {
+				console.log("Program fetched");
+				console.log(data);
+				for (var i = 0; i < data.programStages.length; i++) {
+					self.getProgramStagesAndPopulateDropdown(data.programStages[i].id);
+				}
+			}, "Could not fetch program stage IDs from server");
+			
+			/*
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -42,10 +60,19 @@
 			.fail(function() {
 				console.log("Could not fetch program stage IDs from server");
 			});
+			*/
 		};
 
 		self.getProgramStagesAndPopulateDropdown = function(id) {
 			var progStageUrl = "http://" + survey.utils.getBaseUrl() + "/api/programStages/" + id + ".jsonp";
+			
+			self.genericGETFunction(progStageUrl, function(data) {
+				console.log("Program stages fetched");
+				console.log(data);
+				root.viewModel.programStages.push(data);
+			}, "Could not fetch program stages from server");
+			
+			/*
 			$.ajax({
 				type: 'GET',
 				url: progStageUrl,
@@ -60,6 +87,7 @@
 			.fail(function() {
 				console.log("Could not fetch program stages from server");
 			});
+			*/
 		};
 
 		//TODO: untested (cross-domain trouble)
@@ -119,6 +147,18 @@
 
 		self.getAndInsertDataElementById = function(id) {
 			var url = "http://" + survey.utils.getBaseUrl() + "/api/dataElements/" + id + ".jsonp";
+			
+			self.genericGETFunction(url, function(data) {
+				console.log("Data element fetched");
+				console.log(data);
+				if (data.optionSet) {
+					var optionSetId = data.optionSet.id;
+					self.getOptionSet(optionSetId);
+				}                
+				root.viewModel.dataElements.push(new root.viewModel.dataElementCreator(data));
+			}, "Could not fetch data element from server");
+			
+			/*
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -137,11 +177,20 @@
 			.fail(function() {
 				console.log("Could not fetch data element from server");
 			});
+			*/
 
 		};
 
 		self.getOptionSet = function(id) {
 			var url = "http://" + survey.utils.getBaseUrl() + "/api/optionSets/" + id + ".jsonp";
+			
+			self.genericGETFunction(url, function(data) {
+				console.log("Option set fetched");
+				console.log(data);
+				root.viewModel.selectedProgramStagesOptionSets().push(data);
+			}, "Could not fetch option set from server");
+			
+			/*
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -156,6 +205,7 @@
 			.fail(function() {
 				console.log("Could not fetch option set from server");
 			});
+			*/
 		};
 
 		self.getWebAPI = function() {
@@ -198,16 +248,19 @@
 			});	
 		}
         
-        self.genericAjaxFunction = function(url, doneFunction, failFunction) {
-        $.ajax({
+        self.genericGETFunction = function(url, doneFunction, failMsg) {
+        	$.ajax({
                 type: 'GET',
                 url: url,
                 contentType: 'application/json',
                 dataType: 'jsonp'
             })
-            .done(donefunction)
-            .fail(failFunction);
+            .done(doneFunction)
+            .fail(function() {
+				console.log(failMsg);
+			});
         };
+		
 	};
 
 	root.data = new data();

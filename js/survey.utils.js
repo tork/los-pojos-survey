@@ -1,6 +1,7 @@
 (function(root){
     root.getBaseUrl = function () {
-        return window.location.origin == "file://" ? "localhost:8082" : "apps.dhis2.org/demo";
+        //return window.location.origin == "file://" ? "localhost:8082" : "apps.dhis2.org/demo";
+		return "localhost:8082";
     };
 
     root.surveySettingsUrl = function(surveyId, loc) {

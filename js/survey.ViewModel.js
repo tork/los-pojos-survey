@@ -125,23 +125,25 @@
 			self.loginVisible(true);
 		}
 
-		self.saveDataEntry = function() {
-
-			// loop through all data elements and add them to data entry
-
-
+		self.saveDataEntry = function() {	
+			var getDataValues = function() {
+				dataelements = [];
+				$.each(self.dataElements(), function(index, element) {
+					console.log("ID: ", element.id);
+					console.log("VALUE: ",element.value());
+					dataelements.push({dataElement: element.id, value: element.value()});
+				});
+				return dataelements;
+			}
 
 			var dataentry = {
 					program : self.selectedProgram().id,
 					orgUnit: "DiszpKrYNg8",
 					eventDate: "2013-05-17",
-					dataValues: [
-					             { dataElement: "qrur9Dvnyt5", value: "22" },
-					             { dataElement: "oZg33kd9taw", value: "Male" },
-					             { dataElement: "msodh3rEMJa", value: "2013-05-18" }
-					             ]
+					dataValues: getDataValues()
 			}
-			console.log("saving test data entry", dataentry);
+			
+			//post dataentry to dhis
 		}
 	};
 

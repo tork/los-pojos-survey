@@ -4,9 +4,9 @@
     "description": "Survey app with skip logic",
     "launch_path": "/index.html",
     "icons": {
-        "16": "/img/icons/icon-16.png",
-        "48": "/img/icons/icon-48.png",
-        "128": "/img/icons/icon-128.png"
+        "16": "/img/icons/losPOJOs.png",
+        "48": "/img/icons/losPOJOs.png",
+        "128": "/img/icons/losPOJOs.png"
     },
     "developer": {
         "name": "Los POJOs",

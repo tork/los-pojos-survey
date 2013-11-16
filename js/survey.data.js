@@ -122,7 +122,8 @@
 				console.log(survey.viewModel.downloadedDataElements());
 				
 				// ARR er nå med rearranget data elements
-				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id, self.addRearrangedDataElementsToPage, function() { console.log("fail"); });
+				console.log(survey.viewModel.selectedProgramStage().id);
+				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage().id, self.addRearrangedDataElementsToPage, function() { console.log("fail"); });
 				console.log("Arr:");
 				console.log(arr);
 				// TORKIL HENTER DATAEN
@@ -131,8 +132,8 @@
 			});
 		};
 		
-		self.addRearrangedDataElementsToPage = function() {
-			
+		self.addRearrangedDataElementsToPage = function(res) {
+			console.log(res);
 		};
 		
 		self.getOptionSetForDataElement = function(dataElement, optionSetId) {

@@ -14,30 +14,30 @@ and if project is running from a web server.
 			{
 				10:
 				[{
-					dep_id: 12,
+					id: 12,
 					triggers: [""]
 				},{
-					dep_id: 13,
+					id: 13,
 					triggers: [""]
 				}],
 
 				11:
 				[{
-					dep_id: 10,
+					id: 10,
 					triggers: [""]
 				},{
-					dep_id: -10,
+					id: -10,
 					triggers: [""]
 				}],
 
 				12:
 				[{
-					dep_id: 13,
+					id: 13,
 					triggers: [""]
 				}],
 				'-10': // apparently negative numbers are no-no
 				[{
-					dep_id: 11,
+					id: 11,
 					triggers: [""]
 				}]
 			};

@@ -174,7 +174,11 @@
 				url: url,
 				contentType: 'text/plain'
 			}).done(function(data) {
-				data = JSON.parse(data);
+				if (!data || data == "") {
+					data = [];
+				} else {
+					data = JSON.parse(data);
+				}
 				success(data);
 			}).fail(error);
 		};

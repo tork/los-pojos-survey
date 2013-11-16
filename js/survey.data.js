@@ -118,22 +118,8 @@
 				}
 			}
 			$.when.apply($, promises).then(function() {
-				console.log("All downloaded DataElements now have their optionSets:");
-				console.log(survey.viewModel.downloadedDataElements());
-				
-				// ARR er nå med rearranget data elements
-				console.log(survey.viewModel.selectedProgramStage().id);
-				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage().id, self.addRearrangedDataElementsToPage, function() { console.log("fail"); });
-				console.log("Arr:");
-				console.log(arr);
-				// TORKIL HENTER DATAEN
-				// TODO: LAGRE DATAEN (KALL PÅ TORKILS POST)				
-				// All dataelements are fetched and added into downloadedDataElements
+				self.allDataElementsAndOptionSetsFethed();
 			});
-		};
-		
-		self.addRearrangedDataElementsToPage = function(res) {
-			console.log(res);
 		};
 		
 		self.getOptionSetForDataElement = function(dataElement, optionSetId) {
@@ -149,6 +135,7 @@
 			})
 			.done(function(data) {
 				dataElement.optionSet = data;
+				survey.viewModel.selectedProgramStagesOptionSets.push(data);
 				console.log(dataElement.optionSet);
 				deferred.resolve();
 			})
@@ -158,6 +145,24 @@
 			});
 			
 			return deferred.promise();
+		};
+		
+		self.allDataElementsAndOptionSetsFethed = function() {
+			console.log("All downloaded DataElements now have their optionSets:");
+			console.log(survey.viewModel.downloadedDataElements());
+			survey.rearrange(survey.viewModel.downloadedDataElements(), 
+							 survey.viewModel.selectedProgramStage().id,
+							 self.addDownloadedDataElementsToPage, 
+							 function() { console.log("Rearrangement failed"); });
+		};
+		
+		self.addDownloadedDataElementsToPage = function(res) {
+			console.log("Rearrange finished successfully");
+			console.log(res);
+			
+			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
+				survey.viewModel.dataElements().push(survey.viewModel.downloadedDataElements()[i]);
+			}
 		};
 		
 		
@@ -181,8 +186,8 @@
 		};
 
 		//TODO: untested (cross-domain trouble)
-		self.post_dependencies = function(surveyId, elements) {
-			function elements2dependencies(elements, success, error) {
+		self.post_dependencies = function(surveyId, elements, success, error) {
+			function elements2dependencies(elements) {
 				var deps = {};
 				elements.forEach(function(elem) {
 					var dep = elem.dependencies;
@@ -211,7 +216,7 @@
 				url: url,
 				data: JSON.stringify(data),
 				contentType: 'text/plain'
-			}).done(success).fail(error);
+			}).fail(error).done(success);
 		};
 
 		self.getWebAPI = function() {

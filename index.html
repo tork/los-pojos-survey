@@ -12,6 +12,8 @@
 <link href="css/stylesheet.css" rel="stylesheet">
 <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <link href="css/customComponents.css" rel="stylesheet">
+<link href="css/formee-structure.css" rel="stylesheet">
+<link href="css/formee-style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -25,7 +27,8 @@
 
 				<li><div class="sidebar-item" data-bind="click: adminClick">Admin</div></li>
 				<li><div class="sidebar-item" data-bind="click: userClick">Surveys</div></li>
-				<li><a href="#">Log out</a>
+				<li><div class="sidebar-item" data-bind="click: logoutClick">Log
+						out</div></li>
 			</ul>
 		</div>
 
@@ -167,10 +170,16 @@
 
 											</div>
 										</div>
-
 									</div>
 								</div>
 							</div>
+						</div>
+						<!-- 						Save button here  -->
+						<div data-bind="visible: !isAdmin() && programIsChosen()">
+							Entry date: <input type="date" data-bind="value: entryDate" />
+							OrgUnit: <select data-bind="options: orgUnitOpts, optionsText: 'orgName',
+                                    optionsCaption: 'Select orgUnit',value: orgUnit"></select>
+							<button data-bind="click: saveDataEntry">Save data</button>
 						</div>
 					</div>
 				</div>
@@ -181,6 +190,7 @@
 	<script src="js/libs/bootstrap.js"></script>
 	<script src="js/libs/knockout-3.0.0.min.js"></script>
 	<script src="js/libs/knockout-switch-case.min.js"></script>
+	<script src="js/libs/formee.js"></script>
 
 	<script src="js/namespace.js"></script>
 	<script src="js/survey.utils.js"></script>

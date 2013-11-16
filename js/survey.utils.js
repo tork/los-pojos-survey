@@ -6,7 +6,7 @@
     root.resolveBaseUrl = function() {
         var deferred = new $.Deferred();
         if(root.getBaseUrl() === "localhost:8082") {
-            root.url = "localhost:8082";
+            root.url = "http://localhost:8082";
             deferred.resolve();
         } else {
             $.get("./manifest.webapp").done(function(manifest){

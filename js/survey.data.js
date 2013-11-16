@@ -7,7 +7,7 @@
 		////////////////////////////////
 
 		self.getProgramIdsAndPopulateDropdown = function() {
-			var url = "http://" + survey.utils.url + "/api/programs.jsonp";
+			var url = survey.utils.url + "/api/programs.jsonp";
 			
 			$.ajax({
 				type: 'GET',
@@ -27,7 +27,7 @@
 
 		self.getProgramStageIdsFromSelectedProgram = function() {
 			var chosenProgramId = survey.viewModel.selectedProgram().id;
-			var url = "http://" + survey.utils.url + "/api/programs/" + chosenProgramId + ".jsonp";
+			var url = survey.utils.url + "/api/programs/" + chosenProgramId + ".jsonp";
 			
 			$.ajax({
 				type: 'GET',
@@ -48,7 +48,7 @@
 		};
 
 		self.getProgramStagesAndPopulateDropdown = function(id) {
-			var progStageUrl = "http://" + survey.utils.url + "/api/programStages/" + id + ".jsonp";
+			var progStageUrl = survey.utils.url + "/api/programStages/" + id + ".jsonp";
 			
 			
 			$.ajax({
@@ -85,7 +85,7 @@
 		};
 		
 		self.getDataElementById = function(id) {
-			var url = "http://" + survey.utils.url + "/api/dataElements/" + id + ".jsonp";						
+			var url = survey.utils.url + "/api/dataElements/" + id + ".jsonp";						
 			var deferred = new $.Deferred();						
 			$.ajax({
 				type: 'GET',
@@ -112,14 +112,15 @@
 			console.log(survey.viewModel.downloadedDataElements().length);
 			
 			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
-				console.log(survey.viewModel.downloadedDataElements()[i]);
 				if (survey.viewModel.downloadedDataElements()[i].optionSet) {
 					var optionSetId = survey.viewModel.downloadedDataElements()[i].optionSet.id;
 					promises.push(self.getOptionSetForDataElement(survey.viewModel.downloadedDataElements()[i], optionSetId));
 				}
 			}
 			$.when.apply($, promises).then(function() {
-				console.log("ALLE DATAELEMENTS MED OPTIONSET HAR NÅ FÅTT OPTIONSETTET SITT");
+				console.log("All downloaded DataElements now have their optionSets:");
+				console.log(survey.viewModel.downloadedDataElements());
+				
 				// ARR er nå med rearranget data elements
 				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id, self.addRearrangedDataElementsToPage, function() { console.log("fail"); });
 				console.log("Arr:");
@@ -135,7 +136,7 @@
 		};
 		
 		self.getOptionSetForDataElement = function(dataElement, optionSetId) {
-			var url = "http://" + survey.utils.url + "/api/optionSets/" + optionSetId + ".jsonp";
+			var url = survey.utils.url + "/api/optionSets/" + optionSetId + ".jsonp";
 			
 			var deferred = new $.Deferred();
 			
@@ -211,12 +212,11 @@
 				contentType: 'text/plain'
 			}).done(success).fail(error);
 		};
-		
 
 		self.getWebAPI = function() {
 			var result = "";
-			var url = "http://localhost:8082/api/programs.jsonp?callback=jQuery19108472421790938824_1384426691126&_=1384426691128";
-			
+			var url = survey.utils.url + "/api/programs.jsonp?callback=jQuery19108472421790938824_1384426691126&_=1384426691128";
+
 			var x = $.ajax({
 				type: 'GET',
 				url: url,
@@ -229,29 +229,48 @@
 			.fail(function() {
 				console.log("GET failed");
 			});
-			
+
 			return "";
 		};
-		
+
 		self.authenticate = function(username, password) {
-			
+
 			$.ajax({
-		        url: 'http://apps.dhis2.org/demo/dhis-web-commons-security/login.action?authOnly=true',
-		        data: {
-		            j_username: username,
-		            j_password: password
-		        },
-		        type: 'POST',
-		        dataType: 'json',
-		        contentType: 'text/html'
-		    })
+				url:  survey.utils.url + '/dhis-web-commons-security/login.action?authOnly=true',
+				data: {
+					j_username: username,
+					j_password: password
+				},
+				type: 'POST',
+				dataType: 'jsonp',
+				contentType: 'text/html'
+			})
 			.done(function(data) {
-			    console.log(data)
+				console.log(data)
 			})
 			.fail(function(x) {
-			    console.log("login request failed", x);
-			});
+				console.log("login request failed", x);
+			});	
 		}
+
+		self.logout = function() {
+			var url = survey.utils.url + "/dhis-web-commons-security/logout.action";
+
+			$.ajax({
+				type: 'GET',
+				url: url,
+				contentType: 'application/json',
+				dataType: 'jsonp'
+
+			})
+			.done(function() {
+				console.log("logout complete");
+			})
+			.fail(function(err) {
+				console.log("logout failed", err);
+			});
+
+		};
         
         self.genericGETFunction = function(url, doneFunction, failMsg) {
         	$.ajax({

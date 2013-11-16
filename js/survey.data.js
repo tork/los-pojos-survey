@@ -122,7 +122,7 @@
 				console.log(survey.viewModel.downloadedDataElements());
 				
 				// ARR er nå med rearranget data elements
-				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id, self.addRearrangedDataElementsToPage, function() { console.log("fail"); });
+				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage().id, self.addRearrangedDataElementsToPage, function() { console.log("fail"); });
 				console.log("Arr:");
 				console.log(arr);
 				// TORKIL HENTER DATAEN
@@ -180,8 +180,8 @@
 		};
 
 		//TODO: untested (cross-domain trouble)
-		self.post_dependencies = function(surveyId, elements) {
-			function elements2dependencies(elements, success, error) {
+		self.post_dependencies = function(surveyId, elements, success, error) {
+			function elements2dependencies(elements) {
 				var deps = {};
 				elements.forEach(function(elem) {
 					var dep = elem.dependencies;
@@ -210,7 +210,7 @@
 				url: url,
 				data: JSON.stringify(data),
 				contentType: 'text/plain'
-			}).done(success).fail(error);
+			}).fail(error).done(success);
 		};
 
 		self.getWebAPI = function() {

@@ -22,11 +22,10 @@
     }
 
     root.surveySettingsUrl = function(surveyId, loc) {
-    	return
-    		root.getBaseUrl() +
-    		'/api/systemSettings/los-pojos.' +
+    	return root.url +
+    		'/api/systemSettings/los-pojos_' +
     		surveyId +
-    		'.' +
+    		'_' +
     		loc;
     };
 

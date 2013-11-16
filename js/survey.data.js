@@ -1,17 +1,14 @@
 (function(root){
 	var data = function() {
 		var self = this;
+		
+		////////////////////////////////
+		// Programs and ProgramStages //
+		////////////////////////////////
 
 		self.getProgramIdsAndPopulateDropdown = function() {
 			var url = "http://" + survey.utils.url + "/api/programs.jsonp";
 			
-			self.genericGETFunction(url, function(data) {
-				for (var i = 0; i < data.programs.length; i++) {
-					root.viewModel.programs.push(data.programs[i]);
-				}
-			} ,"Could not fetch program IDs from server");
-			
-			/*
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -26,22 +23,12 @@
 			.fail(function(){
 				console.log("Could not fetch program IDs from server");
 			});
-			*/
 		};
 
 		self.getProgramStageIdsFromSelectedProgram = function() {
 			var chosenProgramId = survey.viewModel.selectedProgram().id;
 			var url = "http://" + survey.utils.url + "/api/programs/" + chosenProgramId + ".jsonp";
-
-			self.genericGETFunction(url, function(data) {
-				console.log("Program fetched");
-				console.log(data);
-				for (var i = 0; i < data.programStages.length; i++) {
-					self.getProgramStagesAndPopulateDropdown(data.programStages[i].id);
-				}
-			}, "Could not fetch program stage IDs from server");
 			
-			/*
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -58,19 +45,12 @@
 			.fail(function() {
 				console.log("Could not fetch program stage IDs from server");
 			});
-			*/
 		};
 
 		self.getProgramStagesAndPopulateDropdown = function(id) {
 			var progStageUrl = "http://" + survey.utils.url + "/api/programStages/" + id + ".jsonp";
 			
-			self.genericGETFunction(progStageUrl, function(data) {
-				console.log("Program stages fetched");
-				console.log(data);
-				root.viewModel.programStages.push(data);
-			}, "Could not fetch program stages from server");
 			
-			/*
 			$.ajax({
 				type: 'GET',
 				url: progStageUrl,
@@ -85,8 +65,104 @@
 			.fail(function() {
 				console.log("Could not fetch program stages from server");
 			});
-			*/
+			
 		};
+		
+		
+		/////////////////////////////////
+		// DataElements and OptionSets //
+		/////////////////////////////////
+
+		self.getAllDataElementsForSelectedProgramStageAndAddToDownloadedDataElements = function() {
+			var promises = [];
+			for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
+				var dataElementId = survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id;
+				promises.push(self.getDataElementById(dataElementId));
+			}
+			$.when.apply($, promises).then(function() {
+				self.getAndAddOptionSetsToDownloadedDataEements();
+			});
+		};
+		
+		self.getDataElementById = function(id) {
+			var url = "http://" + survey.utils.url + "/api/dataElements/" + id + ".jsonp";						
+			var deferred = new $.Deferred();						
+			$.ajax({
+				type: 'GET',
+				url: url,
+				contentType: 'application/json',
+				dataType: 'jsonp'
+			})
+			.done(function(data) {
+				console.log("Data element fetched");
+				console.log(data);
+				root.viewModel.downloadedDataElements.push(new root.viewModel.dataElementCreator(data));
+				deferred.resolve();
+			})
+			.fail(function() {
+				deferred.reject();
+				console.log("Could not fetch data element from server");
+			});
+			
+			return deferred.promise();
+		};
+		
+		self.getAndAddOptionSetsToDownloadedDataEements = function() {
+			var promises = [];
+			console.log(survey.viewModel.downloadedDataElements().length);
+			
+			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
+				console.log(survey.viewModel.downloadedDataElements()[i]);
+				if (survey.viewModel.downloadedDataElements()[i].optionSet) {
+					var optionSetId = survey.viewModel.downloadedDataElements()[i].optionSet.id;
+					promises.push(self.getOptionSetForDataElement(survey.viewModel.downloadedDataElements()[i], optionSetId));
+				}
+			}
+			$.when.apply($, promises).then(function() {
+				console.log("ALLE DATAELEMENTS MED OPTIONSET HAR NÅ FÅTT OPTIONSETTET SITT");
+				// ARR er nå med rearranget data elements
+				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id, self.addRearrangedDataElementsToPage, function() { console.log("fail"); });
+				console.log("Arr:");
+				console.log(arr);
+				// TORKIL HENTER DATAEN
+				// TODO: LAGRE DATAEN (KALL PÅ TORKILS POST)				
+				// All dataelements are fetched and added into downloadedDataElements
+			});
+		};
+		
+		self.addRearrangedDataElementsToPage = function() {
+			
+		};
+		
+		self.getOptionSetForDataElement = function(dataElement, optionSetId) {
+			var url = "http://" + survey.utils.url + "/api/optionSets/" + optionSetId + ".jsonp";
+			
+			var deferred = new $.Deferred();
+			
+			$.ajax({
+				type: 'GET',
+				url: url,
+				contentType: 'application/json',
+				dataType: 'jsonp'
+			})
+			.done(function(data) {
+				dataElement.optionSet = data;
+				console.log(dataElement.optionSet);
+				deferred.resolve();
+			})
+			.fail(function() {
+				console.log("Could not fetch option set from server");
+				deferred.reject();
+			});
+			
+			return deferred.promise();
+		};
+		
+		
+		
+		///////////
+		// Other //
+		///////////
 
 		//TODO: untested (cross-domain trouble)
 		self.get_dependencies = function(surveyId, elements, success, error) {
@@ -135,158 +211,7 @@
 				contentType: 'text/plain'
 			}).done(success).fail(error);
 		};
-
-		self.getAndInsertDataElementsForSelectedProgramStage = function() {
-			var promises = [];
-			for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
-				var dataElementId = survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id;
-				promises.push(self.getAndInsertDataElementById(dataElementId));
-			}
-			$.when.apply($, promises).then(function() {
-				console.log();				
-				// All dataelements are fetched and added into survey.viewModel.downloadedDataElements
-				self.getAllOptionSetsForSelectedProgramStage();
-			});
-		};
 		
-		self.getAllOptionSetsForSelectedProgramStage = function() {
-			var promises = [];
-			console.log(survey.viewModel.downloadedDataElements().length);
-			
-			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
-				console.log(survey.viewModel.downloadedDataElements()[i]);
-				if (survey.viewModel.downloadedDataElements()[i].optionSet) {
-					var optionSetId = survey.viewModel.downloadedDataElements()[i].optionSet.id;
-					promises.push(self.getOptionSetForDataElement(survey.viewModel.downloadedDataElements()[i], optionSetId));
-				}
-			}
-			$.when.apply($, promises).then(function() {
-				console.log("ALLE DATAELEMENTS MED OPTIONSET HAR NÅ FÅTT OPTIONSETTET SITT");
-				// TODO: HENT ALLE DEPENDENCIES FØR ALLE DOWNLOADEDDATAELEMENTS
-				var arr = survey.rearrange(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id, successFunction, failFunction);
-				
-				// All dataelements are fetched and added into survey.viewModel.downloadedDataElements
-			});
-		};
-		
-		self.getOptionSetForDataElement = function(dataElement, optionSetId) {
-			var url = "http://" + survey.utils.url + "/api/optionSets/" + optionSetId + ".jsonp";
-			
-			var deferred = new $.Deferred();
-			
-			$.ajax({
-				type: 'GET',
-				url: url,
-				contentType: 'application/json',
-				dataType: 'jsonp'
-			})
-			.done(function(data) {
-				dataElement.optionSet = data;
-				console.log(dataElement.optionSet);
-				deferred.resolve();
-			})
-			.fail(function() {
-				console.log("Could not fetch option set from server");
-				deferred.reject();
-			});
-			
-			return deferred.promise();
-		};
-		
-
-		self.getAndInsertDataElementById = function(id) {
-			var url = "http://" + survey.utils.url + "/api/dataElements/" + id + ".jsonp";			
-			
-			var deferred = new $.Deferred();
-						
-			$.ajax({
-				type: 'GET',
-				url: url,
-				contentType: 'application/json',
-				dataType: 'jsonp'
-			})
-			.done(function(data) {
-				console.log("Data element fetched");
-				console.log(data);
-				if (data.optionSet) {
-					var optionSetId = data.optionSet.id;
-					self.getOptionSet(optionSetId);
-				}
-				root.viewModel.downloadedDataElements.push(new root.viewModel.dataElementCreator(data));
-				
-				deferred.resolve(data);
-			})
-			.fail(function() {
-				deferred.reject();
-				console.log("Could not fetch data element from server");
-			});
-			
-			return deferred.promise();
-			
-			/*
-			self.genericGETFunction(url, function(data) {
-				console.log("Data element fetched");
-				console.log(data);
-				if (data.optionSet) {
-					var optionSetId = data.optionSet.id;
-					self.getOptionSet(optionSetId);
-				}
-				//root.viewModel.downloadedDataElements.push(new root.viewModel.dataElementCreator(data));
-				root.viewModel.dataElements.push(new root.viewModel.dataElementCreator(data));
-				
-			}, "Could not fetch data element from server");
-			*/
-			
-			
-			/*
-			$.ajax({
-				type: 'GET',
-				url: url,
-				contentType: 'application/json',
-				dataType: 'jsonp'
-			})
-			.done(function(data) {
-				console.log("Data element fetched");
-				console.log(data);
-				if (data.optionSet) {
-					var optionSetId = data.optionSet.id;
-					self.getOptionSet(optionSetId);
-				}                
-				root.viewModel.dataElements.push(new root.viewModel.dataElementCreator(data));
-			})
-			.fail(function() {
-				console.log("Could not fetch data element from server");
-			});
-			*/
-
-		};
-
-		self.getOptionSet = function(id) {
-			var url = "http://" + survey.utils.url + "/api/optionSets/" + id + ".jsonp";
-			
-			self.genericGETFunction(url, function(data) {
-				console.log("Option set fetched");
-				console.log(data);
-				root.viewModel.selectedProgramStagesOptionSets().push(data);
-			}, "Could not fetch option set from server");
-			
-			/*
-			$.ajax({
-				type: 'GET',
-				url: url,
-				contentType: 'application/json',
-				dataType: 'jsonp'
-			})
-			.done(function(data) {
-				console.log("Option set fetched");
-				console.log(data);
-				root.viewModel.selectedProgramStagesOptionSets().push(data);
-			})
-			.fail(function() {
-				console.log("Could not fetch option set from server");
-			});
-			*/
-		};
 
 		self.getWebAPI = function() {
 			var result = "";

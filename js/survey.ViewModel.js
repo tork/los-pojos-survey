@@ -16,7 +16,7 @@
 		});
         self.selectedProgramStage.subscribe(function() {
             self.selectedProgramStagesOptionSets().length = 0;
-            survey.data.getAndInsertDataElementsForSelectedProgramStage();            
+            survey.data.getAllDataElementsForSelectedProgramStageAndAddToDownloadedDataElements();            
         });
         self.selectedProgramStagesOptionSets = ko.observableArray();
 

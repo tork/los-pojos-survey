@@ -21,6 +21,8 @@
 		
         self.selectedProgramStage.subscribe(function() {
             self.selectedProgramStagesOptionSets().length = 0;
+			self.downloadedDataElements().length = 0;
+			self.dataElements().length = 0;
             survey.data.getAllDataElementsForSelectedProgramStageAndAddToDownloadedDataElements();            
         });
         self.selectedProgramStagesOptionSets = ko.observableArray();

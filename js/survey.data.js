@@ -36,8 +36,8 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				console.log("Program fetched");
-				console.log(data);
+				//console.log("Program fetched");
+				//console.log(data);
 				for (var i = 0; i < data.programStages.length; i++) {
 					self.getProgramStagesAndPopulateDropdown(data.programStages[i].id);
 				}
@@ -58,8 +58,8 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				console.log("Program stages fetched");
-				console.log(data);
+				//console.log("Program stages fetched");
+				//console.log(data);
 				root.viewModel.programStages.push(data);
 			})
 			.fail(function() {
@@ -94,8 +94,8 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				console.log("Data element fetched");
-				console.log(data);
+				//console.log("Data element fetched");
+				//console.log(data);
 				root.viewModel.downloadedDataElements.push(new root.viewModel.dataElementCreator(data));
 				deferred.resolve();
 			})
@@ -109,7 +109,6 @@
 		
 		self.getAndAddOptionSetsToDownloadedDataEements = function() {
 			var promises = [];
-			console.log(survey.viewModel.downloadedDataElements().length);
 			
 			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
 				if (survey.viewModel.downloadedDataElements()[i].optionSet) {
@@ -136,7 +135,7 @@
 			.done(function(data) {
 				dataElement.optionSet = data;
 				survey.viewModel.selectedProgramStagesOptionSets.push(data);
-				console.log(dataElement.optionSet);
+				//console.log(dataElement.optionSet);
 				deferred.resolve();
 			})
 			.fail(function() {
@@ -150,16 +149,22 @@
 		self.allDataElementsAndOptionSetsFethed = function() {
 			console.log("All downloaded DataElements now have their optionSets:");
 			console.log(survey.viewModel.downloadedDataElements());
+			self.addDownloadedDataElementsToPage();
+			
+			/*
 			survey.rearrange(survey.viewModel.downloadedDataElements(), 
 							 survey.viewModel.selectedProgramStage().id,
 							 self.addDownloadedDataElementsToPage, 
-							 function() { console.log("Rearrangement failed"); });
+							 function() {
+								 console.log("Rearrangement failed");
+								 // For debugging purposes
+								 self.addDownloadedDataElementsToPage();
+							 });
+							 
+			*/				 
 		};
 		
-		self.addDownloadedDataElementsToPage = function(res) {
-			console.log("Rearrange finished successfully");
-			console.log(res);
-			
+		self.addDownloadedDataElementsToPage = function() {			
 			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
 				survey.viewModel.dataElements().push(survey.viewModel.downloadedDataElements()[i]);
 			}

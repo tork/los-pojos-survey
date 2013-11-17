@@ -75,7 +75,7 @@ to unlock) are excluded from the rearrangement.
 			workspace.free_queue = enqueue(elem, workspace.free_queue);
 		} else {
 			deps.forEach(function(descriptor) {
-				var dep = get_element(descriptor.dep_id, workspace);
+				var dep = get_element(descriptor.id, workspace);
 				dep.dependents = enqueue(elem, dep.dependents);
 			});
 		}

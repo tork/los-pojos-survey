@@ -287,6 +287,36 @@
 			});
 
 		};
+		
+		self.getOrgUnits = function() {
+			var urlOrgUnits = survey.utils.url + "/api/currentUser";			
+			console.log("URL", urlOrgUnits);
+			var currentUser = "";
+			
+			$.get(urlOrgUnits, function(data) {
+				console.log("success orgunits", data); 
+			})
+			.done(function(data) {
+				console.log("GET done.", data);
+				currentUser = JSON.parse(data);
+				console.log("currentUser: ", currentUser.organisationUnits);
+				return currentUser.organisationUnits;
+			});
+			
+			
+//			$.ajax({
+//                type: 'GET',
+//                url: urlOrgUnits,
+//                contentType: 'text/plain',
+//            })
+//            .done(function (done) {
+//            	console.log("orgUnits done");
+//            })
+//            .fail(function(err) {
+//				console.log("error getOrgUnits", err);
+//			});
+			
+		}
         
         self.genericGETFunction = function(url, doneFunction, failMsg) {
         	$.ajax({

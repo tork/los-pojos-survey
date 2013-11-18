@@ -73,7 +73,8 @@
 									data-bind="options: programStages,
                                     optionsText: 'name',
                                     optionsCaption: 'Select program stage',
-                                    value: selectedProgramStage"></select>
+                                    value: selectedProgramStage,
+                                    enable: programStages().length > 0"></select>
                                 </form>
 
 							</div>
@@ -89,8 +90,10 @@
 										<div class="well row col-md-12">
                                             <form class="formee">
                                                 <div class="col-md-6">
-                                                    <label><strong data-bind="text: formName"></strong></label>
-                                                    <label data-bind="visible: type === 'int' || type === 'date' || type === 'string'">
+                                                    <label class="elementTitle"><strong
+                                                            data-bind="text: formName"></strong></label>
+                                                    <label data-bind="visible: type === 'int' || type === 'date' || type === 'string'"
+                                                           class="elementTitle">
                                                         (<strong
                                                             data-bind="text: type !== 'int' ? type : 'number'"></strong>)
                                                     </label>
@@ -119,48 +122,54 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="skipLogicPanel">
+                                                <div class="col-md-6 skipLogicPanel">
                                                     <!--Add skip-logic ui here-->
                                                     <button data-bind="visible: !addingSkipLogic() && !isInSkipLogic() &&
                                                     $parent.isAdmin() , click: $parent.addSkipLogic.bind($data)"
-                                                    class="formee-button">
+                                                    class="formee-button skipButton">
                                                         Add skip logic
                                                     </button>
                                                     <button data-bind="visible: addingSkipLogic(),
                                                     click: $parent.saveSkipLogic.bind($data)"
-                                                    class="formee-button">
+                                                    class="formee-button skipButton">
                                                         Save skip logic
                                                     </button>
 
-                                                    <div class="skipLogicUI col-md-6">
-                                                        <div class="col-md-1">
+                                                    <div class="skipLogicUI">
+                                                        <div data-bind="visible: isInSkipLogic()">
+                                                            <label data-bind="text: isDependent() ? 'Remove?' : 'Add?'"></label>
                                                             <input type="checkbox"
-                                                                data-bind="visible: isInSkipLogic(), checked: isDependent" />
+                                                                data-bind="checked: isDependent" />
                                                         </div>
-                                                        <div class="skipLogicPicker col-md-11"
+                                                        <div class="skipLogicPicker"
                                                             data-bind="visible: isDependent()">
                                                             <div data-bind="switch: $parent.activeElement().type">
                                                                 <div data-bind="case: 'bool'">
                                                                     <label>Show this element when parent is: </label> <select
                                                                         data-bind="options: $parent.activeElement().dropDownOpts,
-                                                                        value: triggerOption"></select>
+                                                                        value: triggerOption" class="mediumField"></select>
                                                                 </div>
                                                                 <div data-bind="case: 'int'">
                                                                     <label>Interval?</label> <input type="checkbox"
                                                                         data-bind="checked: interval" />
                                                                     <div data-bind="visible: !interval()">
-                                                                        <label>Values (separate with ",")</label> <input
-                                                                            type="text" data-bind="value: commaList" />
+                                                                        <label>Values (separate with ","):</label>
+                                                                        <input type="text"
+                                                                               data-bind="value: commaList" />
                                                                     </div>
                                                                     <div data-bind="visible: interval()">
-                                                                        <label>Lower limit</label> <input type="number"
-                                                                            data-bind="value: lowerLimit" /> <label>Upper
-                                                                            limit</label> <input type="number"
+                                                                        <label>Lower limit:</label>
+                                                                        <input type="number" class="mediumField intervalField"
+                                                                            data-bind="value: lowerLimit" />
+                                                                        <br>
+                                                                        <label>Upper limit:</label>
+                                                                        <input type="number"
+                                                                               class="mediumField intervalField"
                                                                             data-bind="value: upperLimit" />
                                                                     </div>
                                                                 </div>
                                                                 <div data-bind="case: 'string'">
-                                                                    <label>Values (separate with ",")</label> <input
+                                                                    <label>Values (separate with ","):</label> <input
                                                                         type="text" data-bind="value: commaList" />
                                                                 </div>
                                                                 <div data-bind="case: 'date'">
@@ -168,12 +177,16 @@
                                                                         data-bind="checked: interval" />
                                                                     <div data-bind="visible: !interval()">
                                                                         <label>Exact date: </label> <input type="date"
-                                                                            data-bind="value: commaList" />
+                                                                            data-bind="value: commaList" class="mediumField" />
                                                                     </div>
                                                                     <div data-bind="visible: interval()">
-                                                                        <label>Lower limit</label> <input type="date"
-                                                                            data-bind="value: lowerLimit" /> <label>Upper
-                                                                            limit</label> <input type="date" data-bind="value: upperLimit" />
+                                                                        <label>Lower limit:</label>
+                                                                        <input type="date" class="mediumField intervalField"
+                                                                            data-bind="value: lowerLimit" />
+                                                                        <br>
+                                                                        <label>Upper limit:</label>
+                                                                        <input type="date" class="mediumField intervalField"
+                                                                        data-bind="value: upperLimit" />
                                                                     </div>
                                                                 </div>
                                                             </div>

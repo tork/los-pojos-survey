@@ -3,3 +3,27 @@ input[type="number"].mediumField,
 select.mediumField {
     width: 55%;
 }
+
+.skipButton {
+    margin-top: 18px;
+    position: relative;
+    float: left; /*Some bug with the button*/
+}
+
+.skipLogicUI label {
+    margin-right: 5px;
+    margin-bottom: 11px;
+}
+
+.skipLogicPanel {
+    margin-top: 5px;
+
+}
+
+.col-md-6 .elementTitle {
+    font-size: 1.7em;
+}
+
+.intervalField {
+    margin-bottom: 5px;
+}

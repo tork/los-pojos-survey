@@ -47,13 +47,7 @@
 					<div class="col-md-12">
 						<p class="lead">Welcome to our survey web app.</p>
 					</div>
-					<div class="col-md-6">
-						<div class="well"></div>
-					</div>
-					<div class="col-md-6">
-						<p class="well">HOW TO USE THE WEB APP</p>
-					</div>
-				</div>
+                </div>
 
 				<div id=programWrapper>
 					<div data-bind="visible: loginVisible()">
@@ -64,18 +58,22 @@
 					<div data-bind="visible: !loginVisible()">
 						<div class="row">
 							<div class="col-md-6">
-								<select class="fullWidth" id="programsSelect"
+								<form class="formee">
+                                <select class="fullWidth" id="programsSelect"
 									data-bind="options: programs,
                                     optionsText: 'name',
                                     optionsCaption: 'Select program',
                                     value: selectedProgram"></select>
+                                </form>
 							</div>
 							<div class="col-md-6">
-								<select class="fullWidth" id="programStagesSelect"
+								<form class="formee">
+                                <select class="fullWidth" id="programStagesSelect"
 									data-bind="options: programStages,
                                     optionsText: 'name',
                                     optionsCaption: 'Select program stage',
                                     value: selectedProgramStage"></select>
+                                </form>
 
 							</div>
 						</div>
@@ -96,12 +94,29 @@
 
                                                 <div class="col-md-6" data-bind="switch: type">
                                                     <div data-bind="case: 'trueOnly'">
+                                                        <label>If yes:</label>
                                                         <input type="checkbox" data-bind="checked: value" />
                                                     </div>
                                                     <div data-bind="case: 'bool'">
                                                         <select
                                                             data-bind="options: dropDownOpts,
                                                     value: value"></select>
+                                                    </div>
+                                                    <div data-bind="case: 'date'">
+                                                        <p>
+                                                            <input class="formee-medium" type="date"
+                                                                   data-bind="value: value" />
+                                                            (<strong
+                                                                data-bind="text: type"></strong>)
+                                                        </p>
+                                                    </div>
+                                                    <div data-bind="case: 'int'">
+                                                        <p>
+                                                            <input class="formee-medium" type="number"
+                                                                   data-bind="value: value" />
+                                                            (<strong
+                                                                data-bind="text: type"></strong>)
+                                                        </p>
                                                     </div>
                                                     <div data-bind="case: $default">
                                                         <p>
@@ -116,12 +131,16 @@
 
                                                 <div class="skipLogicPanel">
                                                     <!--Add skip-logic ui here-->
-                                                    <button
-                                                        data-bind="visible: !addingSkipLogic() && !isInSkipLogic() && $parent.isAdmin() , click: $parent.addSkipLogic.bind($data)">Add
-                                                        skip logic</button>
-                                                    <button
-                                                        data-bind="visible: addingSkipLogic(), click: $parent.saveSkipLogic.bind($data)">Save
-                                                        skip logic</button>
+                                                    <button data-bind="visible: !addingSkipLogic() && !isInSkipLogic() &&
+                                                    $parent.isAdmin() , click: $parent.addSkipLogic.bind($data)"
+                                                    class="formee-button">
+                                                        Add skip logic
+                                                    </button>
+                                                    <button data-bind="visible: addingSkipLogic(),
+                                                    click: $parent.saveSkipLogic.bind($data)"
+                                                    class="formee-button">
+                                                        Save skip logic
+                                                    </button>
 
                                                     <div class="skipLogicUI col-md-6">
                                                         <div class="col-md-1">

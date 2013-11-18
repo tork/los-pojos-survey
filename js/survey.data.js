@@ -58,7 +58,7 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				//console.log("Program stages fetched");
+				console.log("Program stage fetched");
 				//console.log(data);
 				root.viewModel.programStages.push(data);
 			})
@@ -73,13 +73,14 @@
 		// DataElements and OptionSets //
 		/////////////////////////////////
 
-		self.getAllDataElementsForSelectedProgramStageAndAddToDownloadedDataElements = function() {
+		self.getAllDataElementsForSelectedProgramStage = function() {
 			var promises = [];
 			for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
 				var dataElementId = survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id;
 				promises.push(self.getDataElementById(dataElementId));
 			}
 			$.when.apply($, promises).then(function() {
+				console.log("All data elements fetched. Now getting option sets");
 				self.getAndAddOptionSetsToDownloadedDataEements();
 			});
 		};
@@ -96,7 +97,7 @@
 			.done(function(data) {
 				//console.log("Data element fetched");
 				//console.log(data);
-				root.viewModel.downloadedDataElements.push(new root.viewModel.dataElementCreator(data));
+				survey.viewModel.downloadedDataElements.push(data);
 				deferred.resolve();
 			})
 			.fail(function() {
@@ -149,24 +150,24 @@
 		self.allDataElementsAndOptionSetsFethed = function() {
 			console.log("All downloaded DataElements now have their optionSets:");
 			console.log(survey.viewModel.downloadedDataElements());
-			self.addDownloadedDataElementsToPage();
 			
-			/*
 			survey.rearrange(survey.viewModel.downloadedDataElements(), 
 							 survey.viewModel.selectedProgramStage().id,
-							 self.addDownloadedDataElementsToPage, 
+							 self.addDownloadedDataElementsToPage,
 							 function() {
-								 console.log("Rearrangement failed");
-								 // For debugging purposes
-								 self.addDownloadedDataElementsToPage();
+								 self.addDownloadedDataElementsToPage(null);
 							 });
 							 
-			*/				 
+							 
 		};
 		
-		self.addDownloadedDataElementsToPage = function() {			
-			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
-				survey.viewModel.dataElements().push(survey.viewModel.downloadedDataElements()[i]);
+		self.addDownloadedDataElementsToPage = function(orderedElements) {
+			if (!orderedElements) {
+				orderedElements = survey.viewModel.downloadedDataElements();
+			}
+			
+			for (var i = 0; i < orderedElements.length; i++) {
+				survey.viewModel.dataElements.push(new survey.viewModel.dataElementCreator(orderedElements[i]));
 			}
 		};
 		

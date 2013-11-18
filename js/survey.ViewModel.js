@@ -15,6 +15,7 @@
 			type : "None"
 		});
 		self.selectedProgram.subscribe(function() {
+			console.log("Getting program stages for selected program");
 			self.programStages().length = 0;
 			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
@@ -23,7 +24,7 @@
             self.selectedProgramStagesOptionSets().length = 0;
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
-            survey.data.getAllDataElementsForSelectedProgramStageAndAddToDownloadedDataElements();            
+            survey.data.getAllDataElementsForSelectedProgramStage();
         });
         self.selectedProgramStagesOptionSets = ko.observableArray();
 

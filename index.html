@@ -14,6 +14,7 @@
 <link href="css/customComponents.css" rel="stylesheet">
 <link href="css/formee-structure.css" rel="stylesheet">
 <link href="css/formee-style.css" rel="stylesheet">
+<link href="css/formElements.css" rel="stylesheet">
 </head>
 
 <body>
@@ -89,7 +90,10 @@
                                             <form class="formee">
                                                 <div class="col-md-6">
                                                     <label><strong data-bind="text: formName"></strong></label>
-                                                    <strong data-bind="text: description"></strong>
+                                                    <label data-bind="visible: type === 'int' || type === 'date' || type === 'string'">
+                                                        (<strong
+                                                            data-bind="text: type !== 'int' ? type : 'number'"></strong>)
+                                                    </label>
 
                                                     <div data-bind="switch: type">
                                                         <div data-bind="case: 'trueOnly'">
@@ -97,28 +101,21 @@
                                                             <input type="checkbox" data-bind="checked: value" />
                                                         </div>
                                                         <div data-bind="case: 'bool'">
-                                                            <select
+                                                            <select class="mediumField"
                                                                 data-bind="options: dropDownOpts,
                                                         value: value"></select>
                                                         </div>
                                                         <div data-bind="case: 'date'">
-                                                            <input class="formee-medium" type="date"
+                                                            <input type="date" class="mediumField"
                                                                    data-bind="value: value" />
-                                                            (<strong
-                                                                data-bind="text: type"></strong>)
                                                         </div>
                                                         <div data-bind="case: 'int'">
-                                                            <input class="formee-medium" type="number"
+                                                            <input type="number" class="mediumField"
                                                                    data-bind="value: value" />
-                                                            (<strong
-                                                                data-bind="text: type"></strong>)
                                                         </div>
                                                         <div data-bind="case: $default">
-                                                            <input class="formee-medium" type="text"
+                                                            <input type="text"
                                                                    data-bind="value: value" />
-                                                            (<strong
-                                                                data-bind="text: type"></strong>)
-
                                                         </div>
                                                     </div>
                                                 </div>

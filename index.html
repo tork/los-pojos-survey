@@ -87,48 +87,41 @@
 										data-bind="visible: $parent.dependenciesHold($data)">
 										<div class="well row col-md-12">
                                             <form class="formee">
-                                                <p>
+                                                <div class="col-md-6">
                                                     <label><strong data-bind="text: formName"></strong></label>
                                                     <strong data-bind="text: description"></strong>
-                                                </p>
 
-                                                <div class="col-md-6" data-bind="switch: type">
-                                                    <div data-bind="case: 'trueOnly'">
-                                                        <label>If yes:</label>
-                                                        <input type="checkbox" data-bind="checked: value" />
-                                                    </div>
-                                                    <div data-bind="case: 'bool'">
-                                                        <select
-                                                            data-bind="options: dropDownOpts,
-                                                    value: value"></select>
-                                                    </div>
-                                                    <div data-bind="case: 'date'">
-                                                        <p>
+                                                    <div data-bind="switch: type">
+                                                        <div data-bind="case: 'trueOnly'">
+                                                            <label>If yes:</label>
+                                                            <input type="checkbox" data-bind="checked: value" />
+                                                        </div>
+                                                        <div data-bind="case: 'bool'">
+                                                            <select
+                                                                data-bind="options: dropDownOpts,
+                                                        value: value"></select>
+                                                        </div>
+                                                        <div data-bind="case: 'date'">
                                                             <input class="formee-medium" type="date"
                                                                    data-bind="value: value" />
                                                             (<strong
                                                                 data-bind="text: type"></strong>)
-                                                        </p>
-                                                    </div>
-                                                    <div data-bind="case: 'int'">
-                                                        <p>
+                                                        </div>
+                                                        <div data-bind="case: 'int'">
                                                             <input class="formee-medium" type="number"
                                                                    data-bind="value: value" />
                                                             (<strong
                                                                 data-bind="text: type"></strong>)
-                                                        </p>
-                                                    </div>
-                                                    <div data-bind="case: $default">
-                                                        <p>
+                                                        </div>
+                                                        <div data-bind="case: $default">
                                                             <input class="formee-medium" type="text"
                                                                    data-bind="value: value" />
                                                             (<strong
                                                                 data-bind="text: type"></strong>)
-                                                        </p>
 
+                                                        </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="skipLogicPanel">
                                                     <!--Add skip-logic ui here-->
                                                     <button data-bind="visible: !addingSkipLogic() && !isInSkipLogic() &&

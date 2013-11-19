@@ -133,7 +133,7 @@
                                                     <button data-bind="visible: addingSkipLogic(),
                                                     click: $parent.saveSkipLogic.bind($data)"
                                                     class="formee-button skipButton">
-                                                        Save skip logic
+                                                        Done
                                                     </button>
 
                                                     <div class="skipLogicUI">
@@ -208,6 +208,11 @@
                                     optionsCaption: 'Select orgUnit',value: orgUnit"></select>
 							<button data-bind="click: saveDataEntry">Save data</button>
 						</div>
+                        <button data-bind="visible: isAdmin() && programIsChosen(),
+                            click: uploadSkipLogic(), enable: !uploadingSkipLogic"
+                            class="formee-button skipButton">
+                            Save Changes
+                        </button>
 					</div>
 				</div>
 			</div>

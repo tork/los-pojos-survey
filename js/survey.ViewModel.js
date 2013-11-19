@@ -169,6 +169,31 @@
 
 			//post dataentry to dhis
 		}
+
+		self.uploadSkipLogic = function() {
+			var sps = self.selectedProgramStage();
+			if (!sps) return;
+			
+			//var surveyId = sps.id;
+			//var surveyId = 12;
+			var id = sps.id;
+			var success = function() {
+				console.log("success! id was "+id);
+				self.uploadingSkipLogic = false;
+			};
+			var error = function(req, stat, err) {
+				console.log('Error while posting skip logic, with status "'+stat+'":\n'+
+					err+'\n'+'Request was:');
+				console.log(req);
+				survey.error.displayErrorMessage('Failed to save your changes.\n(Read more about it in your console)');
+				self.uploadingSkipLogic = false;
+			};
+			//self.post_dependencies = function(surveyId, elements, success, error) {
+			survey.data.post_dependencies(sps.id, self.dataElements(), success, error);
+			self.uploadingSkipLogic = true;
+		}
+
+		self.uploadingSkipLogic = false;
 	};
 
 	/*

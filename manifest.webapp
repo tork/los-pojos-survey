@@ -1,12 +1,12 @@
 {
-    "version": "0.1",
+    "version": "0.6",
     "name": "Los POJOs Survey App",
     "description": "Survey app with skip logic",
     "launch_path": "/index.html",
     "icons": {
-        "16": "/img/icons/losPOJOs.png",
-        "48": "/img/icons/losPOJOs.png",
-        "128": "/img/icons/losPOJOs.png"
+        "16": "/img/icons/losPOJOs16.jpg",
+        "48": "/img/icons/losPOJOS48.jpg",
+        "128": "/img/icons/losPOJO128.png"
     },
     "developer": {
         "name": "Los POJOs",

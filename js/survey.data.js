@@ -283,7 +283,6 @@
 
 		self.getOrgUnits = function(id) {
 			var urlOrgUnits = survey.utils.url + "/api/programs/" + id + ".jsonp";			
-			console.log("URL ORG", urlOrgUnits);
 			var currentProgram = "";
 
 			$.ajax({
@@ -301,6 +300,26 @@
 			.fail(function() {
 				console.log("Could not fetch orgUnitOpts");
 			});
+		}
+		
+		self.saveDataEntry = function (dataentry) {
+			var jsonEntry = JSON.stringify(dataentry);
+			console.log("saving ", jsonEntry);
+			
+			$.ajax({
+				url:  survey.utils.url + "/api/events",
+				data: JSON.stringify(dataentry),
+				type: 'POST',
+				dataType: 'json',
+				contentType: 'application/json'
+			})
+			.done(function(data) {
+				console.log("Data elements uploaded:", data.imported, " imported, ", data.updated, " updated, ", data.ignored, " ignored");
+			})
+			.fail(function(x) {
+				console.log("saving data entry failed", x);
+			});	
+			
 		}
 
 		self.genericGETFunction = function(url, doneFunction, failMsg) {

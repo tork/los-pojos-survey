@@ -165,8 +165,8 @@
 				console.log("date and orgUnit must be specified!", dataentry.orgUnit, dataentry.eventDate);
 				
 			} else {
-				console.log("saving data entry:", JSON.stringify(dataentry));
-				//post dataentry to dhis
+				console.log("saving data entry");
+				survey.data.saveDataEntry(dataentry);
 			}
 		}
 

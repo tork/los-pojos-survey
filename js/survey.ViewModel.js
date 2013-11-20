@@ -127,10 +127,10 @@
 
 			console.log(survey.data.getOrgUnits());
 			
-//			$.each(survey.data.getOrgUnits(), function(i, orgUnit) {
-//				console.log(orgUnit.name, orgUnit.id, orgUnit.code);
-//				self.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
-//			});
+			$.each(survey.data.getOrgUnits(), function(i, orgUnit) {
+				console.log(orgUnit.name, orgUnit.id, orgUnit.code);
+				self.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
+			});
 
 			root.viewModel.isAdmin(false);
 		};

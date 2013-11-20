@@ -7,7 +7,16 @@
         self.formName = dataelement.formName ? dataelement.formName : dataelement.name;
         self.description = dataelement.description;
         self.type =  dataelement.type;
-		self.optionSet = dataelement.optionSet;
+		
+		self.isOptionSet = ko.observable(false);
+		self.optionSet = ko.observableArray();
+		if (dataelement.optionSet) {
+			self.isOptionSet(true);
+			for (var i = 0; i < dataelement.optionSet.options.length; i++) {
+				self.optionSet.push(dataelement.optionSet.options[i]);
+			}
+		}
+		
 
         self.dependencies = [];
 

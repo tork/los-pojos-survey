@@ -84,7 +84,8 @@
 								data-bind="visible: selectedProgramStage()">
 								<h3
 									data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
-								<div class="row" data-bind="foreach: dataElements">
+								<div> <!--data-bind="with: dataElements"-->
+									<div class="row" data-bind="foreach: dataElements">
 									<div class="col-md-12"
 										data-bind="visible: $parent.dependenciesHold($data)">
 										<div class="well row col-md-12">
@@ -103,6 +104,19 @@
                                                             data-bind="options: dropDownOpts,
                                                     value: value"></select>
                                                     </div>
+													
+													<!-- ØYVINDS TEST AREA -->
+													
+													<div data-bind="case: 'string'">
+														<select data-bind="visible: isOptionSet,
+																		   options: optionSet,
+																		   optionsCaption: 'Select option',
+																		   value: value"></select>
+														<input type="text" data-bind="visible: !isOptionSet()"></input>
+													</div>
+													
+													<!-- END OF ØYVINDS TEST AREA -->
+													
                                                     <div data-bind="case: $default">
                                                         <p>
                                                             <input class="formee-medium" type="text"
@@ -176,6 +190,7 @@
 										</div>
 									</div>
 								</div>
+						</div>
 							</div>
 						</div>
 						<!-- 						Save button here  -->

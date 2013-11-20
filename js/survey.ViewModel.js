@@ -25,6 +25,7 @@
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
 			survey.data.getAllDataElementsForSelectedProgramStage();
+			survey.data.getOrgUnits(self.selectedProgram().id);
 		});
 		self.selectedProgramStagesOptionSets = ko.observableArray();
 
@@ -125,8 +126,6 @@
 		self.userClick = function() {
 			console.log("userClick!");
 
-			self.getOrgUnitOpts();
-
 			root.viewModel.isAdmin(false);
 		};
 
@@ -141,10 +140,6 @@
 
 		self.orgUnitOpts =  ko.observableArray();
 
-		self.getOrgUnitOpts = function () {
-			survey.data.getOrgUnits();
-		}
-
 		self.programIsChosen = ko.computed(function () {
 			return self.selectedProgramStage() != undefined;
 		})
@@ -153,14 +148,14 @@
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
-					dataelements.push({dataElement: element.id, value: element.value()});
+					dataelements.push({dataElement: element.id, value: element.value() || ""});
 				});
 				return dataelements;
 			}
 
 			var dataentry = {
-					program : self.selectedProgramStage().id,
-					orgUnit: self.orgUnit,
+					program : self.selectedProgram().id,
+					orgUnit: self.orgUnit.orgUnit,
 					eventDate: self.entryDate(),
 					dataValues: getDataValues()
 			}
@@ -169,7 +164,7 @@
 				console.log("date and orgUnit must be specified!", dataentry.orgUnit, dataentry.eventDate);
 				
 			} else {
-				console.log("saving data entry:", dataentry);
+				console.log("saving data entry:", JSON.stringify(dataentry));
 				//post dataentry to dhis
 			}
 		}

@@ -7,7 +7,16 @@
         self.formName = dataelement.formName ? dataelement.formName : dataelement.name;
         self.description = dataelement.description;
         self.type =  dataelement.type;
-		self.optionSet = dataelement.optionSet;
+		
+		self.isOptionSet = ko.observable(false);
+		self.optionSet = ko.observableArray();
+		if (dataelement.optionSet) {
+			self.isOptionSet(true);
+			for (var i = 0; i < dataelement.optionSet.options.length; i++) {
+				self.optionSet.push(dataelement.optionSet.options[i]);
+			}
+		}
+		
 
         self.dependencies = dataelement.dependencies;
 
@@ -59,7 +68,7 @@
                             var value = dep.triggers[0] == true ? "Yes" : "No";
                             self.triggerOption(value);
                         } else if(dataElement.type === "date") {
-                            self.commaList(utils.getDateFormattedForInput(dep.triggers[0]));
+                            self.commaList(dep.triggers[0]);
                         } else {
                             self.commaList(dep.triggers.join(","));
                         }

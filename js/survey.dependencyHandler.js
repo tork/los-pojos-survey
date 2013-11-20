@@ -29,9 +29,9 @@
             dependency.triggers = element.commaList().split(",");
         } else if(parentElement.type === "date") { //TODO: finne ut hvordan dhis takler date + validering?
             if(element.interval()) {
-                dependency.triggers.push({from: new Date(element.lowerLimit()), to: new Date(element.upperLimit())});
+                dependency.triggers.push({from: element.lowerLimit(), to: element.upperLimit()});
             } else {
-                dependency.triggers.push(new Date(element.commaList()));
+                dependency.triggers.push(element.commaList());
             }
         } else {
             deferred.reject("No such type");

@@ -80,13 +80,14 @@
 
 							</div>
 						</div>
-						<div class="row">
+						<div id="dataElementsContainer" class="row">
 							<div class="col-md-12"
 								data-bind="visible: selectedProgramStage()">
 								<h3
 									data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
-								<div class="row" data-bind="foreach: dataElements">
-									<div class="col-md-12"
+								<div> <!--data-bind="with: dataElements"-->
+									<div class="row" data-bind="foreach: dataElements">
+									<div class="col-md-12 dataElement"
 										data-bind="visible: $parent.dependenciesHold($data)">
 										<div class="well row col-md-12">
                                             <form class="formee">
@@ -117,6 +118,14 @@
                                                             <input type="number" class="mediumField"
                                                                    data-bind="value: value" />
                                                         </div>
+														<div data-bind="case: 'string'">
+														<select class="mediumField"
+																data-bind="visible: isOptionSet,
+																		   options: optionSet,
+																		   optionsCaption: 'Select option',
+																		   value: value"></select>
+														<input type="text" data-bind="visible: !isOptionSet()" />
+													</div>
                                                         <div data-bind="case: $default">
                                                             <input type="text"
                                                                    data-bind="value: value" />
@@ -193,12 +202,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </form>
 										</div>
 									</div>
 								</div>
+						</div>
 							</div>
 						</div>
 						<!-- 						Save button here  -->

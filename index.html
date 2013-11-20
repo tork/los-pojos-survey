@@ -90,7 +90,7 @@
 									<div class="col-md-12"
 										data-bind="visible: $parent.dependenciesHold($data)">
 										<div class="well row col-md-12">
-                                            <form class="formee">													
+                                            <form class="formee">
                                                 <div class="col-md-6">
                                                     <label class="elementTitle"><strong
                                                             data-bind="text: formName"></strong></label>
@@ -119,7 +119,8 @@
                                                                    data-bind="value: value" />
                                                         </div>
 														<div data-bind="case: 'string'">
-														<select data-bind="visible: isOptionSet,
+														<select class="mediumField"
+																data-bind="visible: isOptionSet,
 																		   options: optionSet,
 																		   optionsCaption: 'Select option',
 																		   value: value"></select>
@@ -201,7 +202,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </form>
 										</div>

@@ -150,17 +150,20 @@
 		self.allDataElementsAndOptionSetsFethed = function() {
 			console.log("All downloaded DataElements now have their optionSets:");
 			console.log(survey.viewModel.downloadedDataElements());
+
+			var surveyId = survey.viewModel.selectedProgramStage().id;
 			
 			survey.rearrange(survey.viewModel.downloadedDataElements(), 
-							 survey.viewModel.selectedProgramStage().id,
+							 surveyId,
 							 self.addDownloadedDataElementsToPage,
 							 function() {
 								 self.addDownloadedDataElementsToPage(null);
 							 });
-			
-			//survey.rearrange.dev.debug(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id)
-							 
-							 
+
+			/** /
+			survey.rearrange.dev.debug(survey.viewModel.downloadedDataElements(),
+				surveyId);
+			//*/
 		};
 		
 		self.addDownloadedDataElementsToPage = function(orderedElements) {

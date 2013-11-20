@@ -45,7 +45,41 @@
 		};
 
 		self.dependenciesHold = function(dataelement) {
-			console.log("dependenciesHold", dataelement)
+			//TODO: if a dep is not visible, return false
+			
+			console.log("dependenciesHold", dataelement);
+			var deps = dataelement.dependencies;
+
+			for (var i = 0; i < deps.length; i++) {
+				console.log("checking dep "+deps[i].id+" of "+dataelement.id);
+				var dep = self.getDataElementByID(deps[i].id);
+				console.log(dep);
+				if (!dep) return false;
+
+				//var val = dep.value();
+				var val = survey.utils.translateElementValue(dep);
+				console.log(val);
+				if (!val) return false;
+
+				var triggers = deps[i].triggers;
+				console.log(triggers);
+				if (triggers.indexOf(val) < 0)
+					return false;
+			}
+
+			return true;
+
+			/*dataelement.dependencies.forEach(function(descriptor) {
+				var dep = self.getDataElementByID(descriptor.id);
+				if (!dep || !dependenciesHold(dep)) {
+					return false;
+				}
+			});
+
+			return true;*/
+
+
+			/*
 			$.each(dataelement.dependencies, function(index, dep) {
 				var dataElement = self.getDataElementByID(dep.id); // undefined
 				if (dataElement != undefined
@@ -53,6 +87,7 @@
 					return false;
 			});
 			return true;
+			*/
 		};
 
 		self.addSkipLogic = function(dataelement) {

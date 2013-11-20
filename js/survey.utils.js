@@ -39,5 +39,19 @@
         return year + "-" + month + "-" + day;
     };
 
+    root.translateElementValue = function (element) {
+        var val;
+        switch (element.type) {
+            case 'bool':
+                val = element.value() == 'Yes'? true:false;
+                break;
+
+            default:
+                val = element.value();
+                break;
+        }
+        return val;
+    }
+
     root.debug = false;
 })(survey.utils = survey.utils || {})

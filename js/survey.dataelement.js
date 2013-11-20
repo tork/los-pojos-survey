@@ -9,7 +9,7 @@
         self.type =  dataelement.type;
 		self.optionSet = dataelement.optionSet;
 
-        self.dependencies = [];
+        self.dependencies = dataelement.dependencies;
 
         self.value = ko.observable();
         self.dropDownOpts = ko.observableArray();

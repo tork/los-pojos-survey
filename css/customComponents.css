@@ -1,5 +1,6 @@
 .fullWidth {
     width: 100%;
+    margin-bottom: 5px;
 }
 
 .sidebar-nav li .sidebar-item {
@@ -17,4 +18,26 @@
 .sidebar-nav li .sidebar-item:active,
 .sidebar-nav li .sidebar-item:focus {
   text-decoration: none;
+}
+
+#error {
+    display: none;
+    width: 80%;
+    position: relative;
+    margin: 0 auto;
+}
+
+#error h1, h2 {
+    width: 100%;
+    font-size: 2em;
+}
+
+#error img {
+    width: 56%;
+    float: left;
+    margin-right: 10px;
+}
+
+#error #msg {
+    text-align: justify;
 }

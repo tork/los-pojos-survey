@@ -19,19 +19,19 @@
 			self.programStages().length = 0;
 			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
-		
-        self.selectedProgramStage.subscribe(function() {
-            self.selectedProgramStagesOptionSets().length = 0;
+
+		self.selectedProgramStage.subscribe(function() {
+			self.selectedProgramStagesOptionSets().length = 0;
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
-            survey.data.getAllDataElementsForSelectedProgramStage();
-        });
-        self.selectedProgramStagesOptionSets = ko.observableArray();
+			survey.data.getAllDataElementsForSelectedProgramStage();
+		});
+		self.selectedProgramStagesOptionSets = ko.observableArray();
 
-        self.dataElementCreator = function(dataElement) {
-            return new models.DataElement(dataElement);
-        };
-		
+		self.dataElementCreator = function(dataElement) {
+			return new models.DataElement(dataElement);
+		};
+
 		self.downloadedDataElements = ko.observableArray();
 
 		self.getDataElementByID = function(id) {
@@ -123,6 +123,15 @@
 		};
 
 		self.userClick = function() {
+			console.log("userClick!");
+
+			console.log(survey.data.getOrgUnits());
+			
+//			$.each(survey.data.getOrgUnits(), function(i, orgUnit) {
+//				console.log(orgUnit.name, orgUnit.id, orgUnit.code);
+//				self.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
+//			});
+
 			root.viewModel.isAdmin(false);
 		};
 
@@ -130,16 +139,17 @@
 			survey.data.logout();
 			self.loginVisible(true);
 		}
-		
+
 		//SAVE DATA ENTRY
 		self.entryDate = "";
 		self.orgUnit = "";
-		
+
+		self.orgUnitOpts =  ko.observableArray();
+
 		self.programIsChosen = ko.computed(function () {
 			return self.selectedProgramStage() != undefined;
 		})
-		
-		self.orgUnitOpts = [{orgName: "org1", id: "hakdhfa"},{orgName: "org2", id: "haskdhfa"},{orgName: "org3", id: "hakdhsfa"}];
+
 		self.saveDataEntry = function() {	
 			var getDataValues = function() {
 				dataelements = [];
@@ -159,6 +169,31 @@
 
 			//post dataentry to dhis
 		}
+
+		self.uploadSkipLogic = function() {
+			var sps = self.selectedProgramStage();
+			if (!sps) return;
+			
+			//var surveyId = sps.id;
+			//var surveyId = 12;
+			var id = sps.id;
+			var success = function() {
+				console.log("success! id was "+id);
+				self.uploadingSkipLogic = false;
+			};
+			var error = function(req, stat, err) {
+				console.log('Error while posting skip logic, with status "'+stat+'":\n'+
+					err+'\n'+'Request was:');
+				console.log(req);
+				survey.error.displayErrorMessage('Failed to save your changes.\n(Read more about it in your console)');
+				self.uploadingSkipLogic = false;
+			};
+			//self.post_dependencies = function(surveyId, elements, success, error) {
+			survey.data.post_dependencies(sps.id, self.dataElements(), success, error);
+			self.uploadingSkipLogic = true;
+		}
+
+		self.uploadingSkipLogic = false;
 	};
 
 	/*

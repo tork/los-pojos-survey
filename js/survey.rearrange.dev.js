@@ -48,19 +48,19 @@ and if project is running from a web server.
 		function test_set() {
 			var test_set = [
 			{
-				element_id: 10
+				id: 10
 			},{
-				element_id: 11
+				id: 11
 			},{
-				element_id: 12
+				id: 12
 			},{
-				element_id: 13
+				id: 13
 			},{
 				// Circular dependencies (excluded)
-				element_id: -10
+				id: -10
 			},{
 				// Isolated node
-				element_id: 19
+				id: 19
 			}
 			];
 			return test_set;
@@ -85,7 +85,7 @@ and if project is running from a web server.
 
 			var elements = [];
 			for (var i = 0; i < num_tests; i++) {
-				elements[i] = {element_id: i};
+				elements[i] = {id: i};
 			}
 
 			var t0 = new Date().getMilliseconds();
@@ -121,11 +121,11 @@ and if project is running from a web server.
 	// Rearrange elements and print debugging information
 	dev.debug = function(elements, surveyId) {
 		function succ(arr) {
-			console.log("OLD\tNEW");
+			console.log("OLD\t\t\tNEW");
 			for (var idx in elements) {
 				var elem = arr[idx];
-				console.log(elements[idx].element_id +
-					(elem? '\t'+arr[idx].element_id:""));
+				console.log(elements[idx].id +
+					(elem? '\t'+arr[idx].id:""));
 			}
 
 			console.log("\nKEPT ELEMENTS");

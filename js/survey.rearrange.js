@@ -49,7 +49,7 @@ to unlock) are excluded from the rearrangement.
 		function succ(deps) {
 			var workspace = create_workspace(elements);
 			elements.forEach(function(elem) {
-				var dep = deps[elem.element_id];
+				var dep = deps[elem.id];
 				elem.dependencies = dep? dep:[];
 
 				register_dependencies(elem, workspace);
@@ -151,7 +151,7 @@ to unlock) are excluded from the rearrangement.
 	function get_element_array(id, workspace) {
 		var found = null;
 		workspace.elements.every(function(elem) {
-			if (elem.element_id == id) {
+			if (elem.id == id) {
 				found = elem;
 				return false;
 			} else {
@@ -169,7 +169,7 @@ to unlock) are excluded from the rearrangement.
 		var o = {};
 
 		elements.forEach(function(elem) {
-			o[elem.element_id] = elem;
+			o[elem.id] = elem;
 		});
 
 		workspace.elements = o;

@@ -157,6 +157,8 @@
 							 function() {
 								 self.addDownloadedDataElementsToPage(null);
 							 });
+			
+			//survey.rearrange.dev.debug(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id)
 							 
 							 
 		};
@@ -177,7 +179,6 @@
 		// Other //
 		///////////
 
-		//TODO: untested (cross-domain trouble)
 		self.get_dependencies = function(surveyId, elements, success, error) {
 			var url = survey.utils.surveySettingsUrl(surveyId, 'deps');
 
@@ -195,36 +196,28 @@
 			}).fail(error);
 		};
 
-		//TODO: untested (cross-domain trouble)
 		self.post_dependencies = function(surveyId, elements, success, error) {
 			function elements2dependencies(elements) {
 				var deps = {};
 				elements.forEach(function(elem) {
 					var dep = elem.dependencies;
-					if (dep) {
-						deps[elem.element_id] = dep;
+					if (dep && dep.length) {
+						console.log("found dep:");
+						console.log(dep);
+						deps[elem.id] = dep;
 					}
 				});
-
-				// deluxe array edition (slow)
-				//      var deps = [];
-				//      elements.forEach(function(elem) {
-				//          var dep = elem.dependencies;
-				//          if (dep) {
-				//              deps.push(dep);
-				//          }
-				//      });
 
 				return deps;
 			}
 
 			var url = survey.utils.surveySettingsUrl(surveyId, 'deps');
-			var data = elements2dependencies(elements);
+			var data = JSON.stringify(elements2dependencies(elements));
 
 			$.ajax({
 				type: 'POST',
-				url: url,
-				data: JSON.stringify(data),
+				url: url+'?value='+data,
+				//data: JSON.stringify(data),
 				contentType: 'text/plain'
 			}).fail(error).done(success);
 		};

@@ -1,14 +1,14 @@
 (function(root){
 	var data = function() {
 		var self = this;
-		
+
 		////////////////////////////////
 		// Programs and ProgramStages //
 		////////////////////////////////
 
 		self.getProgramIdsAndPopulateDropdown = function() {
 			var url = survey.utils.url + "/api/programs.jsonp";
-			
+
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -28,7 +28,7 @@
 		self.getProgramStageIdsFromSelectedProgram = function() {
 			var chosenProgramId = survey.viewModel.selectedProgram().id;
 			var url = survey.utils.url + "/api/programs/" + chosenProgramId + ".jsonp";
-			
+
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -49,8 +49,8 @@
 
 		self.getProgramStagesAndPopulateDropdown = function(id) {
 			var progStageUrl = survey.utils.url + "/api/programStages/" + id + ".jsonp";
-			
-			
+
+
 			$.ajax({
 				type: 'GET',
 				url: progStageUrl,
@@ -65,10 +65,10 @@
 			.fail(function() {
 				console.log("Could not fetch program stages from server");
 			});
-			
+
 		};
-		
-		
+
+
 		/////////////////////////////////
 		// DataElements and OptionSets //
 		/////////////////////////////////
@@ -84,7 +84,7 @@
 				self.getAndAddOptionSetsToDownloadedDataEements();
 			});
 		};
-		
+
 		self.getDataElementById = function(id) {
 			var url = survey.utils.url + "/api/dataElements/" + id + ".jsonp";						
 			var deferred = new $.Deferred();						
@@ -104,13 +104,13 @@
 				deferred.reject();
 				console.log("Could not fetch data element from server");
 			});
-			
+
 			return deferred.promise();
 		};
-		
+
 		self.getAndAddOptionSetsToDownloadedDataEements = function() {
 			var promises = [];
-			
+
 			for (var i = 0; i < survey.viewModel.downloadedDataElements().length; i++) {
 				if (survey.viewModel.downloadedDataElements()[i].optionSet) {
 					var optionSetId = survey.viewModel.downloadedDataElements()[i].optionSet.id;
@@ -121,12 +121,12 @@
 				self.allDataElementsAndOptionSetsFethed();
 			});
 		};
-		
+
 		self.getOptionSetForDataElement = function(dataElement, optionSetId) {
 			var url = survey.utils.url + "/api/optionSets/" + optionSetId + ".jsonp";
-			
+
 			var deferred = new $.Deferred();
-			
+
 			$.ajax({
 				type: 'GET',
 				url: url,
@@ -143,38 +143,38 @@
 				console.log("Could not fetch option set from server");
 				deferred.reject();
 			});
-			
+
 			return deferred.promise();
 		};
-		
+
 		self.allDataElementsAndOptionSetsFethed = function() {
 			console.log("All downloaded DataElements now have their optionSets:");
 			console.log(survey.viewModel.downloadedDataElements());
-			
+
 			survey.rearrange(survey.viewModel.downloadedDataElements(), 
-							 survey.viewModel.selectedProgramStage().id,
-							 self.addDownloadedDataElementsToPage,
-							 function() {
-								 self.addDownloadedDataElementsToPage(null);
-							 });
-			
+					survey.viewModel.selectedProgramStage().id,
+					self.addDownloadedDataElementsToPage,
+					function() {
+				self.addDownloadedDataElementsToPage(null);
+			});
+
 			//survey.rearrange.dev.debug(survey.viewModel.downloadedDataElements(), survey.viewModel.selectedProgramStage.id)
-							 
-							 
+
+
 		};
-		
+
 		self.addDownloadedDataElementsToPage = function(orderedElements) {
 			if (!orderedElements) {
 				orderedElements = survey.viewModel.downloadedDataElements();
 			}
-			
+
 			for (var i = 0; i < orderedElements.length; i++) {
 				survey.viewModel.dataElements.push(new survey.viewModel.dataElementCreator(orderedElements[i]));
 			}
 		};
-		
-		
-		
+
+
+
 		///////////
 		// Other //
 		///////////
@@ -280,37 +280,60 @@
 			});
 
 		};
-		
-		self.getOrgUnits = function() {
-			var urlOrgUnits = survey.utils.url + "/api/currentUser";			
-			console.log("URL", urlOrgUnits);
-			var currentUser = "";
-			
-			$.get(urlOrgUnits, function(data) {
-				console.log("success getting orgUnits");
+
+		self.getOrgUnits = function(id) {
+			var urlOrgUnits = survey.utils.url + "/api/programs/" + id + ".jsonp";			
+			var currentProgram = "";
+
+			$.ajax({
+				type: 'GET',
+				url: urlOrgUnits,
+				contentType: 'application/json',
+				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				currentUser = JSON.parse(data);
-				
-				$.each(currentUser.organisationUnits, function(i, orgUnit) {
+				$.each(data.organisationUnits, function(i, orgUnit) {
 					root.viewModel.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
 					console.log("adding to orgUnitOpts:", orgUnit.name);
 				});
+			})
+			.fail(function() {
+				console.log("Could not fetch orgUnitOpts");
 			});
 		}
-        
-        self.genericGETFunction = function(url, doneFunction, failMsg) {
-        	$.ajax({
-                type: 'GET',
-                url: url,
-                contentType: 'application/json',
-                dataType: 'jsonp'
-            })
-            .done(doneFunction)
-            .fail(function() {
+		
+		self.saveDataEntry = function (dataentry) {
+			var jsonEntry = JSON.stringify(dataentry);
+			console.log("saving ", jsonEntry);
+			
+			$.ajax({
+				url:  survey.utils.url + "/api/events",
+				data: JSON.stringify(dataentry),
+				type: 'POST',
+				dataType: 'json',
+				contentType: 'application/json'
+			})
+			.done(function(data) {
+				console.log("Data elements uploaded:", data.imported, " imported, ", data.updated, " updated, ", data.ignored, " ignored");
+			})
+			.fail(function(x) {
+				console.log("saving data entry failed", x);
+			});	
+			
+		}
+
+		self.genericGETFunction = function(url, doneFunction, failMsg) {
+			$.ajax({
+				type: 'GET',
+				url: url,
+				contentType: 'application/json',
+				dataType: 'jsonp'
+			})
+			.done(doneFunction)
+			.fail(function() {
 				console.log(failMsg);
 			});
-        };
+		};
 	};
 
 	root.data = new data();

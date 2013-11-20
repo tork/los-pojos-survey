@@ -18,7 +18,7 @@
 		}
 		
 
-        self.dependencies = [];
+        self.dependencies = dataelement.dependencies;
 
         self.value = ko.observable();
         self.dropDownOpts = ko.observableArray();
@@ -68,7 +68,7 @@
                             var value = dep.triggers[0] == true ? "Yes" : "No";
                             self.triggerOption(value);
                         } else if(dataElement.type === "date") {
-                            self.commaList(utils.getDateFormattedForInput(dep.triggers[0]));
+                            self.commaList(dep.triggers[0]);
                         } else {
                             self.commaList(dep.triggers.join(","));
                         }

@@ -125,12 +125,7 @@
 		self.userClick = function() {
 			console.log("userClick!");
 
-			console.log(survey.data.getOrgUnits());
-			
-//			$.each(survey.data.getOrgUnits(), function(i, orgUnit) {
-//				console.log(orgUnit.name, orgUnit.id, orgUnit.code);
-//				self.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
-//			});
+			self.getOrgUnitOpts();
 
 			root.viewModel.isAdmin(false);
 		};
@@ -141,10 +136,14 @@
 		}
 
 		//SAVE DATA ENTRY
-		self.entryDate = "";
+		self.entryDate = ko.observable();
 		self.orgUnit = "";
 
 		self.orgUnitOpts =  ko.observableArray();
+
+		self.getOrgUnitOpts = function () {
+			survey.data.getOrgUnits();
+		}
 
 		self.programIsChosen = ko.computed(function () {
 			return self.selectedProgramStage() != undefined;
@@ -160,20 +159,25 @@
 			}
 
 			var dataentry = {
-					program : self.selectedProgram().id,
+					program : self.selectedProgramStage().id,
 					orgUnit: self.orgUnit,
-					eventDate: self.entryDate,
+					eventDate: self.entryDate(),
 					dataValues: getDataValues()
 			}
-			console.log("saving data entry:", dataentry);
-
-			//post dataentry to dhis
+			
+			if(dataentry.orgUnit == undefined || dataentry.eventDate == undefined) {
+				console.log("date and orgUnit must be specified!", dataentry.orgUnit, dataentry.eventDate);
+				
+			} else {
+				console.log("saving data entry:", dataentry);
+				//post dataentry to dhis
+			}
 		}
 
 		self.uploadSkipLogic = function() {
 			var sps = self.selectedProgramStage();
 			if (!sps) return;
-			
+
 			//var surveyId = sps.id;
 			//var surveyId = 12;
 			var id = sps.id;
@@ -183,7 +187,7 @@
 			};
 			var error = function(req, stat, err) {
 				console.log('Error while posting skip logic, with status "'+stat+'":\n'+
-					err+'\n'+'Request was:');
+						err+'\n'+'Request was:');
 				console.log(req);
 				survey.error.displayErrorMessage('Failed to save your changes.\n(Read more about it in your console)');
 				self.uploadingSkipLogic = false;

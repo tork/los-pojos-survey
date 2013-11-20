@@ -287,28 +287,16 @@
 			var currentUser = "";
 			
 			$.get(urlOrgUnits, function(data) {
-				console.log("success orgunits", data); 
+				console.log("success getting orgUnits");
 			})
 			.done(function(data) {
-				console.log("GET done.", data);
 				currentUser = JSON.parse(data);
-				console.log("currentUser: ", currentUser.organisationUnits);
-				return currentUser.organisationUnits;
+				
+				$.each(currentUser.organisationUnits, function(i, orgUnit) {
+					root.viewModel.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
+					console.log("adding to orgUnitOpts:", orgUnit.name);
+				});
 			});
-			
-			
-//			$.ajax({
-//                type: 'GET',
-//                url: urlOrgUnits,
-//                contentType: 'text/plain',
-//            })
-//            .done(function (done) {
-//            	console.log("orgUnits done");
-//            })
-//            .fail(function(err) {
-//				console.log("error getOrgUnits", err);
-//			});
-			
 		}
         
         self.genericGETFunction = function(url, doneFunction, failMsg) {

@@ -148,7 +148,8 @@
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
-					dataelements.push({dataElement: element.id, value: element.value() || ""});
+					if(element.value() != undefined)
+						dataelements.push({dataElement: element.id, value: element.value()});
 				});
 				return dataelements;
 			}

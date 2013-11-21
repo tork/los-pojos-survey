@@ -17,7 +17,6 @@
 			}
 		}
 		
-
         self.dependencies = [];
 
         self.value = ko.observable();

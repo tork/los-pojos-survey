@@ -53,5 +53,5 @@
         return val;
     }
 
-    root.debug = true;
+    root.debug = false;
 })(survey.utils = survey.utils || {})

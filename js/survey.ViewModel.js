@@ -176,7 +176,11 @@
 			return self.selectedProgramStage() != undefined;
 		})
 
-		self.saveDataEntry = function() {	
+		self.saveDataEntry = function() {
+			if (!self.areThereAnyUnfilledRequiredDataElements()) {
+				return;
+			}
+			
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
@@ -226,7 +230,42 @@
 		}
 
 		self.uploadingSkipLogic = false;
+		
+		self.areThereAnyUnfilledRequiredDataElements = function() {
+			var unfilledElements = [];
+			for (var i = 0; i < self.dataElements().length; i++) {
+				if (self.dataElements()[i].isRequired &&
+					!self.dataElements()[i].value() &&
+					(self.dataElements()[i].type !== 'trueOnly')) { // trueOnly should be accepted even if not checked.
+					unfilledElements.push(self.dataElements()[i]);
+				}
+			}
+			return self.alertIfUncheckedRequiredDataElements(unfilledElements);
+		}
+		
+		self.alertIfUncheckedRequiredDataElements = function(unfilledElements) {
+			if (unfilledElements.length > 0) {
+				var alertMsg = "";
+				if (unfilledElements.length === 1) {
+					alertMsg = "These elements are required and not filled out: ";
+				} else {
+					alertMsg = "This element is required and not filled out: ";
+				}
+				for (var i = 0; i < unfilledElements.length; i++) {
+					alertMsg += unfilledElements[i].name;
+					if (i !== unfilledElements.length-1) {
+						alertMsg += ", ";
+					} else {
+						alertMsg += ".";
+					}
+				}
+				alert(alertMsg);
+				return false;
+			}
+			return true;
+		};
 	};
+	
 
 	/*
 	 * Litt forklaring: selectedProgram vil inneholde det man har valgt, eller

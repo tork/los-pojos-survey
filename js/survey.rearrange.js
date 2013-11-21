@@ -81,6 +81,16 @@ to unlock) are excluded from the rearrangement.
 		}
 	}
 
+	function print_queue(msg, queue) {
+		var cur = queue;
+		var str = '';
+		while (cur) {
+			str += cur.id + '->';
+			cur = cur.next;
+		}
+		console.log(msg+': '+str+'null');
+	}
+
 	// Allows duplicates, returns the head.
 	// The queue is circular reversed only.
 	function enqueue(elem, queue) {
@@ -102,6 +112,7 @@ to unlock) are excluded from the rearrangement.
 		var arrangement = [];
 		
 		var root = workspace.free_queue;
+		print_queue("dependents of "+root.id, root.dependents);
 		while (root) {
 			var tmp = root.next;
 			extract_element(root, arrangement);
@@ -116,6 +127,7 @@ to unlock) are excluded from the rearrangement.
 		
 		var child = elem.dependents;
 		while (child) {
+			console.log(elem.id+"'s child:"+child.id);
 			if (--child.dep_count == 0) {
 				extract_element(child, arrangement);
 			}
@@ -125,7 +137,7 @@ to unlock) are excluded from the rearrangement.
 		
 		// TODO: This will cause unreachable nodes
 		// to never get cleaned. Should improve?
-		clean_element(elem);
+		//clean_element(elem);
 		
 		return arrangement;
 	}

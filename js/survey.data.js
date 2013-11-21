@@ -160,7 +160,7 @@
 				self.addDownloadedDataElementsToPage(null);
 			});
 
-			/** /
+			/**/
 			survey.rearrange.dev.debug(survey.viewModel.downloadedDataElements(),
 				surveyId);
 			//*/

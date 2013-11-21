@@ -25,6 +25,7 @@
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
 			survey.data.getAllDataElementsForSelectedProgramStage();
+			survey.data.getOrgUnits(self.selectedProgram().id);
 		});
 		self.selectedProgramStagesOptionSets = ko.observableArray();
 
@@ -45,7 +46,41 @@
 		};
 
 		self.dependenciesHold = function(dataelement) {
-			console.log("dependenciesHold", dataelement)
+			//TODO: if a dep is not visible, return false
+			
+			console.log("dependenciesHold", dataelement);
+			var deps = dataelement.dependencies;
+
+			for (var i = 0; i < deps.length; i++) {
+				console.log("checking dep "+deps[i].id+" of "+dataelement.id);
+				var dep = self.getDataElementByID(deps[i].id);
+				console.log(dep);
+				if (!dep) return false;
+
+				//var val = dep.value();
+				var val = survey.utils.translateElementValue(dep);
+				console.log(val);
+				if (!val) return false;
+
+				var triggers = deps[i].triggers;
+				console.log(triggers);
+				if (triggers.indexOf(val) < 0)
+					return false;
+			}
+
+			return true;
+
+			/*dataelement.dependencies.forEach(function(descriptor) {
+				var dep = self.getDataElementByID(descriptor.id);
+				if (!dep || !dependenciesHold(dep)) {
+					return false;
+				}
+			});
+
+			return true;*/
+
+
+			/*
 			$.each(dataelement.dependencies, function(index, dep) {
 				var dataElement = self.getDataElementByID(dep.id); // undefined
 				if (dataElement != undefined
@@ -53,6 +88,7 @@
 					return false;
 			});
 			return true;
+			*/
 		};
 
 		self.addSkipLogic = function(dataelement) {
@@ -125,13 +161,6 @@
 		self.userClick = function() {
 			console.log("userClick!");
 
-			console.log(survey.data.getOrgUnits());
-			
-//			$.each(survey.data.getOrgUnits(), function(i, orgUnit) {
-//				console.log(orgUnit.name, orgUnit.id, orgUnit.code);
-//				self.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
-//			});
-
 			root.viewModel.isAdmin(false);
 		};
 
@@ -141,7 +170,7 @@
 		}
 
 		//SAVE DATA ENTRY
-		self.entryDate = "";
+		self.entryDate = ko.observable();
 		self.orgUnit = "";
 
 		self.orgUnitOpts =  ko.observableArray();
@@ -154,26 +183,32 @@
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
-					dataelements.push({dataElement: element.id, value: element.value()});
+					if(element.value() != undefined)
+						dataelements.push({dataElement: element.id, value: element.value()});
 				});
 				return dataelements;
 			}
 
 			var dataentry = {
 					program : self.selectedProgram().id,
-					orgUnit: self.orgUnit,
-					eventDate: self.entryDate,
+					orgUnit: self.orgUnit.orgUnit,
+					eventDate: self.entryDate(),
 					dataValues: getDataValues()
 			}
-			console.log("saving data entry:", dataentry);
-
-			//post dataentry to dhis
+			
+			if(dataentry.orgUnit == undefined || dataentry.eventDate == undefined) {
+				console.log("date and orgUnit must be specified!", dataentry.orgUnit, dataentry.eventDate);
+				
+			} else {
+				console.log("saving data entry");
+				survey.data.saveDataEntry(dataentry);
+			}
 		}
 
 		self.uploadSkipLogic = function() {
 			var sps = self.selectedProgramStage();
 			if (!sps) return;
-			
+
 			//var surveyId = sps.id;
 			//var surveyId = 12;
 			var id = sps.id;
@@ -183,7 +218,7 @@
 			};
 			var error = function(req, stat, err) {
 				console.log('Error while posting skip logic, with status "'+stat+'":\n'+
-					err+'\n'+'Request was:');
+						err+'\n'+'Request was:');
 				console.log(req);
 				survey.error.displayErrorMessage('Failed to save your changes.\n(Read more about it in your console)');
 				self.uploadingSkipLogic = false;

@@ -212,7 +212,7 @@
 						</div>
 						<!-- 						Save button here  -->
 						<div data-bind="visible: !isAdmin() && programIsChosen()">
-							Entry date: <input type="date" data-bind="value: entryDate" />
+							Entry date: <input id="reportDate" type="date" data-bind="value: entryDate" />
 							OrgUnit: <select data-bind="options: orgUnitOpts, optionsText: 'orgName',
                                     optionsCaption: 'Select orgUnit',value: orgUnit"></select>
 							<button data-bind="click: saveDataEntry">Save data</button>

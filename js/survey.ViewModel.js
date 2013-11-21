@@ -38,59 +38,56 @@
 		self.downloadedDataElements = ko.observableArray();
 
 		self.getDataElementByID = function(id) {
-			var dataEl;
-			$.each(root.viewModel.dataElements(), function(index, dataElement) {
-				if (dataElement.id === id) {
-					dataEl = dataElement;
+			var elements = root.viewModel.dataElements();
+			for (var i in elements) {
+				var elem = elements[i];
+				if (elem.id === id) {
+					return elem;
 				}
-			});
-			return dataEl;
+			}
+			return null;
 		};
 
-		self.dependenciesHold = function(dataelement) {
-			//TODO: if a dep is not visible, return false
-			
-			console.log("dependenciesHold", dataelement);
-			var deps = dataelement.dependencies;
+		self.dependenciesHold = function(elem) {
+			//console.log("CALCULATING "+elem.id+" WITH VALUE "+elem.value());
+			function getTriggersForDependency(dep) {
+				var triggers = '';
+				var dependencies = elem.dependencies;
+				for (var i in dependencies) {
+					var dep_descriptor = dependencies[i];
+					if (dep_descriptor.id === dep.id) {
+						triggers = dep_descriptor.triggers;
+						break;
+					}
+				}
+				return triggers;
+			}
 
-			for (var i = 0; i < deps.length; i++) {
-				console.log("checking dep "+deps[i].id+" of "+dataelement.id);
-				var dep = self.getDataElementByID(deps[i].id);
-				console.log(dep);
-				if (!dep) return false;
-
-				//var val = dep.value();
-				var val = survey.utils.translateElementValue(dep);
-				console.log(val);
-				if (!val) return false;
-
-				var triggers = deps[i].triggers;
-				console.log(triggers);
-				if (triggers.indexOf(val) < 0)
+			var dependents = elem.dependents;
+			var dependencies = elem.dependencies;
+			for (var i in dependencies) {
+				var dep_descriptor = dependencies[i];
+				var dependency = self.getDataElementByID(dep_descriptor.id);
+				if (!dependency) {
 					return false;
+				}
+
+				if (!self.dependenciesHold(dependency)) {
+					return false;
+				}
+
+				var triggers = getTriggersForDependency(dependency);
+				var dep_val = survey.utils.translateElementValue(dependency);
+
+				// TODO: Using indexOf is not bulletproof.
+				// Should split string and check each element
+				//console.log("does '"+triggers+"' contain '"+dep_val+"'?");
+				if (triggers.indexOf(dep_val) < 0) {
+					return false;
+				}
 			}
 
 			return true;
-
-			/*dataelement.dependencies.forEach(function(descriptor) {
-				var dep = self.getDataElementByID(descriptor.id);
-				if (!dep || !dependenciesHold(dep)) {
-					return false;
-				}
-			});
-
-			return true;*/
-
-
-			/*
-			$.each(dataelement.dependencies, function(index, dep) {
-				var dataElement = self.getDataElementByID(dep.id); // undefined
-				if (dataElement != undefined
-						&& !$.inArray(dep.values, dataElement.value()))
-					return false;
-			});
-			return true;
-			*/
 		};
 
 		self.addSkipLogic = function(dataelement) {

@@ -29,6 +29,12 @@
 		}
 
         self.dependencies = dataelement.dependencies;
+        self.dependents = [];
+        var cur = dataelement.dependents;
+        while (cur) {
+            self.dependents.push(cur.id);
+            cur = cur.next;
+        }
 
         self.value = ko.observable();
         self.dropDownOpts = ko.observableArray();

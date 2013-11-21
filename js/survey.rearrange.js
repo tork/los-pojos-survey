@@ -112,7 +112,6 @@ to unlock) are excluded from the rearrangement.
 		var arrangement = [];
 		
 		var root = workspace.free_queue;
-		print_queue("dependents of "+root.id, root.dependents);
 		while (root) {
 			var tmp = root.next;
 			extract_element(root, arrangement);
@@ -127,7 +126,6 @@ to unlock) are excluded from the rearrangement.
 		
 		var child = elem.dependents;
 		while (child) {
-			console.log(elem.id+"'s child:"+child.id);
 			if (--child.dep_count == 0) {
 				extract_element(child, arrangement);
 			}

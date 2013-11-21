@@ -17,7 +17,7 @@
 			}
 		}
 		
-		// Is the data element required?
+		// Is this data element required?
 		for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
 			if (survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id === self.id) {
 				if (survey.viewModel.selectedProgramStage().programStageDataElements[i].compulsory) {

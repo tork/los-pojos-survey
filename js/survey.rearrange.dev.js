@@ -10,6 +10,7 @@ and if project is running from a web server.
 	dev.testbed = function() {
 		var scratch = survey.data.get_dependencies;
 		survey.data.get_dependencies = function(surveyId, elements, succ, err) {
+			/** /
 			var deps =
 			{
 				10:
@@ -41,6 +42,41 @@ and if project is running from a web server.
 					triggers: [""]
 				}]
 			};
+			//*/
+
+			// The "all-depend-on-one"-bug
+			/**/
+			var deps =
+			{
+				10:
+				[{
+					id: 12,
+					triggers: [""]
+				}],
+				11:
+				[{
+					id: 12,
+					triggers: [""]
+				}],
+				13:
+				[{
+					id: 12,
+					triggers: [""]
+				}],
+				'-10':
+				[{
+					id: 12,
+					triggers: [""]
+				}],
+				19:
+				[{
+					id: 12,
+					triggers: [""]
+				}]
+			};
+			//*/
+
+
 
 			succ(deps);
 		}

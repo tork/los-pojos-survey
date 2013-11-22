@@ -49,200 +49,186 @@
 					<div class="col-md-12">
 						<p class="lead">Welcome to our survey web app.</p>
 					</div>
-                </div>
+				</div>
 
 				<div id=programWrapper>
-					<div data-bind="visible: loginVisible()">
-						Username: <input type="text" data-bind="value: username"><br>
-						Password: <input type="password" data-bind="value: password">
-						<button data-bind="click: logIn">Log in</button>
-					</div>
-					<div data-bind="visible: !loginVisible()">
-						<div class="row">
-							<div class="col-md-6">
-								<form class="formee">
-                                <select class="fullWidth" id="programsSelect"
+					<div class="row">
+						<div class="col-md-6">
+							<form class="formee">
+								<select class="fullWidth" id="programsSelect"
 									data-bind="options: programs,
                                     optionsText: 'name',
                                     optionsCaption: 'Select program',
                                     value: selectedProgram"></select>
-                                </form>
-							</div>
-							<div class="col-md-6">
-								<form class="formee">
-                                <select class="fullWidth" id="programStagesSelect"
+							</form>
+						</div>
+						<div class="col-md-6">
+							<form class="formee">
+								<select class="fullWidth" id="programStagesSelect"
 									data-bind="options: programStages,
                                     optionsText: 'name',
                                     optionsCaption: 'Select program stage',
                                     value: selectedProgramStage,
                                     enable: programStages().length > 0"></select>
-                                </form>
+							</form>
 
-							</div>
 						</div>
-						<div id="dataElementsContainer" class="row">
-							<div class="col-md-12"
-								data-bind="visible: selectedProgramStage()">
-								<h3
-									data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
-								<div> <!--data-bind="with: dataElements"-->
-									<div class="row" data-bind="foreach: dataElements">
+					</div>
+					<div id="dataElementsContainer" class="row">
+						<div class="col-md-12" data-bind="visible: selectedProgramStage()">
+							<h3
+								data-bind="text: selectedProgramStage() ? selectedProgramStage().name : ''"></h3>
+							<div>
+								<!--data-bind="with: dataElements"-->
+								<div class="row" data-bind="foreach: dataElements">
 									<div class="col-md-12 dataElement"
 										data-bind="visible: $parent.isAdmin() || $parent.dependenciesHold($data)">
 										<div class="well row col-md-12">
-                                            <form class="formee">
-                                                <div class="col-md-6">
-                                                    <label class="elementTitle"><strong
-                                                            data-bind="text: formName"></strong></label>
-                                                    <label data-bind="visible: type === 'int' || type === 'date' || type === 'string'"
-                                                           class="elementTitle">
-                                                        (<strong
-                                                            data-bind="text: type !== 'int' ? type : 'number'"></strong>)
-                                                    </label>
+											<form class="formee">
+												<div class="col-md-6">
+													<label class="elementTitle"><strong
+														data-bind="text: formName"></strong></label> <label
+														data-bind="visible: type === 'int' || type === 'date' || type === 'string'"
+														class="elementTitle"> (<strong
+														data-bind="text: type !== 'int' ? type : 'number'"></strong>)
+													</label>
 
-                                                    <div data-bind="switch: type">
-                                                        <div data-bind="case: 'trueOnly'">
-                                                            <label>If yes:</label>
-                                                            <input type="checkbox" data-bind="checked: value" />
-                                                        </div>
-                                                        <div data-bind="case: 'bool'">
-                                                            <select class="mediumField"
-                                                                data-bind="options: dropDownOpts,
+													<div data-bind="switch: type">
+														<div data-bind="case: 'trueOnly'">
+															<label>If yes:</label> <input type="checkbox"
+																data-bind="checked: value" />
+														</div>
+														<div data-bind="case: 'bool'">
+															<select class="mediumField"
+																data-bind="options: dropDownOpts,
                                                         value: value"></select>
-                                                        </div>
-                                                        <div data-bind="case: 'date'">
-                                                            <input type="date" class="mediumField"
-                                                                   data-bind="value: value" />
-                                                        </div>
-                                                        <div data-bind="case: 'int'">
-                                                            <input type="number" class="mediumField"
-                                                                   data-bind="value: value" />
-                                                        </div>
+														</div>
+														<div data-bind="case: 'date'">
+															<input type="date" class="mediumField"
+																data-bind="value: value" />
+														</div>
+														<div data-bind="case: 'int'">
+															<input type="number" class="mediumField"
+																data-bind="value: value" />
+														</div>
 														<div data-bind="case: 'string'">
-														<select class="mediumField"
+															<select class="mediumField"
 																data-bind="visible: isOptionSet,
 																		   options: optionSet,
 																		   optionsCaption: 'Select option',
 																		   value: value"></select>
-														<input type="text" data-bind="visible: !isOptionSet()" />
+															<input type="text" data-bind="visible: !isOptionSet()" />
+														</div>
+														<div data-bind="case: $default">
+															<input type="text" data-bind="value: value" />
+														</div>
 													</div>
-                                                        <div data-bind="case: $default">
-                                                            <input type="text"
-                                                                   data-bind="value: value" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 skipLogicPanel">
-                                                    <!--Add skip-logic ui here-->
-                                                    <button data-bind="visible: !addingSkipLogic() && !isInSkipLogic() &&
+												</div>
+												<div class="col-md-6 skipLogicPanel">
+													<!--Add skip-logic ui here-->
+													<button
+														data-bind="visible: !addingSkipLogic() && !isInSkipLogic() &&
                                                     $parent.isAdmin() , click: $parent.addSkipLogic.bind($data)"
-                                                    class="formee-button skipButton">
-                                                        set dependents
-                                                    </button>
-                                                    <button data-bind="visible: addingSkipLogic(),
+														class="formee-button skipButton">set dependents</button>
+													<button
+														data-bind="visible: addingSkipLogic(),
                                                     click: $parent.saveSkipLogic.bind($data)"
-                                                    class="formee-button skipButton">
-                                                        Done
-                                                    </button>
+														class="formee-button skipButton">Done</button>
 
-                                                    <div class="skipLogicUI">
-                                                        <div data-bind="visible: isInSkipLogic()">
-                                                            <label data-bind="text: isDependent() ? 'Remove?' : 'Add?'"></label>
-                                                            <input type="checkbox"
-                                                                data-bind="checked: isDependent" />
-                                                        </div>
-                                                        <div class="skipLogicPicker"
-                                                            data-bind="visible: isDependent()">
-                                                            <div data-bind="switch: $parent.activeElement().type">
-                                                                <div data-bind="case: 'bool'">
-                                                                    <label>Show this element when parent is: </label> <select
-                                                                        data-bind="options: $parent.activeElement().dropDownOpts,
-                                                                        value: triggerOption" class="mediumField"></select>
-                                                                </div>
-                                                                <div data-bind="case: 'int'">
-                                                                    <label>Interval?</label> <input type="checkbox"
-                                                                        data-bind="checked: interval" />
-                                                                    <div data-bind="visible: !interval()">
-                                                                        <label>Values (separate with ","):</label>
-                                                                        <input type="text"
-                                                                               data-bind="value: commaList" />
-                                                                    </div>
-                                                                    <div data-bind="visible: interval()">
-                                                                        <label>Lower limit:</label>
-                                                                        <input type="number" class="mediumField intervalField"
-                                                                            data-bind="value: lowerLimit" />
-                                                                        <br>
-                                                                        <label>Upper limit:</label>
-                                                                        <input type="number"
-                                                                               class="mediumField intervalField"
-                                                                            data-bind="value: upperLimit" />
-                                                                    </div>
-                                                                </div>
-                                                                <div data-bind="case: 'string'">
-                                                                    <label>Values (separate with ","):</label> <input
-                                                                        type="text" data-bind="value: commaList" />
-                                                                </div>
-                                                                <div data-bind="case: 'date'">
-                                                                    <label>Interval?</label> <input type="checkbox"
-                                                                        data-bind="checked: interval" />
-                                                                    <div data-bind="visible: !interval()">
-                                                                        <label>Exact date: </label> <input type="date"
-                                                                            data-bind="value: commaList" class="mediumField" />
-                                                                    </div>
-                                                                    <div data-bind="visible: interval()">
-                                                                        <label>Lower limit:</label>
-                                                                        <input type="date" class="mediumField intervalField"
-                                                                            data-bind="value: lowerLimit" />
-                                                                        <br>
-                                                                        <label>Upper limit:</label>
-                                                                        <input type="date" class="mediumField intervalField"
-                                                                        data-bind="value: upperLimit" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
+													<div class="skipLogicUI">
+														<div data-bind="visible: isInSkipLogic()">
+															<label
+																data-bind="text: isDependent() ? 'Remove?' : 'Add?'"></label>
+															<input type="checkbox" data-bind="checked: isDependent" />
+														</div>
+														<div class="skipLogicPicker"
+															data-bind="visible: isDependent()">
+															<div data-bind="switch: $parent.activeElement().type">
+																<div data-bind="case: 'bool'">
+																	<label>Show this element when parent is: </label> <select
+																		data-bind="options: $parent.activeElement().dropDownOpts,
+                                                                        value: triggerOption"
+																		class="mediumField"></select>
+																</div>
+																<div data-bind="case: 'int'">
+																	<label>Interval?</label> <input type="checkbox"
+																		data-bind="checked: interval" />
+																	<div data-bind="visible: !interval()">
+																		<label>Values (separate with ","):</label> <input
+																			type="text" data-bind="value: commaList" />
+																	</div>
+																	<div data-bind="visible: interval()">
+																		<label>Lower limit:</label> <input type="number"
+																			class="mediumField intervalField"
+																			data-bind="value: lowerLimit" /> <br> <label>Upper
+																			limit:</label> <input type="number"
+																			class="mediumField intervalField"
+																			data-bind="value: upperLimit" />
+																	</div>
+																</div>
+																<div data-bind="case: 'string'">
+																	<label>Values (separate with ","):</label> <input
+																		type="text" data-bind="value: commaList" />
+																</div>
+																<div data-bind="case: 'date'">
+																	<label>Interval?</label> <input type="checkbox"
+																		data-bind="checked: interval" />
+																	<div data-bind="visible: !interval()">
+																		<label>Exact date: </label> <input type="date"
+																			data-bind="value: commaList" class="mediumField" />
+																	</div>
+																	<div data-bind="visible: interval()">
+																		<label>Lower limit:</label> <input type="date"
+																			class="mediumField intervalField"
+																			data-bind="value: lowerLimit" /> <br> <label>Upper
+																			limit:</label> <input type="date"
+																			class="mediumField intervalField"
+																			data-bind="value: upperLimit" />
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</form>
 										</div>
 									</div>
 								</div>
-						</div>
 							</div>
 						</div>
-						<!-- 						Save button here  -->
-						<div data-bind="visible: !isAdmin() && programIsChosen()">
-							Entry date: <input id="reportDate" type="date" data-bind="value: entryDate" />
-							OrgUnit: <select data-bind="options: orgUnitOpts, optionsText: 'orgName',
-                                    optionsCaption: 'Select orgUnit',value: orgUnit"></select>
-							<button data-bind="click: saveDataEntry">Save data</button>
-						</div>
-                        <button data-bind="visible: isAdmin() && programIsChosen(),
-                            click: uploadSkipLogic(), enable: !uploadingSkipLogic"
-                            class="formee-button skipButton">
-                            Save Changes
-                        </button>
 					</div>
+					<!-- 						Save button here  -->
+					<div data-bind="visible: !isAdmin() && programIsChosen()">
+						Entry date: <input id="reportDate" type="date"
+							data-bind="value: entryDate" /> OrgUnit: <select
+							data-bind="options: orgUnitOpts, optionsText: 'orgName',
+                                    optionsCaption: 'Select orgUnit',value: orgUnit"></select>
+						<button data-bind="click: saveDataEntry">Save data</button>
+					</div>
+					<button
+						data-bind="visible: isAdmin() && programIsChosen(),
+                            click: uploadSkipLogic(), enable: !uploadingSkipLogic"
+						class="formee-button skipButton">Save Changes</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-    <div id="error">
-        <h1>Ooops!</h1>
-        <h2>Something bad has happened :(</h2>
-        <img src="img/error.jpg" alt="An error has occured" />
-        <p id="msg"></p>
-    </div>
+	<div id="error">
+		<h1>Ooops!</h1>
+		<h2>Something bad has happened :(</h2>
+		<img src="img/error.jpg" alt="An error has occured" />
+		<p id="msg"></p>
+	</div>
 
 	<script src="js/libs/jquery.js"></script>
 	<script src="js/libs/bootstrap.js"></script>
 	<script src="js/libs/knockout-3.0.0.min.js"></script>
 	<script src="js/libs/knockout-switch-case.min.js"></script>
-    <script src="js/libs/featherlight.js"></script>
+	<script src="js/libs/featherlight.js"></script>
 
 	<script src="js/namespace.js"></script>
-    <script src="js/survey.error.js"></script>
+	<script src="js/survey.error.js"></script>
 	<script src="js/survey.utils.js"></script>
 	<script src="js/survey.dependencyHandler.js"></script>
 	<script src="js/survey.dataelement.js"></script>

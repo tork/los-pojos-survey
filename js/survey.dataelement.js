@@ -27,7 +27,7 @@
 			}
 		}
 
-        self.dependencies = dataelement.dependencies;
+        self.dependencies = dataelement.dependencies ? dataelement.dependencies : []; //Fix if rearrange fails
         self.dependents = [];
         var cur = dataelement.dependents;
         while (cur) {

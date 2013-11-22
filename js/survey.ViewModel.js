@@ -24,9 +24,11 @@
 			self.selectedProgramStagesOptionSets().length = 0;
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
-			if (self.selectedProgramStage().programStageDataElements) {
-				survey.data.getAllDataElementsForSelectedProgramStage();
-				survey.data.getOrgUnits(self.selectedProgram().id);
+			if (self.selectedProgramStage()) {
+				if (self.selectedProgramStage().programStageDataElements) {
+					survey.data.getAllDataElementsForSelectedProgramStage();
+					survey.data.getOrgUnits(self.selectedProgram().id);
+				}
 			}
 		});
 		self.selectedProgramStagesOptionSets = ko.observableArray();
@@ -161,14 +163,17 @@
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
-					if(element.value() != undefined) {
-						var entryValue = element.value();
-						if(element.type == 'bool') {
-							if(entryValue == 'Yes')
+					var entryValue = element.value();
+					if(element.type === 'trueOnly' && entryValue === false) {
+						entryValue = undefined;
+					}
+					if(entryValue != undefined) {
+						if(element.type === 'bool') {
+							if(entryValue === 'Yes')
 								entryValue = true;
-							if(entryValue == 'No')
+							if(entryValue === 'No')
 								entryValue = false;
-						}
+						} 
 						dataelements.push({dataElement: element.id, value: entryValue});
 					}
 				});
@@ -219,9 +224,7 @@
 		self.areThereAnyUnfilledRequiredDataElements = function() {
 			var unfilledElements = [];
 			for (var i = 0; i < self.dataElements().length; i++) {
-				if (self.dataElements()[i].isRequired &&
-						!self.dataElements()[i].value() &&
-						(self.dataElements()[i].type !== 'trueOnly')) { // trueOnly should be accepted even if not checked.
+				if (self.dataElements()[i].isRequired && !self.dataElements()[i].value()) {
 					unfilledElements.push(self.dataElements()[i]);
 				}
 			}

@@ -200,31 +200,36 @@
 					</div>
 					<!-- 						Save button here  -->
 					<form class="formee">
-						<div style="position: relative; top: -18px;">
-							<div class="col-md-6"
-								data-bind="visible: !isAdmin() && programIsChosen()">
-								<div>
-									Report date<br> <input class="mediumField" id="reportDate"
-										type="date" data-bind="value: entryDate" />
+						<div style="position: relative; top: -18px; margin-top: 20px">
+							<div data-bind="visible: !isAdmin() && programIsChosen()">
+								<div class="well col-md-12 row">
+									<div class="col-md-6">
+										<label class="elementTitle">Report date</label><br> <input class="mediumField"
+											id="reportDate" type="date" data-bind="value: entryDate" />
+									</div>
 								</div>
-								<div>
-									OrgUnit<br> <select class="mediumField"
-										data-bind="options: orgUnitOpts, optionsText: 'orgName',
+								<div class="well col-md-12 row">
+									<div class="col-md-6">
+										<label class="elementTitle">OrgUnit</label><br> <select class="mediumField"
+											data-bind="options: orgUnitOpts, optionsText: 'orgName',
                                     optionsCaption: 'Select orgUnit',value: orgUnit"></select>
+									</div>
 								</div>
 								<div>
 									<button data-bind="click: saveDataEntry"
-										class="formee-button skipButton">Save data</button>
+										class="formee-button skipButton" style="width: 100%">Save
+										data</button>
 								</div>
 							</div>
+
 							<button
 								data-bind="visible: isAdmin() && programIsChosen(),
                             click: uploadSkipLogic(), enable: !uploadingSkipLogic"
 								class="formee-button skipButton" style="width: 100%">Save
 								Changes</button>
 						</div>
+					</form>
 				</div>
-				</form>
 			</div>
 		</div>
 	</div>

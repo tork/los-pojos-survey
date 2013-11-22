@@ -79,9 +79,9 @@
                             self.upperLimit(dep.triggers[0].to);
                         } else {
                             var date = dep.triggers[0].from;
-                            self.lowerLimit(utils.getDateFormattedForInput(date));
+                            self.lowerLimit(date);
                             date = dep.triggers[0].to;
-                            self.upperLimit(utils.getDateFormattedForInput(date));
+                            self.upperLimit(date);
                         }
                     } else {
                         if(dataElement.type === "bool") {

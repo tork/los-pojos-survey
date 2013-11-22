@@ -24,9 +24,11 @@
 			self.selectedProgramStagesOptionSets().length = 0;
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
-			if (self.selectedProgramStage().programStageDataElements) {
-				survey.data.getAllDataElementsForSelectedProgramStage();
-				survey.data.getOrgUnits(self.selectedProgram().id);
+			if (self.selectedProgramStage()) {
+				if (self.selectedProgramStage().programStageDataElements) {
+					survey.data.getAllDataElementsForSelectedProgramStage();
+					survey.data.getOrgUnits(self.selectedProgram().id);
+				}
 			}
 		});
 		self.selectedProgramStagesOptionSets = ko.observableArray();
@@ -49,7 +51,6 @@
 		};
 
 		self.dependenciesHold = function(elem) {
-			//console.log("CALCULATING "+elem.id+" WITH VALUE "+elem.value());
 			function getTriggersForDependency(dep) {
 				var triggers = '';
 				var dependencies = elem.dependencies;
@@ -61,6 +62,38 @@
 					}
 				}
 				return triggers;
+			}
+
+			function triggerIsFulfilled(type, triggers, value) {
+				var fulfills = false;
+				if (triggers[0].from !== undefined) {
+					var range = triggers[0];
+					var from = range.from;
+					var to = range.to;
+					// ranges
+					if (type === 'int') {
+						fulfills = value >= from && value <= to;
+					} else if (type === 'date') {
+						var t0 = new Date(from);
+						var t1 = new Date(to);
+						var tc = new Date(value);
+						var inv = 'Invalid Date';
+						if (t0 !== inv && t1 !== inv && tc !== inv) {
+							var val = tc.getTime();
+							fulfills = val >= t0.getTime() && val <= t1.getTime();
+						}
+					}
+				} else {
+					// points
+					for (var i in triggers) {
+						if (triggers[i] == value) {
+							fulfills = true;
+							break;
+						}
+					}
+				}
+
+				return fulfills;
 			}
 
 			var dependents = elem.dependents;
@@ -79,10 +112,7 @@
 				var triggers = getTriggersForDependency(dependency);
 				var dep_val = survey.utils.translateElementValue(dependency);
 
-				// TODO: Using indexOf is not bulletproof.
-				// Should split string and check each element
-				//console.log("does '"+triggers+"' contain '"+dep_val+"'?");
-				if (triggers.indexOf(dep_val) < 0) {
+				if (!triggerIsFulfilled(dependency.type, triggers, dep_val)) {
 					return false;
 				}
 			}
@@ -222,9 +252,7 @@
 		self.areThereAnyUnfilledRequiredDataElements = function() {
 			var unfilledElements = [];
 			for (var i = 0; i < self.dataElements().length; i++) {
-				if (self.dataElements()[i].isRequired &&
-						!self.dataElements()[i].value() &&
-						(self.dataElements()[i].type !== 'trueOnly')) { // trueOnly should be accepted even if not checked.
+				if (self.dataElements()[i].isRequired && !self.dataElements()[i].value()) {
 					unfilledElements.push(self.dataElements()[i]);
 				}
 			}

@@ -141,11 +141,14 @@
 														class="formee-button skipButton">Done</button>
 
 													<div class="skipLogicUI">
-														<div data-bind="visible: isInSkipLogic()">
+														<div data-bind="visible: isInSkipLogic() && !isRequired()">
 															<label
 																data-bind="text: isDependent() ? 'Remove?' : 'Add?'"></label>
 															<input type="checkbox" data-bind="checked: isDependent" />
 														</div>
+                                                        <div data-bind="visible: isInSkipLogic() && isRequired()">
+                                                             <label>Cannot add required fields</label>
+                                                        </div>
 														<div class="skipLogicPicker"
 															data-bind="visible: isDependent()">
 															<div data-bind="switch: $parent.activeElement().type">
@@ -232,7 +235,7 @@
 
 							<button
 								data-bind="visible: isAdmin() && programIsChosen(),
-                            click: uploadSkipLogic(), enable: !uploadingSkipLogic"
+                            click: uploadSkipLogic, enable: !uploadingSkipLogic"
 								class="formee-button skipButton" style="width: 100%">Save
 								Changes</button>
 						</div>

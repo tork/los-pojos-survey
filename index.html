@@ -175,6 +175,10 @@
 																	<label>Values (separate with ","):</label> <input
 																		type="text" data-bind="value: commaList" />
 																</div>
+                                                                <div data-bind="case: 'string with optionSet'">
+                                                                    <label>Values (separate with ","):</label> <input
+                                                                        type="text" data-bind="value: commaList" />
+                                                                </div>
 																<div data-bind="case: 'date'">
 																	<label>Interval?</label> <input type="checkbox"
 																		data-bind="checked: interval" />

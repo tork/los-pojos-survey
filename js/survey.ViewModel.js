@@ -24,9 +24,11 @@
 			self.selectedProgramStagesOptionSets().length = 0;
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
-			if (self.selectedProgramStage().programStageDataElements) {
-				survey.data.getAllDataElementsForSelectedProgramStage();
-				survey.data.getOrgUnits(self.selectedProgram().id);
+			if (self.selectedProgramStage()) {
+				if (self.selectedProgramStage().programStageDataElements) {
+					survey.data.getAllDataElementsForSelectedProgramStage();
+					survey.data.getOrgUnits(self.selectedProgram().id);
+				}
 			}
 		});
 		self.selectedProgramStagesOptionSets = ko.observableArray();
@@ -156,44 +158,19 @@
 			dataelement.addingSkipLogic(false);
 		};
 
-		// LOG IN
-		self.loginVisible = ko.observable(false);
-
-		self.username = ko.observable();
-		self.password = ko.observable();
-		self.logIn = function() {
-			console.log("Log in with values: " + self.username() + " "
-					+ self.password());
-			survey.data.authenticate(self.username(), self.password());
-			self.loginVisible(false);
-		}
-
 		self.isAdmin = ko.observable(true);
-
-		self.loginStatus = function() {
-			var response = survey.data.getWebAPI();
-			try {
-				JSON.parse(response);
-				self.loginVisible(false);
-			} catch (err) {
-				console.log("User not authenticated.")
-				self.loginVisible(true);
-			}
-		}
 
 		self.adminClick = function() {
 			root.viewModel.isAdmin(true);
 		};
 
 		self.userClick = function() {
-			console.log("userClick!");
-
 			root.viewModel.isAdmin(false);
 		};
 
 		self.logoutClick = function() {
 			survey.data.logout();
-			self.loginVisible(true);
+			window.location.reload(true);
 		}
 
 		//SAVE DATA ENTRY
@@ -210,12 +187,23 @@
 			if (!self.areThereAnyUnfilledRequiredDataElements()) {
 				return;
 			}
-			
+
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
-					if(element.value() != undefined)
-						dataelements.push({dataElement: element.id, value: element.value()});
+					var entryValue = element.value();
+					if(element.type === 'trueOnly' && entryValue === false) {
+						entryValue = undefined;
+					}
+					if(entryValue != undefined) {
+						if(element.type === 'bool') {
+							if(entryValue === 'Yes')
+								entryValue = true;
+							if(entryValue === 'No')
+								entryValue = false;
+						} 
+						dataelements.push({dataElement: element.id, value: entryValue});
+					}
 				});
 				return dataelements;
 			}
@@ -226,10 +214,10 @@
 					eventDate: self.entryDate(),
 					dataValues: getDataValues()
 			}
-			
+
 			if(dataentry.orgUnit == undefined || dataentry.eventDate == undefined) {
 				console.log("date and orgUnit must be specified!", dataentry.orgUnit, dataentry.eventDate);
-				
+
 			} else {
 				console.log("saving data entry");
 				survey.data.saveDataEntry(dataentry);
@@ -260,19 +248,17 @@
 		}
 
 		self.uploadingSkipLogic = false;
-		
+
 		self.areThereAnyUnfilledRequiredDataElements = function() {
 			var unfilledElements = [];
 			for (var i = 0; i < self.dataElements().length; i++) {
-				if (self.dataElements()[i].isRequired &&
-					!self.dataElements()[i].value() &&
-					(self.dataElements()[i].type !== 'trueOnly')) { // trueOnly should be accepted even if not checked.
+				if (self.dataElements()[i].isRequired && !self.dataElements()[i].value()) {
 					unfilledElements.push(self.dataElements()[i]);
 				}
 			}
 			return self.alertIfUncheckedRequiredDataElements(unfilledElements);
 		}
-		
+
 		self.alertIfUncheckedRequiredDataElements = function(unfilledElements) {
 			if (unfilledElements.length > 0) {
 				var alertMsg = "";
@@ -285,8 +271,6 @@
 					alertMsg += unfilledElements[i].name;
 					if (i !== unfilledElements.length-1) {
 						alertMsg += ", ";
-					} else {
-						alertMsg += ".";
 					}
 				}
 				alert(alertMsg);
@@ -295,7 +279,7 @@
 			return true;
 		};		
 	};
-	
+
 
 	/*
 	 * Litt forklaring: selectedProgram vil inneholde det man har valgt, eller

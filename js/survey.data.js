@@ -317,6 +317,7 @@
 				contentType: 'application/json'
 			})
 			.done(function(data) {
+				console.log("data: ", data);
 				console.log("Data elements uploaded:", data.imported, " imported, ", data.updated, " updated, ", data.ignored, " ignored");
 			})
 			.fail(function(x) {

@@ -19,4 +19,3 @@
 
 	});
 })(survey.viewModel, survey.data, survey.utils);
-

@@ -6,7 +6,7 @@
         self.name = dataelement.name;
         self.formName = dataelement.formName ? dataelement.formName : dataelement.name;
         self.description = dataelement.description;
-        self.type =  dataelement.type;
+        self.type =  dataelement.optionSet ? "string with optionSet" : dataelement.type;
 		
 		self.isOptionSet = ko.observable(false);
 		self.optionSet = ko.observableArray();
@@ -35,8 +35,12 @@
             self.dependents.push(cur.id);
             cur = cur.next;
         }
-
-        self.value = ko.observable();
+		self.value = ko.observable();
+		
+		if (self.type === 'trueOnly') {
+			self.value = ko.observable(false);
+		}
+		
         self.dropDownOpts = ko.observableArray();
         self.dropDownOpts.push("Yes"); //Do this when dataElement is inserted in viewModel
         self.dropDownOpts.push("No");   //instead of this hard coded edition :P
@@ -75,9 +79,9 @@
                             self.upperLimit(dep.triggers[0].to);
                         } else {
                             var date = dep.triggers[0].from;
-                            self.lowerLimit(utils.getDateFormattedForInput(date));
+                            self.lowerLimit(date);
                             date = dep.triggers[0].to;
-                            self.upperLimit(utils.getDateFormattedForInput(date));
+                            self.upperLimit(date);
                         }
                     } else {
                         if(dataElement.type === "bool") {

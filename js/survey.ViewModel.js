@@ -252,7 +252,7 @@
 		self.areThereAnyUnfilledRequiredDataElements = function() {
 			var unfilledElements = [];
 			for (var i = 0; i < self.dataElements().length; i++) {
-				if (self.dataElements()[i].isRequired && !self.dataElements()[i].value()) {
+				if (self.dataElements()[i].isRequired() && !self.dataElements()[i].value()) {
 					unfilledElements.push(self.dataElements()[i]);
 				}
 			}

@@ -18,12 +18,11 @@
 		}
 		
 		// Is this data element required?
+		self.isRequired = ko.observable(false);
 		for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
 			if (survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id === self.id) {
 				if (survey.viewModel.selectedProgramStage().programStageDataElements[i].compulsory) {
-					self.isRequired = true;
-				} else {
-					self.isRequired = false;
+					self.isRequired = ko.observable(true);
 				}
 			}
 		}

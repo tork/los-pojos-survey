@@ -35,8 +35,12 @@
             self.dependents.push(cur.id);
             cur = cur.next;
         }
-
-        self.value = ko.observable();
+		self.value = ko.observable();
+		
+		if (self.type === 'trueOnly') {
+			self.value = ko.observable(false);
+		}
+		
         self.dropDownOpts = ko.observableArray();
         self.dropDownOpts.push("Yes"); //Do this when dataElement is inserted in viewModel
         self.dropDownOpts.push("No");   //instead of this hard coded edition :P

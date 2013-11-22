@@ -236,9 +236,7 @@
 		self.areThereAnyUnfilledRequiredDataElements = function() {
 			var unfilledElements = [];
 			for (var i = 0; i < self.dataElements().length; i++) {
-				if (self.dataElements()[i].isRequired &&
-					!self.dataElements()[i].value() &&
-					(self.dataElements()[i].type !== 'trueOnly')) { // trueOnly should be accepted even if not checked.
+				if (self.dataElements()[i].isRequired && !self.dataElements()[i].value()) {
 					unfilledElements.push(self.dataElements()[i]);
 				}
 			}
@@ -257,8 +255,6 @@
 					alertMsg += unfilledElements[i].name;
 					if (i !== unfilledElements.length-1) {
 						alertMsg += ", ";
-					} else {
-						alertMsg += ".";
 					}
 				}
 				alert(alertMsg);

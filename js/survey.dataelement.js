@@ -6,7 +6,7 @@
         self.name = dataelement.name;
         self.formName = dataelement.formName ? dataelement.formName : dataelement.name;
         self.description = dataelement.description;
-        self.type =  dataelement.type;
+        self.type =  dataelement.optionSet ? "string with optionSet" : dataelement.type;
 		
 		self.isOptionSet = ko.observable(false);
 		self.optionSet = ko.observableArray();

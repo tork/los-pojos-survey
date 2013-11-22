@@ -112,15 +112,16 @@
                                                                    data-bind="value: value" />
                                                         </div>
 														<div data-bind="case: 'string'">
-															<select class="mediumField"
-																data-bind="visible: isOptionSet,
-																		   options: optionSet,
-																		   optionsCaption: 'Select option',
-																		   value: value"></select>
-															<input type="text" data-bind="visible: !isOptionSet()" />
+															<input type="text"
+                                                                   data-bind="visible: !isOptionSet(), value: value" />
 														</div>
 														<div data-bind="case: $default">
-															<input type="text" data-bind="value: value" />
+                                                            <select class="mediumField"
+                                                                    data-bind="visible: isOptionSet,
+																		   options: optionSet,
+																		   optionsCaption: 'Select option',
+																		   value: value">
+                                                            </select>
 														</div>
 													</div>
 												</div>

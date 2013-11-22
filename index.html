@@ -92,36 +92,36 @@
 														class="elementTitle"> (<strong
 														data-bind="text: type !== 'int' ? type : 'number'"></strong>)
 													</label>
-                                                    <div data-bind="switch: type">
-                                                        <div data-bind="case: 'trueOnly'">
-                                                            <label>If yes:</label>
-                                                            <input type="checkbox" data-bind="checked: value" />
-                                                        </div>
-                                                        <div data-bind="case: 'bool'">
-                                                            <select class="mediumField"
-                                                                data-bind="options: dropDownOpts,
+													<div data-bind="switch: type">
+														<div data-bind="case: 'trueOnly'">
+															<label>If yes:</label> <input type="checkbox"
+																data-bind="checked: value" />
+														</div>
+														<div data-bind="case: 'bool'">
+															<select class="mediumField"
+																data-bind="options: dropDownOpts,
 																		   optionsCaption: 'Select option',
 																		   value: value"></select>
-                                                        </div>
-                                                        <div data-bind="case: 'date'">
-                                                            <input type="date" class="mediumField"
-                                                                   data-bind="value: value" />
-                                                        </div>
-                                                        <div data-bind="case: 'int'">
-                                                            <input type="number" class="mediumField"
-                                                                   data-bind="value: value" />
-                                                        </div>
+														</div>
+														<div data-bind="case: 'date'">
+															<input type="date" class="mediumField"
+																data-bind="value: value" />
+														</div>
+														<div data-bind="case: 'int'">
+															<input type="number" class="mediumField"
+																data-bind="value: value" />
+														</div>
 														<div data-bind="case: 'string'">
 															<input type="text"
-                                                                   data-bind="visible: !isOptionSet(), value: value" />
+																data-bind="visible: !isOptionSet(), value: value" />
 														</div>
 														<div data-bind="case: $default">
-                                                            <select class="mediumField"
-                                                                    data-bind="visible: isOptionSet,
+															<select class="mediumField"
+																data-bind="visible: isOptionSet,
 																		   options: optionSet,
 																		   optionsCaption: 'Select option',
 																		   value: value">
-                                                            </select>
+															</select>
 														</div>
 													</div>
 												</div>
@@ -199,18 +199,29 @@
 						</div>
 					</div>
 					<!-- 						Save button here  -->
-					<div data-bind="visible: !isAdmin() && programIsChosen()">
-						Entry date: <input id="reportDate" type="date"
-							data-bind="value: entryDate" /> OrgUnit: <select
-							data-bind="options: orgUnitOpts, optionsText: 'orgName',
+					<form class="formee">
+						<div class="col-md-6"
+							data-bind="visible: !isAdmin() && programIsChosen()">
+							<div>
+								Report date<br> <input class="mediumField" id="reportDate"
+									type="date" data-bind="value: entryDate" />
+							</div>
+							<div>
+								OrgUnit<br> <select class="mediumField"
+									data-bind="options: orgUnitOpts, optionsText: 'orgName',
                                     optionsCaption: 'Select orgUnit',value: orgUnit"></select>
-						<button data-bind="click: saveDataEntry">Save data</button>
-					</div>
-					<button
-						data-bind="visible: isAdmin() && programIsChosen(),
+							</div>
+							<div>
+								<button data-bind="click: saveDataEntry"
+									class="formee-button skipButton">Save data</button>
+							</div>
+						</div>
+						<button
+							data-bind="visible: isAdmin() && programIsChosen(),
                             click: uploadSkipLogic(), enable: !uploadingSkipLogic"
-						class="formee-button skipButton">Save Changes</button>
+							class="formee-button skipButton">Save Changes</button>
 				</div>
+				</form>
 			</div>
 		</div>
 	</div>

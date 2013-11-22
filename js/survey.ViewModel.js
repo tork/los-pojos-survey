@@ -24,9 +24,11 @@
 			self.selectedProgramStagesOptionSets().length = 0;
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
-			if (self.selectedProgramStage().programStageDataElements) {
-				survey.data.getAllDataElementsForSelectedProgramStage();
-				survey.data.getOrgUnits(self.selectedProgram().id);
+			if (self.selectedProgramStage()) {
+				if (self.selectedProgramStage().programStageDataElements) {
+					survey.data.getAllDataElementsForSelectedProgramStage();
+					survey.data.getOrgUnits(self.selectedProgram().id);
+				}
 			}
 		});
 		self.selectedProgramStagesOptionSets = ko.observableArray();

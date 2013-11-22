@@ -41,3 +41,7 @@
 #error #msg {
     text-align: justify;
 }
+
+.sidebar-item {
+    cursor: pointer;
+}

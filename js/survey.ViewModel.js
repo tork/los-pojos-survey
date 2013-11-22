@@ -161,14 +161,17 @@
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
-					if(element.value() != undefined) {
-						var entryValue = element.value();
-						if(element.type == 'bool') {
-							if(entryValue == 'Yes')
+					var entryValue = element.value();
+					if(element.type === 'trueOnly' && entryValue === false) {
+						entryValue = undefined;
+					}
+					if(entryValue != undefined) {
+						if(element.type === 'bool') {
+							if(entryValue === 'Yes')
 								entryValue = true;
-							if(entryValue == 'No')
+							if(entryValue === 'No')
 								entryValue = false;
-						}
+						} 
 						dataelements.push({dataElement: element.id, value: entryValue});
 					}
 				});

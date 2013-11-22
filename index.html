@@ -92,25 +92,25 @@
 														class="elementTitle"> (<strong
 														data-bind="text: type !== 'int' ? type : 'number'"></strong>)
 													</label>
-
-													<div data-bind="switch: type">
-														<div data-bind="case: 'trueOnly'">
-															<label>If yes:</label> <input type="checkbox"
-																data-bind="checked: value" />
-														</div>
-														<div data-bind="case: 'bool'">
-															<select class="mediumField"
-																data-bind="options: dropDownOpts,
-                                                        value: value"></select>
-														</div>
-														<div data-bind="case: 'date'">
-															<input type="date" class="mediumField"
-																data-bind="value: value" />
-														</div>
-														<div data-bind="case: 'int'">
-															<input type="number" class="mediumField"
-																data-bind="value: value" />
-														</div>
+                                                    <div data-bind="switch: type">
+                                                        <div data-bind="case: 'trueOnly'">
+                                                            <label>If yes:</label>
+                                                            <input type="checkbox" data-bind="checked: value" />
+                                                        </div>
+                                                        <div data-bind="case: 'bool'">
+                                                            <select class="mediumField"
+                                                                data-bind="options: dropDownOpts,
+																		   optionsCaption: 'Select option',
+																		   value: value"></select>
+                                                        </div>
+                                                        <div data-bind="case: 'date'">
+                                                            <input type="date" class="mediumField"
+                                                                   data-bind="value: value" />
+                                                        </div>
+                                                        <div data-bind="case: 'int'">
+                                                            <input type="number" class="mediumField"
+                                                                   data-bind="value: value" />
+                                                        </div>
 														<div data-bind="case: 'string'">
 															<select class="mediumField"
 																data-bind="visible: isOptionSet,

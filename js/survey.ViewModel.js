@@ -240,8 +240,6 @@
 					alertMsg += unfilledElements[i].name;
 					if (i !== unfilledElements.length-1) {
 						alertMsg += ", ";
-					} else {
-						alertMsg += ".";
 					}
 				}
 				alert(alertMsg);

@@ -199,6 +199,7 @@
 						</div>
 					</div>
 					<!-- 						Save button here  -->
+					<div style="position: relative; top: -18px;">
 					<div data-bind="visible: !isAdmin() && programIsChosen()">
 						Entry date: <input id="reportDate" type="date"
 							data-bind="value: entryDate" /> OrgUnit: <select
@@ -209,7 +210,8 @@
 					<button
 						data-bind="visible: isAdmin() && programIsChosen(),
                             click: uploadSkipLogic(), enable: !uploadingSkipLogic"
-						class="formee-button skipButton">Save Changes</button>
+						class="formee-button skipButton" style="width: 100%">Save Changes</button>
+				</div>
 				</div>
 			</div>
 		</div>

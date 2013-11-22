@@ -158,6 +158,11 @@
 				return;
 			}
 
+			if(self.orgUnit == undefined || self.entryDate() == undefined) {
+				alert("Report date and orgUnit must be specified!");
+				return;
+			}
+
 			var getDataValues = function() {
 				dataelements = [];
 				$.each(self.dataElements(), function(index, element) {
@@ -185,13 +190,8 @@
 					dataValues: getDataValues()
 			}
 
-			if(dataentry.orgUnit == undefined || dataentry.eventDate == undefined) {
-				console.log("date and orgUnit must be specified!", dataentry.orgUnit, dataentry.eventDate);
-
-			} else {
-				console.log("saving data entry");
-				survey.data.saveDataEntry(dataentry);
-			}
+			console.log("saving data entry");
+			survey.data.saveDataEntry(dataentry);
 		}
 
 		self.uploadSkipLogic = function() {

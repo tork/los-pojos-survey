@@ -53,6 +53,9 @@
 
     root.hasDependency = function(element, potentialParent) {
         var deps = element.dependencies;
+        if(!deps) {
+            return false;
+        }
         for(var i = 0; i < deps.length; i++) {
             if(deps[i].id == potentialParent.id) {
                 return true;

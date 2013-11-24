@@ -91,14 +91,12 @@
 														data-bind="visible: type === 'int' || type === 'date' || type === 'string'"
 														class="elementTitle"> (<strong
 														data-bind="text: type !== 'int' ? type : 'number'"></strong>)
-													</label>
-													<label>
-														<em data-bind="visible: isRequired" class="formee-req"> *</em>
+													</label> <label> <em data-bind="visible: isRequired"
+														class="formee-req"> *</em>
 													</label>
 													<div data-bind="switch: type">
 														<div data-bind="case: 'trueOnly'">
-															<label>If yes:</label>
-															<input type="checkbox"
+															<label>If yes:</label> <input type="checkbox"
 																data-bind="checked: value" />
 														</div>
 														<div data-bind="case: 'bool'">
@@ -129,7 +127,8 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6 skipLogicPanel" data-bind="visible: $parent.isAdmin()">
+												<div class="col-md-6 skipLogicPanel"
+													data-bind="visible: $parent.isAdmin()">
 													<!--Add skip-logic ui here-->
 													<button
 														data-bind="visible: !addingSkipLogic() && !isInSkipLogic(), click: $parent.addSkipLogic.bind($data)"
@@ -145,9 +144,9 @@
 																data-bind="text: isDependent() ? 'Remove?' : 'Add?'"></label>
 															<input type="checkbox" data-bind="checked: isDependent" />
 														</div>
-                                                        <div data-bind="visible: isInSkipLogic() && isRequired()">
-                                                             <label>Cannot add required fields</label>
-                                                        </div>
+														<div data-bind="visible: isInSkipLogic() && isRequired()">
+															<label>Cannot add required fields</label>
+														</div>
 														<div class="skipLogicPicker"
 															data-bind="visible: isDependent()">
 															<div data-bind="switch: $parent.activeElement().type">
@@ -177,10 +176,10 @@
 																	<label>Values (separate with ","):</label> <input
 																		type="text" data-bind="value: commaList" />
 																</div>
-                                                                <div data-bind="case: 'string with optionSet'">
-                                                                    <label>Values (separate with ","):</label> <input
-                                                                        type="text" data-bind="value: commaList" />
-                                                                </div>
+																<div data-bind="case: 'string with optionSet'">
+																	<label>Values (separate with ","):</label> <input
+																		type="text" data-bind="value: commaList" />
+																</div>
 																<div data-bind="case: 'date'">
 																	<label>Interval?</label> <input type="checkbox"
 																		data-bind="checked: interval" />
@@ -214,13 +213,17 @@
 							<div data-bind="visible: !isAdmin() && programIsChosen()">
 								<div class="well col-md-12 row">
 									<div class="col-md-6">
-										<label class="elementTitle">Report date</label><br> <input class="mediumField"
-											id="reportDate" type="date" data-bind="value: entryDate" />
+										<label class="elementTitle">Report date</label> <label>
+											<em class="formee-req">*</em>
+										</label><br> <input class="mediumField" id="reportDate"
+											type="date" data-bind="value: entryDate" />
 									</div>
 								</div>
 								<div class="well col-md-12 row">
 									<div class="col-md-6">
-										<label class="elementTitle">OrgUnit</label><br> <select class="mediumField"
+										<label class="elementTitle">OrgUnit</label> <label> 
+										<em	class="formee-req">*</em>
+										</label><br> <select class="mediumField"
 											data-bind="options: orgUnitOpts, optionsText: 'orgName',
                                     optionsCaption: 'Select orgUnit',value: orgUnit"></select>
 									</div>

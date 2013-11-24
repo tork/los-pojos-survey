@@ -129,11 +129,10 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6 skipLogicPanel">
+												<div class="col-md-6 skipLogicPanel" data-bind="visible: $parent.isAdmin()">
 													<!--Add skip-logic ui here-->
 													<button
-														data-bind="visible: !addingSkipLogic() && !isInSkipLogic() &&
-                                                    $parent.isAdmin() , click: $parent.addSkipLogic.bind($data)"
+														data-bind="visible: !addingSkipLogic() && !isInSkipLogic(), click: $parent.addSkipLogic.bind($data)"
 														class="formee-button skipButton">set dependents</button>
 													<button
 														data-bind="visible: addingSkipLogic(),

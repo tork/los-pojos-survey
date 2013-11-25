@@ -32,9 +32,6 @@
             } else {
                 dependency.triggers.push(element.commaList());
             }
-        } else if (parentElement.type === "string with optionSet") {
-            //TODO: Something should be done here, but not this:
-            dependency.triggers = ["I'm not implemented! :D (dependencyHandler.addDependency())"];
         } else {
             deferred.reject("No such type");
         }

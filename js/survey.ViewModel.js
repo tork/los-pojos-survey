@@ -165,7 +165,6 @@
 			var unordered = root.viewModel.dataElements();
 			survey.rearrange.withDeps(unordered, function(arranged) {
 				self.circular(unordered.length != arranged.length);
-				console.log("dep length was "+unordered.length+", is now "+arranged.length);
 			});
 		}
 

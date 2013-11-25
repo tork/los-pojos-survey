@@ -28,12 +28,7 @@
 		}
 
         self.dependencies = dataelement.dependencies ? dataelement.dependencies : []; //Fix if rearrange fails
-        /*self.dependents = [];
-        var cur = dataelement.dependents;
-        while (cur) {
-            self.dependents.push(cur.id);
-            cur = cur.next;
-        }*/
+        
 		self.value = ko.observable();
 		
 		if (self.type === 'trueOnly') {

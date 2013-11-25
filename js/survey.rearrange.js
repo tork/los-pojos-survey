@@ -49,7 +49,6 @@ to unlock) are excluded from the rearrangement.
 		function succ(deps) {
 			var workspace = create_workspace(elements);
 			elements.forEach(function(elem) {
-				//clean_element(elem);
 				var dep = deps[elem.id];
 				elem.dependencies = dep? dep:[];
 
@@ -71,8 +70,6 @@ to unlock) are excluded from the rearrangement.
 	self.withDeps = function(elements, callback) {
 		var workspace = create_workspace(elements);
 		elements.forEach(function(elem) {
-			//clean_element(elem);
-
 			var dep = elem.dependencies;
 			if (!dep) elem.dependencies = [];
 
@@ -84,24 +81,17 @@ to unlock) are excluded from the rearrangement.
 
 	function register_dependencies(elem, workspace) {
 		var deps = elem.dependencies;
-		//console.log("deps of "+elem.id+": "+JSON.stringify(deps));
-		console.log(elem.id+":");
 		elem.dep_count = deps.length;
 		
 		if (elem.dep_count == 0) {
-			console.log("free");
 			workspace.free_queue = enqueue(elem, workspace.free_queue);
 		} else {
-			console.log("deps");
 			deps.forEach(function(descriptor) {
 				var dep = get_element(descriptor.id, workspace);
 
 				if (!dep.dependents)
 					dep.dependents = {};
 				dep.dependents[elem.id] = elem;
-
-				//dep.dependents = enqueue(elem, dep.dependents);
-				//print_queue("has "+elem.dep_count+" deps", dep.dependents);
 			});
 		}
 	}
@@ -134,7 +124,6 @@ to unlock) are excluded from the rearrangement.
 	}
 
 	function extract_arrangement(workspace) {
-		print_queue("free queue", workspace.free_queue);
 		var arrangement = [];
 		
 		var root = workspace.free_queue;
@@ -159,15 +148,6 @@ to unlock) are excluded from the rearrangement.
 				}
 			}
 		}
-		
-		/*var child = elem.dependents;
-		while (child) {
-			if (--child.dep_count == 0) {
-				extract_element(child, arrangement);
-			}
-			
-			child = child.next;
-		}*/
 		
 		// TODO: This will cause unreachable nodes
 		// to never get cleaned. Should improve?

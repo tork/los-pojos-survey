@@ -11,6 +11,7 @@
 		self.programStages = ko.observableArray();
 		self.selectedProgramStage = ko.observable();
 		self.dataElements = ko.observableArray();
+		self.circular = ko.observable(false);
 		self.activeElement = ko.observable({
 			type : "None"
 		});
@@ -156,7 +157,17 @@
 				}
 			});
 			dataelement.addingSkipLogic(false);
+
+			self.detectCircularDependencies();
 		};
+
+		self.detectCircularDependencies = function() {
+			var unordered = root.viewModel.dataElements();
+			survey.rearrange.withDeps(unordered, function(arranged) {
+				self.circular(unordered.length != arranged.length);
+				console.log("dep length was "+unordered.length+", is now "+arranged.length);
+			});
+		}
 
 		self.isAdmin = ko.observable(true);
 
@@ -227,6 +238,11 @@
 		self.uploadSkipLogic = function() {
 			var sps = self.selectedProgramStage();
 			if (!sps) return;
+
+			if (self.circular()) {
+				survey.error.displayErrorMessage("Your questions contain circular dependencie(s). Please resolve them.");
+				return;
+			}
 
 			//var surveyId = sps.id;
 			//var surveyId = 12;

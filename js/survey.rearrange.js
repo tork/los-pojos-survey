@@ -49,6 +49,7 @@ to unlock) are excluded from the rearrangement.
 		function succ(deps) {
 			var workspace = create_workspace(elements);
 			elements.forEach(function(elem) {
+				clean_element(elem);
 				var dep = deps[elem.id];
 				elem.dependencies = dep? dep:[];
 
@@ -67,16 +68,33 @@ to unlock) are excluded from the rearrangement.
 		root.data.get_dependencies(surveyId, elements, succ, err);
 	}
 
+	self.withDeps = function(elements, callback) {
+		var workspace = create_workspace(elements);
+		elements.forEach(function(elem) {
+			clean_element(elem);
+
+			var dep = elem.dependencies;
+			if (!dep) elem.dependencies = [];
+
+			register_dependencies(elem, workspace);
+		});
+		
+		callback(extract_arrangement(workspace));
+	}
+
 	function register_dependencies(elem, workspace) {
 		var deps = elem.dependencies;
+		console.log("deps of "+elem.id+": "+JSON.stringify(deps));
 		elem.dep_count = deps.length;
 		
 		if (elem.dep_count == 0) {
+			console.log("free");
 			workspace.free_queue = enqueue(elem, workspace.free_queue);
 		} else {
 			deps.forEach(function(descriptor) {
 				var dep = get_element(descriptor.id, workspace);
 				dep.dependents = enqueue(elem, dep.dependents);
+				print_queue("has "+elem.dep_count+" deps", dep.dependents);
 			});
 		}
 	}

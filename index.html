@@ -237,7 +237,15 @@
 
 							<button
 								data-bind="visible: isAdmin() && programIsChosen(),
-                            click: uploadSkipLogic, enable: !uploadingSkipLogic"
+                            click: uploadSkipLogic,
+                            enable: !uploadingSkipLogic,
+                            style: {
+                            	background: circular()? '#db4d4d' : '#5393c2',
+                            	background: circular()? '-moz-linear-gradient(top, #db4d4d 40%, #993636)':
+                            							'-moz-linear-gradient(top, #5393c2 40%, #3a77a4)',
+                            	background: circular()? '-webkit-linear-gradient(top, #db4d4d 40%, #993636)':
+                            							'-webkit-linear-gradient(top, #5393c2 40%, #3a77a4)'
+                            }"
 								class="formee-button skipButton" style="width: 100%">Save
 								Changes</button>
 						</div>

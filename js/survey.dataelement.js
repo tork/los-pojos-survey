@@ -28,12 +28,7 @@
 		}
 
         self.dependencies = dataelement.dependencies ? dataelement.dependencies : []; //Fix if rearrange fails
-        self.dependents = [];
-        var cur = dataelement.dependents;
-        while (cur) {
-            self.dependents.push(cur.id);
-            cur = cur.next;
-        }
+        
 		self.value = ko.observable();
 		
 		if (self.type === 'trueOnly') {
@@ -71,7 +66,9 @@
         self.setSkipLogicUIElements = function(dataElement) {
             $.each(self.dependencies, function(i, dep) {
                 if(dep.id === dataElement.id) {
-                    if(dep.triggers[0].from !== undefined) {
+                    if (!dep.triggers.length) {
+                        // yeah.
+                    } else if(dep.triggers[0].from !== undefined) {
                         self.interval(true)
                         if(dataElement.type === "int") {
                             self.lowerLimit(dep.triggers[0].from);

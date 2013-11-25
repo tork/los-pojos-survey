@@ -67,6 +67,18 @@ to unlock) are excluded from the rearrangement.
 		root.data.get_dependencies(surveyId, elements, succ, err);
 	}
 
+	self.withDeps = function(elements, callback) {
+		var workspace = create_workspace(elements);
+		elements.forEach(function(elem) {
+			var dep = elem.dependencies;
+			if (!dep) elem.dependencies = [];
+
+			register_dependencies(elem, workspace);
+		});
+		
+		callback(extract_arrangement(workspace));
+	}
+
 	function register_dependencies(elem, workspace) {
 		var deps = elem.dependencies;
 		elem.dep_count = deps.length;
@@ -76,7 +88,10 @@ to unlock) are excluded from the rearrangement.
 		} else {
 			deps.forEach(function(descriptor) {
 				var dep = get_element(descriptor.id, workspace);
-				dep.dependents = enqueue(elem, dep.dependents);
+
+				if (!dep.dependents)
+					dep.dependents = {};
+				dep.dependents[elem.id] = elem;
 			});
 		}
 	}
@@ -123,14 +138,15 @@ to unlock) are excluded from the rearrangement.
 
 	function extract_element(elem, arrangement) {
 		arrangement.push(elem);
-		
-		var child = elem.dependents;
-		while (child) {
-			if (--child.dep_count == 0) {
-				extract_element(child, arrangement);
+
+		var dependents = elem.dependents;
+		for (var key in dependents) {
+			if (dependents.hasOwnProperty(key)) {
+				var child = dependents[key];
+				if (--child.dep_count == 0) {
+					extract_element(child, arrangement);
+				}
 			}
-			
-			child = child.next;
 		}
 		
 		// TODO: This will cause unreachable nodes
@@ -153,6 +169,9 @@ to unlock) are excluded from the rearrangement.
 	/** ARRAY AS WORKSPACE **/
 	function create_workspace_array(elements) {
 		var workspace = {};
+		elements.forEach(function(elem) {
+			clean_element(elem);
+		});
 		workspace.elements = elements;
 		workspace.free_queue = null;
 		return workspace;
@@ -179,6 +198,7 @@ to unlock) are excluded from the rearrangement.
 		var o = {};
 
 		elements.forEach(function(elem) {
+			clean_element(elem);
 			o[elem.id] = elem;
 		});
 

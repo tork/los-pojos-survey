@@ -82,7 +82,7 @@
 								<!--data-bind="with: dataElements"-->
 								<div class="row" data-bind="foreach: dataElements">
 									<div class="col-md-12 dataElement"
-										data-bind="visible: $parent.isAdmin() || $parent.dependenciesHold($data)">
+										data-bind="fadeVisible: $parent.isAdmin() || $parent.dependenciesHold($data)">
 										<div class="well row col-md-12">
 											<form class="formee">
 												<div class="col-md-6">

@@ -13,10 +13,9 @@
         if(parentElement.type === "trueOnly") {
             dependency.triggers.push(true);
         } else if(parentElement.type === "bool") {
-            dependency.triggers.push(element.triggerOption() === "Yes"); //TODO: "Yes"/"No" eller true/false?
+            dependency.triggers.push(element.triggerOption() === "Yes");
         } else if(parentElement.type === "int") {
             if(element.interval()) {
-                //TODO: hva skulle vi ha av validering her igjen?
                 dependency.triggers.push({from: parseInt(element.lowerLimit()), to: parseInt(element.upperLimit())});
             } else {
                 dependency.triggers = $.map(element.commaList().split(","), function(num) {
@@ -25,9 +24,9 @@
                     }
                 });
             }
-        } else if(parentElement.type === "string") {
+        } else if(parentElement.type === "string" || parentElement.type === "string with optionSet") {
             dependency.triggers = element.commaList().split(",");
-        } else if(parentElement.type === "date") { //TODO: finne ut hvordan dhis takler date + validering?
+        } else if(parentElement.type === "date") {
             if(element.interval()) {
                 dependency.triggers.push({from: element.lowerLimit(), to: element.upperLimit()});
             } else {

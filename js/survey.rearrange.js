@@ -49,7 +49,7 @@ to unlock) are excluded from the rearrangement.
 		function succ(deps) {
 			var workspace = create_workspace(elements);
 			elements.forEach(function(elem) {
-				clean_element(elem);
+				//clean_element(elem);
 				var dep = deps[elem.id];
 				elem.dependencies = dep? dep:[];
 
@@ -71,7 +71,7 @@ to unlock) are excluded from the rearrangement.
 	self.withDeps = function(elements, callback) {
 		var workspace = create_workspace(elements);
 		elements.forEach(function(elem) {
-			clean_element(elem);
+			//clean_element(elem);
 
 			var dep = elem.dependencies;
 			if (!dep) elem.dependencies = [];
@@ -84,17 +84,24 @@ to unlock) are excluded from the rearrangement.
 
 	function register_dependencies(elem, workspace) {
 		var deps = elem.dependencies;
-		console.log("deps of "+elem.id+": "+JSON.stringify(deps));
+		//console.log("deps of "+elem.id+": "+JSON.stringify(deps));
+		console.log(elem.id+":");
 		elem.dep_count = deps.length;
 		
 		if (elem.dep_count == 0) {
 			console.log("free");
 			workspace.free_queue = enqueue(elem, workspace.free_queue);
 		} else {
+			console.log("deps");
 			deps.forEach(function(descriptor) {
 				var dep = get_element(descriptor.id, workspace);
-				dep.dependents = enqueue(elem, dep.dependents);
-				print_queue("has "+elem.dep_count+" deps", dep.dependents);
+
+				if (!dep.dependents)
+					dep.dependents = {};
+				dep.dependents[elem.id] = elem;
+
+				//dep.dependents = enqueue(elem, dep.dependents);
+				//print_queue("has "+elem.dep_count+" deps", dep.dependents);
 			});
 		}
 	}
@@ -127,6 +134,7 @@ to unlock) are excluded from the rearrangement.
 	}
 
 	function extract_arrangement(workspace) {
+		print_queue("free queue", workspace.free_queue);
 		var arrangement = [];
 		
 		var root = workspace.free_queue;
@@ -141,15 +149,25 @@ to unlock) are excluded from the rearrangement.
 
 	function extract_element(elem, arrangement) {
 		arrangement.push(elem);
+
+		var dependents = elem.dependents;
+		for (var key in dependents) {
+			if (dependents.hasOwnProperty(key)) {
+				var child = dependents[key];
+				if (--child.dep_count == 0) {
+					extract_element(child, arrangement);
+				}
+			}
+		}
 		
-		var child = elem.dependents;
+		/*var child = elem.dependents;
 		while (child) {
 			if (--child.dep_count == 0) {
 				extract_element(child, arrangement);
 			}
 			
 			child = child.next;
-		}
+		}*/
 		
 		// TODO: This will cause unreachable nodes
 		// to never get cleaned. Should improve?
@@ -171,6 +189,9 @@ to unlock) are excluded from the rearrangement.
 	/** ARRAY AS WORKSPACE **/
 	function create_workspace_array(elements) {
 		var workspace = {};
+		elements.forEach(function(elem) {
+			clean_element(elem);
+		});
 		workspace.elements = elements;
 		workspace.free_queue = null;
 		return workspace;
@@ -197,6 +218,7 @@ to unlock) are excluded from the rearrangement.
 		var o = {};
 
 		elements.forEach(function(elem) {
+			clean_element(elem);
 			o[elem.id] = elem;
 		});
 

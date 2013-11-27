@@ -53,12 +53,17 @@
         return val;
     }
 
-    root.alert = function(title, message, yesText, noText, type, yesCallback, noCallback) {
+    root.alert = function(title, message, type, yesText, noText, yesCallback, noCallback) {
+        $("#NoOption").show();
         $("#alertTitle").text(title);
         $("#alertMsg").text(message);
         var yesTxt = yesText ? yesText : "Yes";
         var noTxt = noText ? noText : "No";
         type = type.toLowerCase();
+        if(type != "warning") {
+            $("#NoOption").hide();
+            yesTxt = "Ok";
+        }
         if(type != "warning" && type != "error" && type != "success") {
             type = "info";
         }

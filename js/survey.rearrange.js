@@ -59,8 +59,8 @@ to unlock) are excluded from the rearrangement.
 		}
 
 		function err(req, status, err) {
-			console.log('Rearranging failed (status=' + status+'):');
-			console.log(err);
+			survey.utils.log('Rearranging failed (status=' + status+'):');
+			survey.utils.log(err);
 			error();
 		}
 
@@ -103,7 +103,7 @@ to unlock) are excluded from the rearrangement.
 			str += cur.id + '->';
 			cur = cur.next;
 		}
-		console.log(msg+': '+str+'null');
+		survey.utils.log(msg+': '+str+'null');
 	}
 
 	// Allows duplicates, returns the head.

@@ -16,7 +16,7 @@
 			type : "None"
 		});
 		self.selectedProgram.subscribe(function() {
-			console.log("Getting program stages for selected program");
+			survey.utils.log("Getting program stages for selected program");
 			self.programStages().length = 0;
 			survey.data.getProgramStageIdsFromSelectedProgram();
 		});
@@ -142,11 +142,11 @@
 						depHandler.addDependency(dataelement, element).done(
 								function() {
 									element.resetSkipLogicUI();
-									console.log("legger til avhengighet",
+									survey.utils.log("legger til avhengighet",
 											element);
 								}).fail(function(status) {
 									element.resetSkipLogicUI();
-									console.log(status);
+									survey.utils.log(status);
 								});
 					} else {
 						depHandler.removeDependency(dataelement, element);
@@ -235,7 +235,7 @@
 					dataValues: getDataValues()
 			}
 
-			console.log("saving data entry");
+			survey.utils.log("saving data entry");
 			survey.data.saveDataEntry(dataentry);
 		}
 
@@ -258,13 +258,14 @@
 			//var surveyId = 12;
 			var id = sps.id;
 			var success = function() {
-				console.log("success! id was "+id);
+				survey.utils.log("success! id was "+id);
 				self.uploadingSkipLogic = false;
+				
 			};
 			var error = function(req, stat, err) {
-				console.log('Error while posting skip logic, with status "'+stat+'":\n'+
+				survey.utils.log('Error while posting skip logic, with status "'+stat+'":\n'+
 						err+'\n'+'Request was:');
-				console.log(req);
+				survey.utils.log(req);
 				survey.error.displayErrorMessage('Failed to save your changes.\n(Read more about it in your console)');
 				self.uploadingSkipLogic = false;
 			};

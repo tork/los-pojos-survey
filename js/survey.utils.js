@@ -95,5 +95,9 @@
         }
     };
 
+    root.log = function(msg) {
+        if (root.debug) return console.log(msg);
+    }
+
     root.debug = false;
 })(survey.utils = survey.utils || {})

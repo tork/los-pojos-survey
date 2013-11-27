@@ -53,6 +53,35 @@
         return val;
     }
 
+    root.alert = function(title, message, yesText, noText, yesCallback, noCallback) {
+        $("#alertTitle").text(title);
+        $("#alertMsg").text(message);
+        var yesTxt = yesText ? yesText : "Yes";
+        var noTxt = noText ? noText : "No";
+
+        $("#YesOption").text(yesTxt);
+        $("#YesOption").unbind("click");
+        if(yesCallback) {
+            $("#YesOption").click(yesCallback);
+        }
+
+        $("#NoOption").text(noTxt);
+        $("#NoOption").unbind("click");
+        if(noCallback) {
+            $("#NoOption").click(noCallback);
+        }
+
+        $("#alert").show();
+        $.featherlight($("#alert"), {
+            close: function(e) {
+                this.$instance.hide();
+                $(".featherlight-content").removeClass("featherlight-alert");
+            },
+            variant: 'myCssClass'
+        });
+        $(".featherlight-content").addClass("featherlight-alert");
+    };
+
     ko.bindingHandlers.fadeVisible = {
         init: function(element, valueAccessor) {
             // Initially set the element to be instantly visible/hidden depending on the value

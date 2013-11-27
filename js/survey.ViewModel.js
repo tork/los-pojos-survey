@@ -254,6 +254,7 @@
 			var success = function() {
 				console.log("success! id was "+id);
 				self.uploadingSkipLogic = false;
+				
 			};
 			var error = function(req, stat, err) {
 				console.log('Error while posting skip logic, with status "'+stat+'":\n'+

@@ -4,7 +4,7 @@
 			e.preventDefault();
 			$("#wrapper").toggleClass("active");
 		});
-		
+
 		$('#reportDate').attr('max', utils.getDateFormattedForInput(new Date()));
 
 		ko.applyBindings({viewModel: viewModel});

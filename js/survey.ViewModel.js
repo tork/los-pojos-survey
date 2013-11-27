@@ -180,12 +180,13 @@
 		self.userClick = function() {
 			self.isAdmin(false);
             self.activeMenuItem("Data entry");
+
 		};
 
 		self.logoutClick = function() {
 			survey.data.logout();
 			window.location.reload(true);
-		}
+		};
 
 		//SAVE DATA ENTRY
 		self.entryDate = ko.observable();

@@ -326,7 +326,9 @@
 			})
 			.done(function(data) {
 				survey.utils.log("data: ", data);
-				survey.utils.log("Data elements uploaded:", data.imported, " imported, ", data.updated, " updated, ", data.ignored, " ignored");
+				var saveMsg = "Data elements uploaded:<br>" + data.imported + " imported<br>" + data.updated + " updated<br>" + data.ignored + " ignored";
+				survey.utils.log(saveMsg);
+				survey.utils.alert("Data entry saved", saveMsg, "success");
 			})
 			.fail(function(x) {
 				survey.utils.log("saving data entry failed", x);

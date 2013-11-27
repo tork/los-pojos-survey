@@ -239,6 +239,12 @@
 			survey.data.saveDataEntry(dataentry);
 		}
 
+        self.clearAllSkipLogic = function() {
+            $.each(root.viewModel.dataElements(), function(index, element) {
+                element.dependencies = [];
+            });
+        };
+
 		self.uploadSkipLogic = function() {
 			var sps = self.selectedProgramStage();
 			if (!sps) return;

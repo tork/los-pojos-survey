@@ -62,3 +62,7 @@
 .sidebar-brand {
     color: rgb(206, 206, 206);
 }
+
+.halfButton {
+    width: 50%;
+}

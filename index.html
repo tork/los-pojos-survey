@@ -239,7 +239,11 @@
 										data</button>
 								</div>
 							</div>
-
+                            <button data-bind="visible: isAdmin() && programIsChosen(),
+                            click: clearAllSkipLogic, enable: !uploadingSkipLogic"
+                                    class="formee-button halfButton">
+                                Clear skip logic
+                            </button>
 							<button
 								data-bind="visible: isAdmin() && programIsChosen(),
                             click: uploadSkipLogic,

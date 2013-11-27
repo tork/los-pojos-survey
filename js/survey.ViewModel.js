@@ -205,7 +205,7 @@
 			}
 
 			if(self.orgUnit == undefined || self.entryDate() == undefined) {
-				alert("Report date and orgUnit must be specified!");
+				survey.utils.alert("Required fields", "Report date and orgUnit must be specified!", "info");
 				return;
 			}
 
@@ -235,8 +235,6 @@
 					eventDate: self.entryDate(),
 					dataValues: getDataValues()
 			}
-
-			survey.utils.log("saving data entry");
 			survey.data.saveDataEntry(dataentry);
 		}
 
@@ -263,7 +261,7 @@
 			//var surveyId = 12;
 			var id = sps.id;
 			var success = function() {
-				survey.utils.log("success! id was "+id);
+				survey.utils.alert("Skip logic saved", "Skip logic saved successfully with id "+id, "success");
 				self.uploadingSkipLogic = false;
 				
 			};
@@ -305,7 +303,7 @@
 						alertMsg += ", ";
 					}
 				}
-				alert(alertMsg);
+				survey.utils.alert("Required fields", alertMsg, "info");
 				return false;
 			}
 			return true;

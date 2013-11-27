@@ -56,7 +56,7 @@
     root.alert = function(title, message, type, yesText, noText, yesCallback, noCallback) {
         $("#NoOption").show();
         $("#alertTitle").text(title);
-        $("#alertMsg").text(message);
+        $("#alertMsg").html(message);
         var yesTxt = yesText ? yesText : "Yes";
         var noTxt = noText ? noText : "No";
         type = type.toLowerCase();

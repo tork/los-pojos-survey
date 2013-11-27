@@ -168,14 +168,18 @@
 			});
 		}
 
-		self.isAdmin = ko.observable(true);
+		/*Nav elements*/
+        self.isAdmin = ko.observable(true);
+        self.activeMenuItem = ko.observable("Admin");
 
 		self.adminClick = function() {
-			root.viewModel.isAdmin(true);
+			self.isAdmin(true);
+            self.activeMenuItem("Admin");
 		};
 
 		self.userClick = function() {
-			root.viewModel.isAdmin(false);
+			self.isAdmin(false);
+            self.activeMenuItem("Data entry");
 		};
 
 		self.logoutClick = function() {
@@ -294,15 +298,6 @@
 			return true;
 		};		
 	};
-
-
-	/*
-	 * Litt forklaring: selectedProgram vil inneholde det man har valgt, eller
-	 * undefined hvis det står "Select program" i selecten. Det er en observable, så
-	 * den hentes ut ved å kalle viewModel.selectedProgram() Foreslår at dette
-	 * brukes til å gjøre get til api.
-	 */
-
 	root.viewModel = new viewModel();
 
 })(survey, survey.models, survey.dependencyHandler);

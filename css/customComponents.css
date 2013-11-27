@@ -44,4 +44,21 @@
 
 .sidebar-item {
     cursor: pointer;
+    font-size: 25px;
+    padding: 10px 0 10px;
+}
+
+.sidebar-nav li .activeEl {
+    background: #222930;
+    color: rgb(206, 206, 206);
+}
+
+.sidebar-nav li .sidebar-item.activeEl:hover {
+    background: #222930;
+    color: #999;
+    cursor: default;
+}
+
+.sidebar-brand {
+    color: rgb(206, 206, 206);
 }

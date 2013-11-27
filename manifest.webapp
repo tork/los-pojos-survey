@@ -1,5 +1,5 @@
 {
-    "version": "0.6",
+    "version": "0.9.1",
     "name": "Los POJOs Survey App",
     "description": "Survey app with skip logic",
     "launch_path": "/index.html",

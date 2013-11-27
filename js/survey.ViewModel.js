@@ -240,9 +240,13 @@
 		}
 
         self.clearAllSkipLogic = function() {
-            $.each(root.viewModel.dataElements(), function(index, element) {
-                element.dependencies = [];
+            survey.utils.alert("Clear all?", "Are you sure? The changes will not be saved before you choose save changes",
+            "Yes", "No", "warning", function() {
+                $.each(root.viewModel.dataElements(), function(index, element) {
+                    element.dependencies = [];
+                });
             });
+
         };
 
 		self.uploadSkipLogic = function() {

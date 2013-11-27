@@ -53,11 +53,17 @@
         return val;
     }
 
-    root.alert = function(title, message, yesText, noText, yesCallback, noCallback) {
+    root.alert = function(title, message, yesText, noText, type, yesCallback, noCallback) {
         $("#alertTitle").text(title);
         $("#alertMsg").text(message);
         var yesTxt = yesText ? yesText : "Yes";
         var noTxt = noText ? noText : "No";
+        type = type.toLowerCase();
+        if(type != "warning" && type != "error" && type != "success") {
+            type = "info";
+        }
+
+        var formeeMsgClass = "formee-msg-" + type;
 
         $("#YesOption").text(yesTxt);
         $("#YesOption").unbind("click");
@@ -76,10 +82,12 @@
             close: function(e) {
                 this.$instance.hide();
                 $(".featherlight-content").removeClass("featherlight-alert");
+                $(".featherlight-content").removeClass(formeeMsgClass);
             },
             variant: 'myCssClass'
         });
         $(".featherlight-content").addClass("featherlight-alert");
+        $(".featherlight-content").addClass(formeeMsgClass);
     };
 
     ko.bindingHandlers.fadeVisible = {

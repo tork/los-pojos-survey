@@ -132,14 +132,14 @@ and if project is running from a web server.
 			var t1 = new Date().getMilliseconds();
 
 			var delta = t1 - t0;
-			console.log(name+'\t'+delta+'ms');
+			survey.utils.log(name+'\t'+delta+'ms');
 
 			dev.set_create_workspace(scratch_create);
 			dev.set_get_element(scratch_get);
 		}
 
 		var num_tests = 1000;
-		console.log('\nBENCHMARK ('+num_tests+' OPERATIONS)');
+		survey.utils.log('\nBENCHMARK ('+num_tests+' OPERATIONS)');
 		benchmark(
 			dev.create_workspace_array,
 			dev.get_element_array,
@@ -157,21 +157,21 @@ and if project is running from a web server.
 	// Rearrange elements and print debugging information
 	dev.debug = function(elements, surveyId) {
 		function succ(arr) {
-			console.log("OLD\t\t\tNEW");
+			survey.utils.log("OLD\t\t\tNEW");
 			for (var idx in elements) {
 				var elem = arr[idx];
-				console.log(elements[idx].id +
+				survey.utils.log(elements[idx].id +
 					(elem? '\t'+arr[idx].id:""));
 			}
 
-			console.log("\nKEPT ELEMENTS");
+			survey.utils.log("\nKEPT ELEMENTS");
 			arr.forEach(function(elem) {
-				console.log(JSON.stringify(elem));
+				survey.utils.log(JSON.stringify(elem));
 			});
 		}
 
 		function err() {
-			console.log('Something went wrong. :-(');
+			survey.utils.log('Something went wrong. :-(');
 		}
 
 		rearrange(elements, surveyId, succ, err);

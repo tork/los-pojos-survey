@@ -21,7 +21,7 @@
 				}
 			})
 			.fail(function(){
-				console.log("Could not fetch program IDs from server");
+				survey.utils.log("Could not fetch program IDs from server");
 			});
 		};
 
@@ -36,14 +36,14 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				//console.log("Program fetched");
-				//console.log(data);
+				//survey.utils.log("Program fetched");
+				//survey.utils.log(data);
 				for (var i = 0; i < data.programStages.length; i++) {
 					self.getProgramStagesAndPopulateDropdown(data.programStages[i].id);
 				}
 			})
 			.fail(function() {
-				console.log("Could not fetch program stage IDs from server");
+				survey.utils.log("Could not fetch program stage IDs from server");
 			});
 		};
 
@@ -58,12 +58,12 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				console.log("Program stage fetched");
-				//console.log(data);
+				survey.utils.log("Program stage fetched");
+				//survey.utils.log(data);
 				root.viewModel.programStages.push(data);
 			})
 			.fail(function() {
-				console.log("Could not fetch program stages from server");
+				survey.utils.log("Could not fetch program stages from server");
 			});
 
 		};
@@ -80,7 +80,7 @@
 				promises.push(self.getDataElementById(dataElementId));
 			}
 			$.when.apply($, promises).then(function() {
-				console.log("All data elements fetched. Now getting option sets");
+				survey.utils.log("All data elements fetched. Now getting option sets");
 				self.getAndAddOptionSetsToDownloadedDataEements();
 			});
 		};
@@ -95,14 +95,14 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				//console.log("Data element fetched");
-				//console.log(data);
+				//survey.utils.log("Data element fetched");
+				//survey.utils.log(data);
 				survey.viewModel.downloadedDataElements.push(data);
 				deferred.resolve();
 			})
 			.fail(function() {
 				deferred.reject();
-				console.log("Could not fetch data element from server");
+				survey.utils.log("Could not fetch data element from server");
 			});
 
 			return deferred.promise();
@@ -136,11 +136,11 @@
 			.done(function(data) {
 				dataElement.optionSet = data;
 				survey.viewModel.selectedProgramStagesOptionSets.push(data);
-				//console.log(dataElement.optionSet);
+				//survey.utils.log(dataElement.optionSet);
 				deferred.resolve();
 			})
 			.fail(function() {
-				console.log("Could not fetch option set from server");
+				survey.utils.log("Could not fetch option set from server");
 				deferred.reject();
 			});
 
@@ -148,8 +148,8 @@
 		};
 
 		self.allDataElementsAndOptionSetsFethed = function() {
-			console.log("All downloaded DataElements now have their optionSets:");
-			console.log(survey.viewModel.downloadedDataElements());
+			survey.utils.log("All downloaded DataElements now have their optionSets:");
+			survey.utils.log(survey.viewModel.downloadedDataElements());
 
 			var surveyId = survey.viewModel.selectedProgramStage().id;
 			
@@ -205,8 +205,8 @@
 				elements.forEach(function(elem) {
 					var dep = elem.dependencies;
 					if (dep && dep.length) {
-						console.log("found dep:");
-						console.log(dep);
+						survey.utils.log("found dep:");
+						survey.utils.log(dep);
 						deps[elem.id] = dep;
 					}
 				});
@@ -235,11 +235,11 @@
 				async: false
 			})
 			.done(function(data) {
-				console.log("done", data);
+				survey.utils.log("done", data);
 
 			})
 			.fail(function() {
-				console.log("GET failed");
+				survey.utils.log("GET failed");
 			});
 
 			return "";
@@ -258,10 +258,10 @@
 				contentType: 'text/html'
 			})
 			.done(function(data) {
-				console.log(data)
+				survey.utils.log(data)
 			})
 			.fail(function(x) {
-				console.log("login request failed", x);
+				survey.utils.log("login request failed", x);
 			});	
 		}
 
@@ -276,10 +276,10 @@
 
 			})
 			.done(function() {
-				console.log("logout complete");
+				survey.utils.log("logout complete");
 			})
 			.fail(function(err) {
-				console.log("logout failed", err);
+				survey.utils.log("logout failed", err);
 			});
 
 		};
@@ -297,17 +297,17 @@
 			.done(function(data) {
 				$.each(data.organisationUnits, function(i, orgUnit) {
 					root.viewModel.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
-					console.log("adding to orgUnitOpts:", orgUnit.name);
+					survey.utils.log("adding to orgUnitOpts:", orgUnit.name);
 				});
 			})
 			.fail(function() {
-				console.log("Could not fetch orgUnitOpts");
+				survey.utils.log("Could not fetch orgUnitOpts");
 			});
 		}
 		
 		self.saveDataEntry = function (dataentry) {
 			var jsonEntry = JSON.stringify(dataentry);
-			console.log("saving ", jsonEntry);
+			survey.utils.log("saving ", jsonEntry);
 			
 			$.ajax({
 				url:  survey.utils.url + "/api/events",
@@ -317,11 +317,11 @@
 				contentType: 'application/json'
 			})
 			.done(function(data) {
-				console.log("data: ", data);
-				console.log("Data elements uploaded:", data.imported, " imported, ", data.updated, " updated, ", data.ignored, " ignored");
+				survey.utils.log("data: ", data);
+				survey.utils.log("Data elements uploaded:", data.imported, " imported, ", data.updated, " updated, ", data.ignored, " ignored");
 			})
 			.fail(function(x) {
-				console.log("saving data entry failed", x);
+				survey.utils.log("saving data entry failed", x);
 			});	
 			
 		}
@@ -335,7 +335,7 @@
 			})
 			.done(doneFunction)
 			.fail(function() {
-				console.log(failMsg);
+				survey.utils.log(failMsg);
 			});
 		};
 	};

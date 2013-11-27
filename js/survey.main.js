@@ -5,6 +5,7 @@
 			$("#wrapper").toggleClass("active");
 		});
 		
+		$('#admin-item').addClass('active-item');
 		$('#reportDate').attr('max', utils.getDateFormattedForInput(new Date()));
 
 		ko.applyBindings({viewModel: viewModel});

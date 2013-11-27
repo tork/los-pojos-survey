@@ -172,10 +172,14 @@
 
 		self.adminClick = function() {
 			root.viewModel.isAdmin(true);
+			$('#admin-item').addClass('active-item');
+			$('#survey-item').removeClass('active-item');
 		};
 
 		self.userClick = function() {
 			root.viewModel.isAdmin(false);
+			$('#survey-item').addClass('active-item');
+			$('#admin-item').removeClass('active-item');
 		};
 
 		self.logoutClick = function() {

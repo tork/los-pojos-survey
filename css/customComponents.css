@@ -20,6 +20,11 @@
   text-decoration: none;
 }
 
+.active-item {
+	color: black;
+  background: white;
+}
+
 #error {
     display: none;
     width: 80%;

@@ -118,7 +118,7 @@
 				}
 			}
 			$.when.apply($, promises).then(function() {
-				self.allDataElementsAndOptionSetsFethed();
+				self.allDataElementsAndOptionSetsFetched();
 			});
 		};
 
@@ -147,13 +147,21 @@
 			return deferred.promise();
 		};
 
-		self.allDataElementsAndOptionSetsFethed = function() {
+		self.allDataElementsAndOptionSetsFetched = function() {
 			survey.utils.log("All downloaded DataElements now have their optionSets:");
 			survey.utils.log(survey.viewModel.downloadedDataElements());
 
 			var surveyId = survey.viewModel.selectedProgramStage().id;
 			
-			survey.rearrange(survey.viewModel.downloadedDataElements(), 
+			for (var i = 0; i < survey.viewModel.selectedProgramStage().programStageDataElements.length; i++) {
+				for (var j = 0; j < survey.viewModel.downloadedDataElements().length; j++) {
+					if (survey.viewModel.selectedProgramStage().programStageDataElements[i].dataElement.id === survey.viewModel.downloadedDataElements()[j].id) {
+						survey.viewModel.downloadedAndOrderedDataElements.push(survey.viewModel.downloadedDataElements()[j]);
+					}
+				}
+			}
+			
+			survey.rearrange(survey.viewModel.downloadedAndOrderedDataElements(), 
 					surveyId,
 					self.addDownloadedDataElementsToPage,
 					function() {
@@ -170,7 +178,7 @@
 			if (!orderedElements) {
 				orderedElements = survey.viewModel.downloadedDataElements();
 			}
-
+			
 			for (var i = 0; i < orderedElements.length; i++) {
 				survey.viewModel.dataElements.push(new survey.viewModel.dataElementCreator(orderedElements[i]));
 			}

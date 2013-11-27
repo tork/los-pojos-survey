@@ -39,6 +39,7 @@
 		};
 
 		self.downloadedDataElements = ko.observableArray();
+		self.downloadedAndOrderedDataElements = ko.observableArray();
 
 		self.getDataElementByID = function(id) {
 			var elements = root.viewModel.dataElements();

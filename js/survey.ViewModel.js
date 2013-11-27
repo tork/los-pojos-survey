@@ -185,7 +185,8 @@
 
 		self.logoutClick = function() {
 			survey.data.logout();
-			window.location.reload(true);
+//			window.location.reload(true);
+			window.location.replace(survey.utils.url);
 		};
 
 		//SAVE DATA ENTRY

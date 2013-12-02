@@ -267,7 +267,6 @@
         		self.dataElements(elements);
         		self.showLockedElements(!preview);
         		self.previewToggled(preview);
-        		console.log("setting showLockedElements="+(!preview)+", previewToggled="+preview);
         	}
         	survey.rearrange.withDeps(self.dataElements(), fun);
         }

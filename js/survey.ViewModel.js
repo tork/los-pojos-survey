@@ -173,6 +173,9 @@
 		/*Nav elements*/
         self.isAdmin = ko.observable(true);
         self.showLockedElements = ko.observable(self.isAdmin());
+        self.previewButtonText = ko.computed(function() {
+        	return (self.previewToggled()? 'Hide':'Show') + ' Preview';
+        });
         self.activeMenuItem = ko.observable("Admin");
 
 		self.adminClick = function() {

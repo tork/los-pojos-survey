@@ -40,6 +40,7 @@
 		};
 
 		self.downloadedDataElements = ko.observableArray();
+		self.downloadedAndOrderedDataElements = ko.observableArray();
 
 		self.getDataElementByID = function(id) {
 			var elements = root.viewModel.dataElements();
@@ -189,7 +190,8 @@
 
 		self.logoutClick = function() {
 			survey.data.logout();
-			window.location.reload(true);
+//			window.location.reload(true);
+			window.location.replace(survey.utils.url);
 		};
 
 		//SAVE DATA ENTRY
@@ -208,7 +210,7 @@
 			}
 
 			if(self.orgUnit == undefined || self.entryDate() == undefined) {
-				alert("Report date and orgUnit must be specified!");
+				survey.utils.alert("Required fields", "Report date and orgUnit must be specified!", "info");
 				return;
 			}
 
@@ -238,15 +240,17 @@
 					eventDate: self.entryDate(),
 					dataValues: getDataValues()
 			}
-
-			survey.utils.log("saving data entry");
 			survey.data.saveDataEntry(dataentry);
 		}
 
         self.clearAllSkipLogic = function() {
-            $.each(root.viewModel.dataElements(), function(index, element) {
-                element.dependencies = [];
+            survey.utils.alert("Clear all?", "Are you sure? The changes will not be saved before you choose save changes",
+            "warning", "Yes", "No", function() {
+                $.each(root.viewModel.dataElements(), function(index, element) {
+                    element.dependencies = [];
+                });
             });
+
         };
 
         self.togglePreview = function() {
@@ -273,7 +277,7 @@
 			//var surveyId = 12;
 			var id = sps.id;
 			var success = function() {
-				survey.utils.log("success! id was "+id);
+				survey.utils.alert("Skip logic saved", "Skip logic saved successfully with id "+id, "success");
 				self.uploadingSkipLogic = false;
 				
 			};
@@ -315,7 +319,7 @@
 						alertMsg += ", ";
 					}
 				}
-				alert(alertMsg);
+				survey.utils.alert("Required fields", alertMsg, "info");
 				return false;
 			}
 			return true;

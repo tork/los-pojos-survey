@@ -12,6 +12,7 @@
 		self.selectedProgramStage = ko.observable();
 		self.dataElements = ko.observableArray();
 		self.circular = ko.observable(false);
+		self.previewToggled = ko.observable(false);
 		self.activeElement = ko.observable({
 			type : "None"
 		});
@@ -170,15 +171,18 @@
 
 		/*Nav elements*/
         self.isAdmin = ko.observable(true);
+        self.showLockedElements = ko.observable(self.isAdmin());
         self.activeMenuItem = ko.observable("Admin");
 
 		self.adminClick = function() {
 			self.isAdmin(true);
+			self.showLockedElements(true);
             self.activeMenuItem("Admin");
 		};
 
 		self.userClick = function() {
 			self.isAdmin(false);
+			self.showLockedElements(false);
             self.activeMenuItem("Data entry");
 
 		};
@@ -244,6 +248,17 @@
                 element.dependencies = [];
             });
         };
+
+        self.togglePreview = function() {
+        	var preview = !self.previewToggled();
+        	var fun = function(elements) {
+        		self.dataElements(elements);
+        		self.showLockedElements(!preview);
+        		self.previewToggled(preview);
+        		console.log("setting showLockedElements="+(!preview)+", previewToggled="+preview);
+        	}
+        	survey.rearrange.withDeps(self.dataElements(), fun);
+        }
 
 		self.uploadSkipLogic = function() {
 			var sps = self.selectedProgramStage();

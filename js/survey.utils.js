@@ -43,7 +43,12 @@
         var val;
         switch (element.type) {
             case 'bool':
-                val = element.value() == 'Yes'? true:false;
+                switch (element.value()) {
+                    case 'Yes': val = true; break;
+                    case 'No': val = false; break;
+                    default: val = undefined; break;
+                }
+                //val = element.value() == 'Yes'? true:false;
                 break;
 
             default:
@@ -99,5 +104,5 @@
         if (root.debug) return console.log(msg);
     }
 
-    root.debug = false;
+    root.debug = true;
 })(survey.utils = survey.utils || {})

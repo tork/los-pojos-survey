@@ -23,6 +23,7 @@
 		});
 
 		self.selectedProgramStage.subscribe(function() {
+			self.downloadedAndOrderedDataElements().length = 0;
 			self.selectedProgramStagesOptionSets().length = 0;
 			self.downloadedDataElements().length = 0;
 			self.dataElements().length = 0;
@@ -185,10 +186,14 @@
 		};
 
 		self.userClick = function() {
+			// Trigger a program stage refresh
+			var scratch = self.selectedProgramStage();
+			self.selectedProgramStage(undefined);
+			self.selectedProgramStage(scratch);
+
 			self.isAdmin(false);
 			self.showLockedElements(false);
-            self.activeMenuItem("Data entry");
-
+			self.activeMenuItem("Data entry");
 		};
 
 		self.logoutClick = function() {

@@ -30,7 +30,8 @@
 			if (self.selectedProgramStage()) {
 				if (self.selectedProgramStage().programStageDataElements) {
 					survey.data.getAllDataElementsForSelectedProgramStage();
-					survey.data.getOrgUnits(self.selectedProgram().id);
+					self.orgUnitOpts().length = 0;
+                    survey.data.getOrgUnits(self.selectedProgram().id);
 				}
 			}
 		});

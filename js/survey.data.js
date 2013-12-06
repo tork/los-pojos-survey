@@ -303,15 +303,36 @@
 				dataType: 'jsonp'
 			})
 			.done(function(data) {
-				$.each(data.organisationUnits, function(i, orgUnit) {
-					root.viewModel.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
-					survey.utils.log("adding to orgUnitOpts:", orgUnit.name);
-				});
+                addOrgUnitsWithoutBlockingUI(data.organisationUnits);
+// $.each(data.organisationUnits, function(i, orgUnit) {
+//					root.viewModel.orgUnitOpts.push({orgName: orgUnit.name, orgUnit: orgUnit.id});
+//					survey.utils.log("adding to orgUnitOpts:", orgUnit.name);
+//				});
+//                root.viewModel.orgUnitOpts = null;
+//                    root.viewModel.orgUnitOpts =    ko.observableArray([{orgName: "orgUnit.name", orgUnit: "orgUnit.id"}])
+                    //root.viewModel.orgUnitOpts.push({orgName: "orgUnit.name", orgUnit: "orgUnit.id"});
 			})
 			.fail(function() {
 				survey.utils.log("Could not fetch orgUnitOpts");
 			});
 		}
+
+        function addOrgUnitsWithoutBlockingUI(orgUnits) {
+            var chunk = 100;
+            var index = 0;
+            function doChunk() {
+                var cnt = chunk;
+                while (cnt-- && index < orgUnits.length) {
+                    root.viewModel.orgUnitOpts.push({orgName: orgUnits[index].name, orgUnit: orgUnits[index].id});
+                    ++index;
+                }
+                if (index < orgUnits.length) {
+                    setTimeout(doChunk, survey.utils.chunkTime);
+                }
+            }
+
+            doChunk();
+        }
 		
 		self.saveDataEntry = function (dataentry) {
 			var jsonEntry = JSON.stringify(dataentry);

@@ -118,4 +118,5 @@
     }
 
     root.debug = true;
+    root.chunkTime  = 30;
 })(survey.utils = survey.utils || {})
